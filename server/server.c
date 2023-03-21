@@ -9,7 +9,7 @@
 
 struct list_head head;
 
-void free_all_clients()
+void free_all_clients(void)
 {
     while (!LIST_EMPTY(&head)) {
         struct client *elem = LIST_FIRST(&head);

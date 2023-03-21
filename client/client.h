@@ -5,8 +5,7 @@
 ** client
 */
 
-#ifndef CLIENt
-    #define CLIENT
+#pragma once
 
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -23,5 +22,3 @@
 #define MAX_BODY_LENGTH 512
 
 void create_client(char *ip, char *port);
-
-#endif /* !CLIENT */

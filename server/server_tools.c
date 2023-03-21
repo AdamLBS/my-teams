@@ -30,7 +30,6 @@ void accept_socket(int m_sock, struct sockaddr_in addr, int rl)
     char *ip = inet_ntoa(addr.sin_addr);
     int port_co = ntohs(addr.sin_port);
     printf("Connection from %s:%i\n", ip, port_co);
-    // write(cfd, "220 Service ready for new user.\r\n", 33);
     add_new_socket_to_array(cfd, addr);
 }
 

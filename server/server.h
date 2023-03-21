@@ -46,4 +46,3 @@ void accept_socket(int m_sock, struct sockaddr_in addr, int rl);
 void operations_on_sockets(fd_set *fd);
 void add_and_set_sockets(fd_set *fd, int *m_sd, int m_sock);
 void remove_client(int socket);
-
