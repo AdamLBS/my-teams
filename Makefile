@@ -11,7 +11,7 @@ CLIENT_NAME = myteams_cli
 SEVER_SRC = server/*.c
 CLIENT_SRC = client/*.c
 
-FLAGS = -Wall -Wextra -g3
+FLAGS = -Wall -Wextra -g3 -luuid
 
 all:
 	gcc -o $(SERVER_NAME) $(SEVER_SRC) $(FLAGS)

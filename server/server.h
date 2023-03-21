@@ -33,7 +33,7 @@ struct client {
     int sock;
     char *username;
     int passwd;
-    uuid_t id;
+    char id[37];
     char *buffer;
     struct sockaddr_in addr;
     LIST_ENTRY(client) next;

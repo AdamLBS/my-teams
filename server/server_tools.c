@@ -10,12 +10,15 @@
 void add_new_socket_to_array(int cfd, struct sockaddr_in addr)
 {
     struct client *cl = malloc(sizeof(struct client));
+    uuid_t uuid;
+    uuid_generate_random(uuid);
+    uuid_unparse(uuid, cl->id);
     cl->addr = addr;
     cl->sock = cfd;
     cl->username = NULL;
     cl->passwd = 0;
-    cl->buffer = malloc(sizeof(char) * 1025);
-    memset(cl->buffer, 0, 1024);
+    cl->buffer = malloc(sizeof(char) * MAX_NAME_LENGTH);
+    memset(cl->buffer, 0, MAX_NAME_LENGTH);
     LIST_INSERT_HEAD(&head, cl, next);
 }
 
