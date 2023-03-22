@@ -4,3 +4,4 @@ myteams_server
 .DS_Store
 */.DS_Store
 *.dSYM
+log.txt

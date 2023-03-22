@@ -15,7 +15,8 @@ void login_command(void *handle, struct client *client, char *buffer)
     else {
         return;
     }
-    client->username = username;
+    client->username = strdup(username);
+    read(client->sock, client->id, 37);
     ((int (*)(char const *))
     dlsym(handle, "server_event_user_logged_in"))(client->id);
 }

@@ -16,10 +16,10 @@ void send_commands(void *handle, client_t *client)
     if (strstr(buffer, "/login"))
         login_command(handle, client, buffer);
     if (strcmp(buffer, "/logout") == 0) {
-        logout_command(handle, client); val = 1;
+        logout_command(handle, client, buffer); val = 1;
     }
-    write(client->sock, buffer, strlen(buffer));
-    write(client->sock, "\n", 1);
+    if (strcmp(buffer, "/users") == 0)
+        users_command(handle, client);
     free(buffer);
     if (val == 1) {
         free(client->username);

@@ -17,6 +17,10 @@ int commands(struct client *cli, char *buffer, void *handle)
         logout_command(handle, cli);
         return 1;
     }
+    if (strcmp(buffer, "/users") == 0) {
+        users_command(handle, cli);
+        return 0;
+    }
     write(cli->sock, "500 Syntax error, ", 18);
     write(cli->sock, "command unrecognized.\n", 22);
     return 0;
@@ -26,7 +30,7 @@ int check_commands_socket(struct client *cli, void *handle)
 {
     int valread; char buffer[MAX_BODY_LENGTH] = {0};
     if ((valread = read(cli->sock, buffer, MAX_BODY_LENGTH)) == 0) {
-        remove_client(cli->sock); return 1;
+        cli->sock = -1; return 0;
     } else {
         if (cli->buffer[0] != '\0')
             strcat(cli->buffer, buffer);
@@ -53,7 +57,7 @@ void operations_on_sockets(fd_set *fd, void *handle)
         if (FD_ISSET(tmp->sock, fd))
             val = check_commands_socket(tmp, handle);
         if (val == 1) {
-            remove_client(tmp->sock);
+            tmp->sock = -1;
             val = 0;
         }
     }

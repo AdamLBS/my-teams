@@ -20,9 +20,6 @@ void *get_lib(void)
 void set_struct_client(client_t *cl)
 {
     cl->username = malloc(sizeof(char) * MAX_NAME_LENGTH);
-    uuid_t uuid;
-    uuid_generate_random(uuid);
-    uuid_unparse(uuid, cl->id);
 }
 
 void create_client(char *ip, char *port)

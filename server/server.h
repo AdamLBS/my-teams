@@ -31,7 +31,7 @@
 
 struct client {
     int sock;
-    const char *username;
+    char *username;
     int passwd;
     char id[37];
     char *buffer;
@@ -48,3 +48,4 @@ void add_and_set_sockets(fd_set *fd, int *m_sd, int m_sock);
 void remove_client(int socket);
 void login_command(void *handle, struct client *client, char *buffer);
 void logout_command(void *handle, struct client *client);
+void users_command(void *handle, struct client *client);
