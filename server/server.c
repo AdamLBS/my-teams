@@ -29,13 +29,6 @@ void free_all_clients(void)
     }
 }
 
-static volatile int keepRunning = 1;
-
-void intHandler(int dummy) {
-    if (dummy == SIGINT)
-        keepRunning = 0;
-}
-
 void create_server(char *port)
 {
     void *handle = get_lib();
@@ -47,7 +40,6 @@ void create_server(char *port)
     myaddr.sin_port = htons(atoi(port));
     bind(master_socket, (struct sockaddr *)&myaddr, sizeof(myaddr));
     listen(master_socket, MAX_CLIENTS);
-    // signal(SIGINT, intHandler);
     while (1) {
         add_and_set_sockets(&readfds, &max_sd, master_socket);
         int ret_val = select(max_sd + 1, &readfds, NULL, NULL, NULL);
@@ -58,6 +50,5 @@ void create_server(char *port)
         operations_on_sockets(&readfds, handle);
     }
     close(master_socket);
-    free_all_clients();
-    dlclose(handle);
+    free_all_clients(); dlclose(handle);
 }

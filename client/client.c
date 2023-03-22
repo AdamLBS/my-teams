@@ -25,13 +25,6 @@ void set_struct_client(client_t *cl)
     uuid_unparse(uuid, cl->id);
 }
 
-static volatile int keepRunning = 1;
-
-void intHandler(int dummy) {
-    if (dummy == SIGINT)
-        keepRunning = 0;
-}
-
 void create_client(char *ip, char *port)
 {
     void *handle = get_lib();
@@ -44,7 +37,6 @@ void create_client(char *ip, char *port)
     myaddr.sin_port = htons(atoi(port));
     connect(client.sock, (struct sockaddr *)&myaddr, sizeof(myaddr));
     write(client.sock, client.id, strlen(client.id));
-    // signal(SIGINT, intHandler);
     while (1) {
         send_commands(handle, &client);
     }
