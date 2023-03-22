@@ -10,15 +10,13 @@
 void add_new_socket_to_array(int cfd, struct sockaddr_in addr)
 {
     struct client *cl = malloc(sizeof(struct client));
-    uuid_t uuid;
-    uuid_generate_random(uuid);
-    uuid_unparse(uuid, cl->id);
     cl->addr = addr;
     cl->sock = cfd;
     cl->username = NULL;
     cl->passwd = 0;
     cl->buffer = malloc(sizeof(char) * MAX_NAME_LENGTH);
     memset(cl->buffer, 0, MAX_NAME_LENGTH);
+    read(cl->sock, cl->id, 37);
     LIST_INSERT_HEAD(&head, cl, next);
 }
 
@@ -27,9 +25,6 @@ void accept_socket(int m_sock, struct sockaddr_in addr, int rl)
     int cfd = accept(m_sock, (struct sockaddr*)&addr, (socklen_t*)&rl);
     if (cfd < 0)
         exit(EXIT_FAILURE);
-    char *ip = inet_ntoa(addr.sin_addr);
-    int port_co = ntohs(addr.sin_port);
-    printf("Connection from %s:%i\n", ip, port_co);
     add_new_socket_to_array(cfd, addr);
 }
 
@@ -54,11 +49,9 @@ void remove_client(int socket)
     struct client *tmp;
     LIST_FOREACH(tmp, &head, next) {
         if (tmp->sock == socket) {
-            printf("Client disconnected\n");
             close(tmp->sock);
             LIST_REMOVE(tmp, next);
             free(tmp->buffer);
-            free(tmp->username);
             free(tmp);
             return;
         }

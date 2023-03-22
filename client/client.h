@@ -16,9 +16,22 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+#include <dlfcn.h>
+#include <uuid/uuid.h>
+#include <signal.h>
+#include <fcntl.h>
 
 #define MAX_NAME_LENGTH 32
 #define MAX_DESCRIPTION_LENGTH 255
 #define MAX_BODY_LENGTH 512
 
+typedef struct client {
+    int sock;
+    char *username;
+    char id[37];
+} client_t;
+
 void create_client(char *ip, char *port);
+void send_commands(void *handle, client_t *client);
+void login_command(void *handle, client_t *client, char *buffer);
+void logout_command(void *handle, client_t *client);

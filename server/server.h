@@ -22,7 +22,7 @@
 #include <fcntl.h>
 #include <dirent.h>
 #include <sys/queue.h>
-#include <uuid/uuid.h>
+#include <dlfcn.h>
 
 #define MAX_CLIENTS 100
 #define MAX_NAME_LENGTH 32
@@ -31,7 +31,7 @@
 
 struct client {
     int sock;
-    char *username;
+    const char *username;
     int passwd;
     char id[37];
     char *buffer;
@@ -43,6 +43,8 @@ extern LIST_HEAD(list_head, client) head;
 
 void create_server(char *port);
 void accept_socket(int m_sock, struct sockaddr_in addr, int rl);
-void operations_on_sockets(fd_set *fd);
+void operations_on_sockets(fd_set *fd, void *handle);
 void add_and_set_sockets(fd_set *fd, int *m_sd, int m_sock);
 void remove_client(int socket);
+void login_command(void *handle, struct client *client, char *buffer);
+void logout_command(void *handle, struct client *client);
