@@ -33,8 +33,9 @@ void create_server(char *port)
 {
     void *handle = get_lib();
     LIST_INIT(&head);
-    int max_sd;
-    fd_set readfds; int master_socket = socket(AF_INET, SOCK_STREAM, 0);
+    int max_sd, master_socket = socket(AF_INET, SOCK_STREAM, 0);
+    setsockopt(master_socket, 1, 2, &(int){1}, sizeof(int));
+    fd_set readfds;
     struct sockaddr_in myaddr; int addrlen = sizeof(myaddr);
     myaddr.sin_family = AF_INET; inet_aton("0.0.0.0", &myaddr.sin_addr);
     myaddr.sin_port = htons(atoi(port));
@@ -49,6 +50,5 @@ void create_server(char *port)
             accept_socket(master_socket, myaddr, addrlen);
         operations_on_sockets(&readfds, handle);
     }
-    close(master_socket);
-    free_all_clients(); dlclose(handle);
+    close(master_socket); free_all_clients(); dlclose(handle);
 }
