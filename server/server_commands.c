@@ -18,7 +18,11 @@ int commands(struct client *cli, char *buffer, void *handle)
         return 1;
     }
     if (strcmp(buffer, "/users") == 0) {
-        users_command(handle, cli);
+        users_command(cli);
+        return 0;
+    }
+    if (strstr(buffer, "/user")) {
+        user_command(cli, buffer);
         return 0;
     }
     write(cli->sock, "500 Syntax error, ", 18);

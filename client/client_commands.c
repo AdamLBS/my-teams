@@ -20,6 +20,8 @@ void send_commands(void *handle, client_t *client)
     }
     if (strcmp(buffer, "/users") == 0)
         users_command(handle, client);
+    else if (strstr(buffer, "/user"))
+        user_command(handle, client, buffer);
     free(buffer);
     if (val == 1) {
         free(client->username);
