@@ -39,4 +39,7 @@ void logout_command(void *handle, client_t *client, char *buffer);
 void users_command(void *handle, client_t *client);
 void user_command(void *handle, client_t *client, char *buffer);
 void help_command(void);
-void send_command(void *handle, char *buffer, struct client *client);
+void send_command(char *buffer, struct client *client);
+// RECEIVE COMMANDS:
+void receive_commands(void *handle, client_t *client);
+void receive_message(void *handle, char *buffer);

@@ -26,7 +26,7 @@ int commands(struct client *cli, char *buffer, void *handle)
         return 0;
     }
     if (strstr(buffer, "/send")) {
-        send_command(handle, cli, buffer); return 0;
+        send_command(handle, buffer); return 0;
     }
     write(cli->sock, "500 Syntax error, ", 18);
     write(cli->sock, "command unrecognized.\n", 22);

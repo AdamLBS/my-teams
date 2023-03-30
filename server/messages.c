@@ -7,13 +7,10 @@
 
 #include "server.h"
 
-void send_command(void *handle, struct client *client, char *buffer)
+void send_command(void *handle, char *buffer)
 {
-    buffer += 6;
-    char *r_uuid; char *s_uuid; char *msg;
-    char *token;
-    printf("buffer: %s\n", buffer);
-    token = strtok(buffer, " "); int i = 0;
+    buffer += 6; char *r_uuid; char *s_uuid; char *msg; char *token;
+    token = strtok(buffer, " "); struct client *tmp;
     if (token != NULL) {
         r_uuid = token;
         token = strtok(NULL, " ");
@@ -21,7 +18,16 @@ void send_command(void *handle, struct client *client, char *buffer)
         token = strtok(NULL, " ");
         s_uuid = token;
     }
-    printf("r_uuid: %s, s_uuid: %s, message: %s\n", r_uuid, s_uuid, msg);
     ((int (*)(char const *, char const *, char const *))
     dlsym(handle, "server_event_private_message_sended"))(s_uuid, r_uuid, msg);
+    LIST_FOREACH(tmp, &head, next) {
+        if (strcmp(r_uuid, tmp->id) == 0) {
+            char *nbuff = malloc(sizeof(char) * MAX_BODY_LENGTH);
+            nbuff = strcpy(nbuff, "receive: ");
+            nbuff = strcat(nbuff, s_uuid); nbuff = strcat(nbuff, " ");
+            nbuff = strcat(nbuff, msg); nbuff = strcat(nbuff, "\n");
+            printf("nbuff: %s", nbuff);
+            send(tmp->sock, nbuff, strlen(nbuff), 0);
+        }
+    }
 }
