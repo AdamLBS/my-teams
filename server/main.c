@@ -7,10 +7,8 @@
 
 #include "server.h"
 
-static bool keepRunning = true;
-
 void intHandler() {
-    keepRunning = false;
+    return;
 }
 
 void help(void)
@@ -30,8 +28,6 @@ int main(int ac, char **av)
     act.sa_handler = intHandler;  
     sigaction(SIGINT, &act, NULL );  
     create_save_folder();
-    while (keepRunning) {
-        create_server(av[1]);
-    }
+    create_server(av[1]);
     return 0;
 }
