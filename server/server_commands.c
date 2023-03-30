@@ -9,27 +9,17 @@
 
 int commands(struct client *cli, char *buffer, void *handle)
 {
-    if (strstr(buffer, "/login")) {
-        login_command(handle, cli, buffer);
-        return 0;
-    }
-    if (strcmp(buffer, "/logout") == 0) {
-        logout_command(handle, cli);
-        return 1;
-    }
-    if (strcmp(buffer, "/users") == 0) {
-        users_command(cli);
-        return 0;
-    }
-    if (strstr(buffer, "/user")) {
-        user_command(cli, buffer);
-        return 0;
-    }
-    if (strstr(buffer, "/send")) {
+    if (strstr(buffer, "/login"))
+        login_command(handle, cli, buffer); return 0;
+    if (strcmp(buffer, "/logout") == 0)
+        logout_command(handle, cli); return 1;
+    if (strcmp(buffer, "/users") == 0)
+        users_command(cli); return 0;
+    if (strstr(buffer, "/user"))
+        user_command(cli, buffer); return 0;
+    if (strstr(buffer, "/send"))
         send_command(handle, buffer); return 0;
-    }
-    write(cli->sock, "500 Syntax error, ", 18);
-    write(cli->sock, "command unrecognized.\n", 22);
+    write(cli->sock, UNKNOWN_CMD, strlen(UNKNOWN_CMD));
     return 0;
 }
 

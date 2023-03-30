@@ -7,10 +7,9 @@
 
 #include "server.h"
 
-static bool keepRunning = true;
-
-void intHandler() {
-    keepRunning = false;
+void handle_sig(void)
+{
+    return;
 }
 
 void help(void)
@@ -27,11 +26,9 @@ int main(int ac, char **av)
     if (strcmp(av[1], "-help") == 0)
         help();
     struct sigaction act;
-    act.sa_handler = intHandler;  
-    sigaction(SIGINT, &act, NULL );  
+    act.sa_handler = handle_sig;
+    sigaction(SIGINT, &act, NULL );
     create_save_folder();
-    while (keepRunning) {
-        create_server(av[1]);
-    }
+    create_server(av[1]);
     return 0;
 }

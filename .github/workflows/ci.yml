@@ -15,18 +15,28 @@ jobs:
         run: chmod 0777 check_codingstyle/coding-style.sh
       - name: Run coding style checker
         run: ./check_codingstyle/coding-style.sh .. .
+      - name: 'Upload coding style logs'
+        uses: actions/upload-artifact@v3
+        with:
+          name: coding-style-reports.log
+          path: coding-style-reports.log
+          retention-days: 1
   check_major:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
         - name: Checkout code
           uses: actions/checkout@v3
+        - name: Download coding style results
+          uses: actions/download-artifact@v3
+          with:
+            name: coding-style-reports.log
         - name: Check number of "MAJOR:" occurrences
           run: |
-            major_occurrences=$(grep -c "MAJOR:" ./check_codingstyle/coding-style-reports.log)
+            major_occurrences=$(grep -c "MAJOR:" coding-style-reports.log)
             if [ "$major_occurrences" -gt 9 ]; then
                 echo "Too many MAJOR occurrences ($major_occurrences - 9)!"
-                grep "MAJOR:" ./check_codingstyle/coding-style-reports.log
+                grep "MAJOR:" coding-style-reports.log | tail -n +10
                 exit 1
             fi
   check_minor:
@@ -35,12 +45,16 @@ jobs:
     steps:
         - name: Checkout code
           uses: actions/checkout@v3
+        - name: Download coding style results
+          uses: actions/download-artifact@v3
+          with:
+            name: coding-style-reports.log
         - name: Check number of "MINOR:" occurrences
           run: |
-            minor_occurrences=$(grep -c "MINOR:" ./check_codingstyle/coding-style-reports.log)
+            minor_occurrences=$(grep -c "MINOR:" coding-style-reports.log)
             if [ "$minor_occurrences" -gt 5 ]; then
               echo "Too many MINOR occurrences ($minor_occurrences - 5)!"
-              grep "MINOR:" ./check_codingstyle/coding-style-reports.log
+              grep "MINOR:" coding-style-reports.log | tail -n +6
               exit 1
             fi
   check_compilation:
@@ -49,5 +63,7 @@ jobs:
     steps:
         - name: Checkout code
           uses: actions/checkout@v3
+        - name: Install UUID
+          run: sudo apt-get update && sudo apt-get -y install uuid-dev
         - name: Run make
           run: make

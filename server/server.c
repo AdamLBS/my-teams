@@ -32,8 +32,7 @@ void free_all_clients(void)
 void create_server(char *port)
 {
     void *handle = get_lib();
-    struct client *tmp = NULL;
-    LIST_INIT(&head);
+    struct client *tmp = NULL; LIST_INIT(&head);
     int max_sd, master_socket = socket(AF_INET, SOCK_STREAM, 0);
     setsockopt(master_socket, 1, 2, &(int){1}, sizeof(int));
     fd_set readfds;
