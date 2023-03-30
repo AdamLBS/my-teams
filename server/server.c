@@ -32,6 +32,7 @@ void free_all_clients(void)
 void create_server(char *port)
 {
     void *handle = get_lib();
+    struct client *tmp = NULL;
     LIST_INIT(&head);
     int max_sd, master_socket = socket(AF_INET, SOCK_STREAM, 0);
     setsockopt(master_socket, 1, 2, &(int){1}, sizeof(int));
@@ -45,10 +46,10 @@ void create_server(char *port)
         add_and_set_sockets(&readfds, &max_sd, master_socket);
         int ret_val = select(max_sd + 1, &readfds, NULL, NULL, NULL);
         if (ret_val <= 0)
-            perror("select()");
+            return save_server(tmp);
         if (FD_ISSET(master_socket, &readfds))
             accept_socket(master_socket, myaddr, addrlen);
-        operations_on_sockets(&readfds, handle);
+        operations_on_sockets(&readfds, handle, tmp);
     }
     close(master_socket); free_all_clients(); dlclose(handle);
 }

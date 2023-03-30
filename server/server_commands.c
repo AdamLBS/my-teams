@@ -56,9 +56,8 @@ int check_commands_socket(struct client *cli, void *handle)
 }
 
 // to fix error with memory management
-void operations_on_sockets(fd_set *fd, void *handle)
+void operations_on_sockets(fd_set *fd, void *handle, struct client *tmp)
 {
-    struct client *tmp;
     int val = 0;
     LIST_FOREACH(tmp, &head, next) {
         if (FD_ISSET(tmp->sock, fd))

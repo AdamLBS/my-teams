@@ -5,3 +5,4 @@ myteams_server
 */.DS_Store
 *.dSYM
 log.txt
+users/
