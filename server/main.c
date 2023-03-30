@@ -7,7 +7,8 @@
 
 #include "server.h"
 
-void intHandler() {
+void intHandler()
+{
     return;
 }
 
@@ -25,8 +26,8 @@ int main(int ac, char **av)
     if (strcmp(av[1], "-help") == 0)
         help();
     struct sigaction act;
-    act.sa_handler = intHandler;  
-    sigaction(SIGINT, &act, NULL );  
+    act.sa_handler = intHandler;
+    sigaction(SIGINT, &act, NULL );
     create_save_folder();
     create_server(av[1]);
     return 0;

@@ -13,7 +13,7 @@ int commands(struct client *cli, char *buffer, void *handle)
         login_command(handle, cli, buffer); return 0;
     if (strcmp(buffer, "/logout") == 0)
         logout_command(handle, cli); return 1;
-    if (strcmp(buffer, "/users") == 0) 
+    if (strcmp(buffer, "/users") == 0)
         users_command(cli); return 0;
     if (strstr(buffer, "/user"))
         user_command(cli, buffer); return 0;
