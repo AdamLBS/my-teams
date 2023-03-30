@@ -9,14 +9,16 @@
 
 void login_command(void *handle, struct client *client, char *buffer)
 {
-    char *username = strchr(buffer, ' ');
-    if (username != NULL)
-        username++;
+    printf("login_command\n");
+    char *str = strchr(buffer, ' ');
+    if (str != NULL)
+        str++;
     else {
         return;
     }
-    client->username = strdup(username);
-    recv(client->sock, client->id, sizeof(client->id), 0);
+    client->username = strdup(strtok(str, " "));
+    client->id = strdup(strtok(NULL, " "));
+    // recv(client->sock, client->id, sizeof(client->id), 0);
     ((int (*)(char const *))
     dlsym(handle, "server_event_user_logged_in"))(client->id);
 }

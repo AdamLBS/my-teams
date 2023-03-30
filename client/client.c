@@ -33,7 +33,6 @@ void create_client(char *ip, char *port)
     inet_aton(ip, &myaddr.sin_addr);
     myaddr.sin_port = htons(atoi(port));
     connect(client.sock, (struct sockaddr *)&myaddr, sizeof(myaddr));
-    write(client.sock, client.id, strlen(client.id));
     while (1) {
         send_commands(handle, &client);
     }

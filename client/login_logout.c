@@ -49,14 +49,15 @@ void login_command(void *handle, client_t *client, char *buffer)
     ((int (*)(char const *, const char *))
     dlsym(handle, "client_event_logged_in"))(client->id, username);
     send(client->sock, buffer, strlen(buffer), 0);
-    send(client->sock, "\n", 1, 0);
+    send(client->sock, " ", 1, 0);
     send(client->sock, client->id, strlen(client->id), 0);
+    send(client->sock, "\n", 1, 0);
 }
 
 void logout_command(void *handle, client_t *client, char *buffer)
 {
     ((int (*)(char const *, const char *))
     dlsym(handle, "client_event_logged_out"))(client->id, client->username);
-    write(client->sock, buffer, strlen(buffer));
-    write(client->sock, "\n", 1);
+    send(client->sock, buffer, strlen(buffer), 0);
+    send(client->sock, "\n", 1, 0);
 }

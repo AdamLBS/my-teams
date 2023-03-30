@@ -9,9 +9,12 @@
 
 void users_command(void *handle, client_t *client)
 {
-    dprintf(client->sock, "/users\n");
+    send(client->sock, "/users\n", strlen("/users\n"), 0);
     char line[MAX_BODY_LENGTH];
-    read(client->sock, line, MAX_BODY_LENGTH);
+    if (recv(client->sock, line, MAX_BODY_LENGTH, 0) < 0) {
+        printf("Error: recv\n");
+        return;
+    }
     char *token = strtok(line, " ");
     while (token != NULL) {
         char *id = token;
@@ -33,9 +36,10 @@ void user_command(void *handle, client_t *client, char *buffer)
     else {
         id_find[0] = '\0';
     }
-    dprintf(client->sock, "%s\n", buffer);
+    send(client->sock, buffer, strlen(buffer), 0);
+    send(client->sock, "\n", strlen("\n"), 0);
     char line[MAX_BODY_LENGTH];
-    read(client->sock, line, MAX_BODY_LENGTH);
+    recv(client->sock, line, MAX_BODY_LENGTH, 0);
     if (strstr(line, "ERROR")) {
         ((int (*)(char const *))
         dlsym(handle, "client_error_unknown_user"))(id_find);
