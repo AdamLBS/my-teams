@@ -33,7 +33,7 @@ int commands(struct client *cli, char *buffer, void *handle)
 int check_commands_socket(struct client *cli, void *handle)
 {
     int valread; char buffer[MAX_BODY_LENGTH] = {0};
-    if ((valread = read(cli->sock, buffer, MAX_BODY_LENGTH)) == 0) {
+    if ((valread = recv(cli->sock, buffer, sizeof(buffer), 0)) < 0) {
         cli->sock = -1; return 0;
     } else {
         if (cli->buffer[0] != '\0')

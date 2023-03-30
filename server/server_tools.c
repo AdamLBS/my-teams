@@ -14,8 +14,8 @@ void add_new_socket_to_array(int cfd, struct sockaddr_in addr)
     cl->sock = cfd;
     cl->username = NULL;
     cl->passwd = 0;
-    cl->buffer = malloc(sizeof(char) * MAX_NAME_LENGTH);
-    memset(cl->buffer, 0, MAX_NAME_LENGTH);
+    cl->buffer = malloc(sizeof(char) * MAX_BODY_LENGTH);
+    memset(cl->buffer, 0, MAX_BODY_LENGTH);
     read(cl->sock, cl->id, 37);
     LIST_INSERT_HEAD(&head, cl, next);
 }
