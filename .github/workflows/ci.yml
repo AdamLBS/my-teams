@@ -1,0 +1,53 @@
+name: CI
+on:
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Create coding style directory
+        run: mkdir check_codingstyle
+      - name: Download script
+        run: wget --no-check-certificate -O check_codingstyle/coding-style.sh https://uploads.admlbs.fr/coding-style.sh
+      - name: Set permissions
+        run: chmod 0777 check_codingstyle/coding-style.sh
+      - name: Run coding style checker
+        run: ./check_codingstyle/coding-style.sh .. .
+  check_major:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+        - name: Check number of "MAJOR:" occurrences
+          run: |
+            major_occurrences=$(grep -c "MAJOR:" ./check_codingstyle/coding-style-reports.log)
+            if [ "$major_occurrences" -gt 9 ]; then
+                echo "Too many MAJOR occurrences ($major_occurrences - 9)!"
+                grep "MAJOR:" ./check_codingstyle/coding-style-reports.log
+                exit 1
+            fi
+  check_minor:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+        - name: Check number of "MINOR:" occurrences
+          run: |
+            minor_occurrences=$(grep -c "MINOR:" ./check_codingstyle/coding-style-reports.log)
+            if [ "$minor_occurrences" -gt 5 ]; then
+              echo "Too many MINOR occurrences ($minor_occurrences - 5)!"
+              grep "MINOR:" ./check_codingstyle/coding-style-reports.log
+              exit 1
+            fi
+  check_compilation:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+        - name: Run make
+          run: make
