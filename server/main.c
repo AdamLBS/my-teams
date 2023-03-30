@@ -9,7 +9,7 @@
 
 static bool keepRunning = true;
 
-void intHandler(int) {
+void intHandler() {
     keepRunning = false;
 }
 

@@ -52,6 +52,7 @@ void login_command(void *handle, struct client *client, char *buffer);
 void logout_command(void *handle, struct client *client);
 void users_command(struct client *client);
 void user_command(struct client *client, char *buffer);
+void send_command(void *handle, char *buffer);
 void create_save_folder(void);
 void save_user(char *user_uuid, char *user_name);
 int do_user_exists(char *user_uuid);
