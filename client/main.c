@@ -17,6 +17,8 @@ void help(void)
 
 int main(int ac, char **av)
 {
+    int flags = fcntl(0, F_GETFL, 0);
+    fcntl(0, F_SETFL, flags | O_NONBLOCK);
     if (ac != 2 && ac != 3)
         return 84;
     if (strcmp(av[1], "-help") == 0)

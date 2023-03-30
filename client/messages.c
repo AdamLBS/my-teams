@@ -19,8 +19,8 @@ void send_command(char *buffer, struct client *client)
 
 void receive_message(void *handle, char *buffer)
 {
-    printf("OUEEEEEE\n");
     buffer += 9; char *uuid; char *msg;
+    buffer[strlen(buffer) - 1] = '\0';
     char *token = strtok(buffer, " ");
     uuid = token;
     token = strtok(NULL, " ");
