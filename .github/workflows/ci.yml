@@ -19,8 +19,6 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
         - name: Check number of "MAJOR:" occurrences
           run: |
             major_occurrences=$(grep -c "MAJOR:" coding-style-reports.log)
@@ -33,8 +31,6 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
         - name: Check number of "MINOR:" occurrences
           run: |
             minor_occurrences=$(grep -c "MINOR:" coding-style-reports.log)
@@ -47,9 +43,7 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
         - name: Install UUID
-          run: apt-get update && apt-get -y install uuid-dev
+          run: sudo apt-get update && sudo apt-get -y install uuid-dev
         - name: Run make
           run: make
