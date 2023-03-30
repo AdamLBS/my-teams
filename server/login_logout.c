@@ -9,7 +9,6 @@
 
 void login_command(void *handle, struct client *client, char *buffer)
 {
-    printf("login_command\n");
     char *str = strchr(buffer, ' ');
     if (str != NULL)
         str++;
@@ -19,6 +18,14 @@ void login_command(void *handle, struct client *client, char *buffer)
     client->username = strdup(strtok(str, " "));
     client->id = strdup(strtok(NULL, " "));
     // recv(client->sock, client->id, sizeof(client->id), 0);
+    if (do_user_exists(client->id) == 0) {
+        save_user(client->id, client->username);
+        ((int (*)(char const *, char const *))
+        dlsym(handle, "server_event_user_created"))(client->id, client->username);    
+    } else {
+        ((int (*)(char const *, char const *))
+        dlsym(handle, "server_event_user_loaded"))(client->id, client->username);
+    }
     ((int (*)(char const *))
     dlsym(handle, "server_event_user_logged_in"))(client->id);
 }
