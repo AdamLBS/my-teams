@@ -38,3 +38,10 @@ int do_user_exists(char *user_uuid)
     }
     return 0;
 }
+
+void save_server(struct client *cli)
+{
+    //TODO : Faire la fonction
+    (cli);
+    return;
+}

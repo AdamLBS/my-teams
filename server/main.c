@@ -7,6 +7,12 @@
 
 #include "server.h"
 
+static bool keepRunning = true;
+
+void intHandler(int) {
+    keepRunning = false;
+}
+
 void help(void)
 {
     printf("USAGE: ./myteams_server port\n\t");
@@ -20,7 +26,12 @@ int main(int ac, char **av)
         return 84;
     if (strcmp(av[1], "-help") == 0)
         help();
+    struct sigaction act;
+    act.sa_handler = intHandler;  
+    sigaction(SIGINT, &act, NULL );  
     create_save_folder();
-    create_server(av[1]);
+    while (keepRunning) {
+        create_server(av[1]);
+    }
     return 0;
 }

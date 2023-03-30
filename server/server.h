@@ -24,6 +24,7 @@
 #include <sys/queue.h>
 #include <dlfcn.h>
 #include <errno.h>
+#include <stdbool.h>
 
 #define MAX_CLIENTS 100
 #define MAX_NAME_LENGTH 32
@@ -44,7 +45,7 @@ extern LIST_HEAD(list_head, client) head;
 
 void create_server(char *port);
 void accept_socket(int m_sock, struct sockaddr_in addr, int rl);
-void operations_on_sockets(fd_set *fd, void *handle);
+void operations_on_sockets(fd_set *fd, void *handle, struct client *tmp);
 void add_and_set_sockets(fd_set *fd, int *m_sd, int m_sock);
 void remove_client(int socket);
 void login_command(void *handle, struct client *client, char *buffer);
@@ -54,3 +55,4 @@ void user_command(struct client *client, char *buffer);
 void create_save_folder(void);
 void save_user(char *user_uuid, char *user_name);
 int do_user_exists(char *user_uuid);
+void save_server(struct client *cli);
