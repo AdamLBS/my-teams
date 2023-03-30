@@ -26,23 +26,21 @@ void receive_commands(void *handle, struct client *client)
 {
     char buffer[MAX_BODY_LENGTH];
     fd_set read_fds; FD_ZERO(&read_fds); FD_SET(client->sock, &read_fds);
-    struct timeval timeout; timeout.tv_sec = 0; timeout.tv_usec = 100000;
+    struct timeval timeout; timeout.tv_sec = 0; timeout.tv_usec = 1;
     int ready = select(client->sock + 1, &read_fds, NULL, NULL, &timeout);
     if (ready == -1) {
         perror("select");
         return;
-    } else if (ready == 0) {
+    } else if (ready == 0)
+        return;
+    int valread = recv(client->sock, buffer, sizeof(buffer), 0);
+    if (valread < 0) {
+        perror("recv"); return;
+    } else if (valread == 0) {
         return;
     } else {
-        int valread = recv(client->sock, buffer, sizeof(buffer), 0);
-        if (valread < 0) {
-            perror("recv"); return;
-        } else if (valread == 0) {
-            return;
-        } else {
-            if (strstr(buffer, "receive:"))
-                receive_message(handle, buffer);
-        }
+        if (strstr(buffer, "receive:"))
+            receive_message(handle, buffer);
     }
 }
 
