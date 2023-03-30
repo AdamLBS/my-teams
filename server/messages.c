@@ -26,6 +26,7 @@ void send_command(void *handle, char *buffer)
             nbuff = strcpy(nbuff, "receive: ");
             nbuff = strcat(nbuff, s_uuid); nbuff = strcat(nbuff, " ");
             nbuff = strcat(nbuff, msg); nbuff = strcat(nbuff, "\n");
+            send(tmp->sock, nbuff, strlen(nbuff), 0);
         }
     }
 }

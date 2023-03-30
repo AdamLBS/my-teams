@@ -7,11 +7,6 @@
 
 #include "server.h"
 
-void handle_sig(void)
-{
-    return;
-}
-
 void help(void)
 {
     printf("USAGE: ./myteams_server port\n\t");
@@ -26,7 +21,6 @@ int main(int ac, char **av)
     if (strcmp(av[1], "-help") == 0)
         help();
     struct sigaction act;
-    act.sa_handler = handle_sig;
     sigaction(SIGINT, &act, NULL );
     create_save_folder();
     create_server(av[1]);

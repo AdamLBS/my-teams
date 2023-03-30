@@ -14,8 +14,9 @@ void create_save_folder(void)
 
 void save_user(char *user_uuid, char *user_name)
 {
-    char *path = malloc(sizeof(char) * strlen("users/") + strlen(user_uuid) + 1);
-    memset(path, '\0', strlen("users/") + strlen(user_uuid) + 1);
+    int size = strlen("users/") + strlen(user_uuid) + 1;
+    char *path = malloc(sizeof(char) * size);
+    memset(path, '\0', size);
     strcpy(path, "users/");
     strcat(path, user_uuid);
     FILE *fd = fopen(path, "w");
