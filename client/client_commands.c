@@ -20,6 +20,8 @@ void send_commands(void *handle, client_t *client)
     }
     if (strstr(buffer, "/help"))
         help_command();
+    if (strstr(buffer, "/send"))
+        send_command(handle, buffer, client);
     if (strcmp(buffer, "/users") == 0)
         users_command(handle, client);
     else if (strstr(buffer, "/user"))
