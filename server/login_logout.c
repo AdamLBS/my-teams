@@ -18,7 +18,6 @@ void login_command(void *handle, struct client *client, char *buffer)
     }
     client->username = strdup(strtok(str, " "));
     client->id = strdup(strtok(NULL, " "));
-    // recv(client->sock, client->id, sizeof(client->id), 0);
     ((int (*)(char const *))
     dlsym(handle, "server_event_user_logged_in"))(client->id);
 }
