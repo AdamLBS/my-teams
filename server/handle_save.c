@@ -14,11 +14,12 @@ void create_save_folder(void)
 
 void save_user(char *user_uuid, char *user_name)
 {
-    int size = strlen("users/") + strlen(user_uuid) + 1;
+    int size = strlen("users/") + strlen(user_uuid) + 6;
     char *path = malloc(sizeof(char) * size);
     memset(path, '\0', size);
     strcpy(path, "users/");
     strcat(path, user_uuid);
+    strcat(path, ".txt");
     FILE *fd = fopen(path, "w");
     fwrite(user_uuid, 1, strlen(user_uuid), fd);
     fwrite("\n", 1, 1, fd);
@@ -29,14 +30,19 @@ void save_user(char *user_uuid, char *user_name)
 
 int do_user_exists(char *user_uuid)
 {
-    char *path = malloc(sizeof(char) * strlen("users/") + strlen(user_uuid) + 1);
+    int size = strlen("users/") + strlen(user_uuid) + 6;
+    char *path = malloc(sizeof(char) * size);
+    memset(path, '\0', size);
     strcpy(path, "users/");
     strcat(path, user_uuid);
+    strcat(path, ".txt");
     FILE *fd = fopen(path, "r");
     if (fd) {
         fclose(fd);
+        free(path);
         return 1;
     }
+    free(path);
     return 0;
 }
 

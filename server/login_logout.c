@@ -21,10 +21,6 @@ void login_command(void *handle, struct client *client, char *buffer)
         ((int (*)(char const *, char const *))
         dlsym(handle, "server_event_user_created"))
         (client->id, client->username);
-    } else {
-        ((int (*)(char const *, char const *))
-        dlsym(handle, "server_event_user_loaded"))
-        (client->id, client->username);
     }
     ((int (*)(char const *))
     dlsym(handle, "server_event_user_logged_in"))(client->id);

@@ -58,3 +58,6 @@ void create_save_folder(void);
 void save_user(char *user_uuid, char *user_name);
 int do_user_exists(char *user_uuid);
 void save_server(struct client *cli);
+char **read_user_from_save(char *path);
+void load_users_from_save(void *handle);
+void send_user_loaded(char ***userList, void *handle);
