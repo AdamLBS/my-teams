@@ -46,8 +46,6 @@ void login_command(void *handle, client_t *client, char *buffer)
         fprintf(fp, "id: %s\n", client->id); fclose(fp);
     } else
         check_if_client_exist(fp, client, username);
-    ((int (*)(char const *, const char *))
-    dlsym(handle, "client_event_logged_in"))(client->id, username);
     send(client->sock, buffer, strlen(buffer), 0);
     send(client->sock, " ", 1, 0);
     send(client->sock, client->id, strlen(client->id), 0);

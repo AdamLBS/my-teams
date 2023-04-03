@@ -10,7 +10,8 @@
 int commands(struct client *cli, char *buffer, void *handle)
 {
     if (strstr(buffer, "/login")) {
-        login_command(handle, cli, buffer); return 0;
+        login_command(handle, cli, buffer);
+        send(cli->sock, "LOGIN OK\n", 9, 0);
     }
     if (strcmp(buffer, "/logout") == 0) {
         logout_command(handle, cli); return 1;
