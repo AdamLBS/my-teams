@@ -39,7 +39,8 @@ void receive_commands(void *handle, struct client *client)
             receive_message(handle, buffer);
         if (strstr(buffer, "LOGIN OK\n")) {
             ((int (*)(char const *, const char *))
-            dlsym(handle, "client_event_logged_in"))(client->id, client->username);        
+            dlsym(handle, "client_event_logged_in"))
+            (client->id, client->username);
         }
     }
 }

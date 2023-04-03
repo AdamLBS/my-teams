@@ -6,7 +6,6 @@
 */
 
 #include "server.h"
-#define _GNU_SOURCE
 #include <stdio.h>
 
 void load_users_from_save(void *handle)
