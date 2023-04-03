@@ -10,13 +10,12 @@
 void send_commands(void *handle, client_t *client)
 {
     char *buffer = malloc(sizeof(char) * MAX_BODY_LENGTH);
-    read(0, buffer, MAX_BODY_LENGTH); int val = 0;
+    read(0, buffer, MAX_BODY_LENGTH);
     buffer[strlen(buffer) - 1] = '\0';
     if (strstr(buffer, "/login"))
-        login_command(handle, client, buffer);
-    if (strcmp(buffer, "/logout") == 0) {
-        logout_command(handle, client, buffer); val = 1;
-    }
+        login_command(client, buffer);
+    if (strcmp(buffer, "/logout") == 0)
+        logout_command(client, buffer);
     if (strstr(buffer, "/help"))
         help_command();
     if (strstr(buffer, "/send"))
@@ -26,7 +25,4 @@ void send_commands(void *handle, client_t *client)
     else if (strstr(buffer, "/user"))
         user_command(handle, client, buffer);
     free(buffer);
-    if (val == 1) {
-        free(client->username); close(client->sock); exit(0);
-    }
 }

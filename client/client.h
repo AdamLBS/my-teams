@@ -34,8 +34,8 @@ typedef struct client {
 void create_client(char *ip, char *port);
 // COMMANDS:
 void send_commands(void *handle, client_t *client);
-void login_command(void *handle, client_t *client, char *buffer);
-void logout_command(void *handle, client_t *client, char *buffer);
+void login_command(client_t *client, char *buffer);
+void logout_command(client_t *client, char *buffer);
 void users_command(void *handle, client_t *client);
 void user_command(void *handle, client_t *client, char *buffer);
 void help_command(void);
@@ -43,3 +43,4 @@ void send_command(char *buffer, struct client *client);
 // RECEIVE COMMANDS:
 void receive_commands(void *handle, client_t *client);
 void receive_message(void *handle, char *buffer);
+void handle_received_data(char *buffer, void *handle, client_t *client);

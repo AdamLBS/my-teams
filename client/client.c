@@ -29,19 +29,12 @@ void receive_commands(void *handle, struct client *client)
     struct timeval timeout; timeout.tv_sec = 0; timeout.tv_usec = 200;
     int ready = select(client->sock + 1, &read_fds, NULL, NULL, &timeout);
     if (ready == -1) {
-        perror("select");
-        return;
+        perror("select"); return;
     } else if (ready == 0)
         return;
     int valread = recv(client->sock, buffer, sizeof(buffer), 0);
     if (valread > 0) {
-        if (strstr(buffer, "receive:"))
-            receive_message(handle, buffer);
-        if (strstr(buffer, "LOGIN OK\n")) {
-            ((int (*)(char const *, const char *))
-            dlsym(handle, "client_event_logged_in"))
-            (client->id, client->username);
-        }
+        handle_received_data(buffer, handle, client);
     }
 }
 

@@ -30,7 +30,7 @@ void check_if_client_exist(FILE *fp, client_t *client, char *username)
     fclose(fp);
 }
 
-void login_command(void *handle, client_t *client, char *buffer)
+void login_command(client_t *client, char *buffer)
 {
     char *username = strchr(buffer, ' ');
     if (username != NULL)
@@ -52,10 +52,8 @@ void login_command(void *handle, client_t *client, char *buffer)
     send(client->sock, "\n", 1, 0);
 }
 
-void logout_command(void *handle, client_t *client, char *buffer)
+void logout_command(client_t *client, char *buffer)
 {
-    ((int (*)(char const *, const char *))
-    dlsym(handle, "client_event_logged_out"))(client->id, client->username);
     send(client->sock, buffer, strlen(buffer), 0);
     send(client->sock, "\n", 1, 0);
 }
