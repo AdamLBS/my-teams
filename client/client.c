@@ -25,6 +25,7 @@ void set_struct_client(client_t *cl)
 void receive_commands(void *handle, struct client *client)
 {
     char buffer[MAX_BODY_LENGTH];
+    memset(buffer, 0, MAX_BODY_LENGTH);
     fd_set read_fds; FD_ZERO(&read_fds); FD_SET(client->sock, &read_fds);
     struct timeval timeout; timeout.tv_sec = 0; timeout.tv_usec = 200;
     int ready = select(client->sock + 1, &read_fds, NULL, NULL, &timeout);

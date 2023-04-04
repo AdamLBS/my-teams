@@ -10,6 +10,7 @@
 void send_commands(void *handle, client_t *client)
 {
     char *buffer = malloc(sizeof(char) * MAX_BODY_LENGTH);
+    memset(buffer, 0, MAX_BODY_LENGTH);
     read(0, buffer, MAX_BODY_LENGTH);
     buffer[strlen(buffer) - 1] = '\0';
     if (strstr(buffer, "/login"))
