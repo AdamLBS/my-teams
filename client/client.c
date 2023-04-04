@@ -20,6 +20,7 @@ void *get_lib(void)
 void set_struct_client(client_t *cl)
 {
     cl->username = malloc(sizeof(char) * MAX_NAME_LENGTH);
+    memset(cl->username, 0, MAX_NAME_LENGTH);
 }
 
 void receive_commands(void *handle, struct client *client)
@@ -58,7 +59,7 @@ void create_client(char *ip, char *port)
     connect(client.sock, (struct sockaddr *)&myaddr, sizeof(myaddr));
     while (1) {
         receive_commands(handle, &client);
-        send_commands(&client);
+        send_commands(handle, &client);
     }
     dlclose(handle);
 }

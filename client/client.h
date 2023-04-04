@@ -34,7 +34,7 @@ typedef struct client {
 
 void create_client(char *ip, char *port);
 // COMMANDS:
-void send_commands(client_t *client);
+void send_commands(void *handle, client_t *client);
 void login_command(client_t *client, char *buffer);
 void logout_command(client_t *client, char *buffer);
 void users_command(client_t *client);
@@ -49,3 +49,5 @@ void receive_message(void *handle, char *buffer);
 void handle_received_data(void *handle, client_t *client);
 // BUFFER HANDLING:
 int is_buffer_ended(client_t *client);
+//AUTH HANDLING:
+void log_unauthorized(void *handle);
