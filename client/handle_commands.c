@@ -7,16 +7,20 @@
 
 #include "client.h"
 
-void handle_received_data(char *buffer, void *handle, client_t *client)
+void handle_received_data(void *handle, client_t *client)
 {
-    if (strstr(buffer, "receive:"))
-    receive_message(handle, buffer);
-    if (strstr(buffer, "LOGIN OK\n")) {
+    if (strstr(client->buffer, "receive:"))
+    receive_message(handle, client->buffer);
+    if (strstr(client->buffer, "users:"))
+        receive_users(client->buffer, handle);
+    if (strstr(client->buffer, "user:"))
+        receive_user(handle, client->buffer);
+    if (strstr(client->buffer, "LOGIN OK\n")) {
         ((int (*)(char const *, const char *))
         dlsym(handle, "client_event_logged_in"))
         (client->id, client->username);
     }
-    if (strstr(buffer, "LOGOUT OK\n")) {
+    if (strstr(client->buffer, "LOGOUT OK\n")) {
         ((int (*)(char const *, const char *))
         dlsym(handle, "client_event_logged_out"))
         (client->id, client->username);

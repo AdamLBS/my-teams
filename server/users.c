@@ -9,25 +9,7 @@
 
 void users_command(struct client *client)
 {
-    struct client *tmp;
-    int val = 0;
-    int copy = 1;
-    char *str = malloc(sizeof(char) * MAX_BODY_LENGTH);
-    LIST_FOREACH(tmp, &head, next) {
-        if (val)
-            str = strcat(str, " ");
-        if (tmp->username != NULL) {
-            str = copy == 1 ? strcpy(str, tmp->id) : strcat(str, tmp->id);
-            str = strcat(str, " ");
-            str = strcat(str, tmp->username);
-            str = strcat(str, " ");
-            str = strcat(str, (tmp->sock > 0 ? "1" : "0"));
-            val = 1, copy = 0;
-        }
-    }
-    str = strcat(str, "\n");
-    send(client->sock, str, strlen(str), 0);
-    free(str);
+    get_users_from_save(client);
 }
 
 void user_command(struct client *client, char *buffer)
@@ -39,17 +21,66 @@ void user_command(struct client *client, char *buffer)
         dprintf(client->sock, "ERROR\n");
         return;
     }
-    struct client *tmp;
-    char *buf = malloc(sizeof(char) * MAX_BODY_LENGTH);
-    LIST_FOREACH(tmp, &head, next) {
-        if (strcmp(tmp->id, id) == 0) {
-            if (tmp->username != NULL) {
-                buf = strcpy(buf, tmp->id); buf = strcat(buf, " ");
-                buf = strcat(buf, tmp->username); buf = strcat(buf, " ");
-                buf = strcat(buf, (tmp->sock > 0 ? "1\n" : "0\n"));
-                send(client->sock, buf, strlen(buf), 0); free(buf); return;
-            }
+    char *path = malloc(sizeof(char) * MAX_DESCRIPTION_LENGTH);
+    memset(path, 0, MAX_DESCRIPTION_LENGTH);
+    strcpy(path, "users/"); strcat(path, id); strcat(path, ".txt");
+    FILE *fd = fopen(path, "r");
+    if (fd == 0) {
+        send(client->sock, "user: ", 6, 0);
+        send(client->sock, id, strlen(id), 0);
+        send(client->sock, " ERROR\n", 7, 0);
+        free(path);
+        return;
+    }
+    char **val = read_user_from_save(path);
+    send_user(val, client);
+}
+
+void get_users_from_save(struct client *client)
+{
+    DIR *d; struct dirent *dir; char *path = NULL;
+    char ***userList = malloc(sizeof(char **) * 100);
+    memset(userList, 0, 100);
+    int index = 0; d = opendir("users/");
+    if (!d) return;
+    while ((dir = readdir(d)) != NULL) {
+        path = dir->d_name;
+        if (strlen(path) > 4 && !strcmp(path + strlen(path) - 4, ".txt")) {
+            int size = strlen("users/") + strlen(dir->d_name) + 1;
+            char *fullpath = malloc(sizeof(char ) * size);
+            memset(fullpath, '\0', size);
+            strcpy(fullpath, "users/");
+            strcat(fullpath, dir->d_name);
+            char **val = read_user_from_save(fullpath);
+            userList[index] = val;
+            index++;
         }
     }
-    dprintf(client->sock, "ERROR\n");
+    send_users(userList, client);
+}
+
+void send_users(char ***userList, struct client *client)
+{
+    send(client->sock, "users: ", 7, 0);
+    for (int i = 0; userList[i]; i++) {
+        if (i != 0)
+            send(client->sock, " ", 1, 0);
+        send(client->sock, userList[i][0], strlen(userList[i][0]), 0);
+        send(client->sock, " ", 1, 0);
+        send(client->sock, userList[i][1], strlen(userList[i][1]), 0);
+        send(client->sock, " ", 1, 0);
+        send(client->sock, userList[i][2], strlen(userList[i][2]), 0);
+    }
+    send(client->sock, "\n", 1, 0);
+}
+
+void send_user(char **user, struct client *client)
+{
+    send(client->sock, "user: ", 6, 0);
+    send(client->sock, user[0], strlen(user[0]), 0);
+    send(client->sock, " ", 1, 0);
+    send(client->sock, user[1], strlen(user[1]), 0);
+    send(client->sock, " ", 1, 0);
+    send(client->sock, user[2], strlen(user[2]), 0);
+    send(client->sock, "\n", 1, 0);
 }

@@ -29,18 +29,23 @@ typedef struct client {
     int sock;
     char *username;
     char id[37];
+    char *buffer;
 } client_t;
 
 void create_client(char *ip, char *port);
 // COMMANDS:
-void send_commands(void *handle, client_t *client);
+void send_commands(client_t *client);
 void login_command(client_t *client, char *buffer);
 void logout_command(client_t *client, char *buffer);
-void users_command(void *handle, client_t *client);
-void user_command(void *handle, client_t *client, char *buffer);
+void users_command(client_t *client);
+void receive_users(char *buffer, void *handle);
+void user_command(client_t *client, char *buffer);
+void receive_user(void *handle, char *buffer);
 void help_command(void);
 void send_command(char *buffer, struct client *client);
 // RECEIVE COMMANDS:
 void receive_commands(void *handle, client_t *client);
 void receive_message(void *handle, char *buffer);
-void handle_received_data(char *buffer, void *handle, client_t *client);
+void handle_received_data(void *handle, client_t *client);
+// BUFFER HANDLING:
+int is_buffer_ended(client_t *client);

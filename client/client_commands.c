@@ -7,7 +7,7 @@
 
 #include "client.h"
 
-void send_commands(void *handle, client_t *client)
+void send_commands(client_t *client)
 {
     char *buffer = malloc(sizeof(char) * MAX_BODY_LENGTH);
     memset(buffer, 0, MAX_BODY_LENGTH);
@@ -22,8 +22,8 @@ void send_commands(void *handle, client_t *client)
     if (strstr(buffer, "/send"))
         send_command(buffer, client);
     if (strcmp(buffer, "/users") == 0)
-        users_command(handle, client);
+        users_command(client);
     else if (strstr(buffer, "/user"))
-        user_command(handle, client, buffer);
+        user_command(client, buffer);
     free(buffer);
 }

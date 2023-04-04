@@ -24,6 +24,7 @@ void login_command(void *handle, struct client *client, char *buffer)
     }
     ((int (*)(char const *))
     dlsym(handle, "server_event_user_logged_in"))(client->id);
+    set_user_to_logged_in(client->id);
 }
 
 void logout_command(void *handle, struct client *client)
@@ -31,4 +32,5 @@ void logout_command(void *handle, struct client *client)
     ((int (*)(char const *))
     dlsym(handle, "server_event_user_logged_out"))(client->id);
     send(client->sock, "LOGOUT OK\n", 10, 0);
+    set_user_to_logged_out(client->id);
 }

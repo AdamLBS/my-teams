@@ -24,8 +24,6 @@ void set_struct_client(client_t *cl)
 
 void receive_commands(void *handle, struct client *client)
 {
-    char buffer[MAX_BODY_LENGTH];
-    memset(buffer, 0, MAX_BODY_LENGTH);
     fd_set read_fds; FD_ZERO(&read_fds); FD_SET(client->sock, &read_fds);
     struct timeval timeout; timeout.tv_sec = 0; timeout.tv_usec = 200;
     int ready = select(client->sock + 1, &read_fds, NULL, NULL, &timeout);
@@ -33,9 +31,15 @@ void receive_commands(void *handle, struct client *client)
         perror("select"); return;
     } else if (ready == 0)
         return;
-    int valread = recv(client->sock, buffer, sizeof(buffer), 0);
+    char tmpBuffer[MAX_BODY_LENGTH];
+    memset(tmpBuffer, 0, MAX_BODY_LENGTH);
+    int valread = recv(client->sock, tmpBuffer, sizeof(tmpBuffer), 0);
+    strcat(client->buffer, tmpBuffer);
+    if (!is_buffer_ended(client))
+        return;
     if (valread > 0) {
-        handle_received_data(buffer, handle, client);
+        handle_received_data(handle, client);
+        memset(client->buffer, 0, MAX_BODY_LENGTH);
     }
 }
 
@@ -43,6 +47,8 @@ void create_client(char *ip, char *port)
 {
     void *handle = get_lib();
     client_t client;
+    client.buffer = malloc(sizeof(char) * MAX_BODY_LENGTH);
+    memset(client.buffer, 0, MAX_BODY_LENGTH);
     client.sock = socket(AF_INET, SOCK_STREAM, 0);
     set_struct_client(&client);
     struct sockaddr_in myaddr;
@@ -52,7 +58,7 @@ void create_client(char *ip, char *port)
     connect(client.sock, (struct sockaddr *)&myaddr, sizeof(myaddr));
     while (1) {
         receive_commands(handle, &client);
-        send_commands(handle, &client);
+        send_commands(&client);
     }
     dlclose(handle);
 }

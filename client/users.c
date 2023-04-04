@@ -7,15 +7,15 @@
 
 #include "client.h"
 
-void users_command(void *handle, client_t *client)
+void users_command(client_t *client)
 {
     send(client->sock, "/users\n", strlen("/users\n"), 0);
-    char line[MAX_BODY_LENGTH];
-    if (recv(client->sock, line, MAX_BODY_LENGTH, 0) < 0) {
-        printf("Error: recv\n");
-        return;
-    }
-    char *token = strtok(line, " ");
+}
+
+void receive_users(char *buffer, void *handle)
+{
+    for (int i = 0; i != 7; i++, buffer++);
+    char *token = strtok(buffer, " ");
     while (token != NULL) {
         char *id = token;
         token = strtok(NULL, " ");
@@ -28,7 +28,23 @@ void users_command(void *handle, client_t *client)
     }
 }
 
-void user_command(void *handle, client_t *client, char *buffer)
+void receive_user(void *handle, char *buffer)
+{
+    int error = strstr(buffer, "ERROR") != NULL;
+    for (int i = 0; i != 6; i++, buffer++);
+    char *id = strtok(buffer, " ");
+    if (error) {
+        ((int (*)(char const *))
+        dlsym(handle, "client_error_unknown_user"))(id);
+        return;
+    }
+    char *username = strtok(NULL, " ");
+    int is_connected = atoi(strtok(NULL, " "));
+    ((int (*)(char const *, char const *, int))
+    dlsym(handle, "client_print_user"))(id, username, is_connected);
+}
+
+void user_command(client_t *client, char *buffer)
 {
     char *id_find = strchr(buffer, ' ');
     if (id_find != NULL)
@@ -38,16 +54,4 @@ void user_command(void *handle, client_t *client, char *buffer)
     }
     send(client->sock, buffer, strlen(buffer), 0);
     send(client->sock, "\n", strlen("\n"), 0);
-    char line[MAX_BODY_LENGTH];
-    recv(client->sock, line, MAX_BODY_LENGTH, 0);
-    if (strstr(line, "ERROR")) {
-        ((int (*)(char const *))
-        dlsym(handle, "client_error_unknown_user"))(id_find);
-        return;
-    }
-    char *id = strtok(line, " ");
-    char *username = strtok(NULL, " ");
-    int is_connected = atoi(strtok(NULL, " "));
-    ((int (*)(char const *, char const *, int))
-    dlsym(handle, "client_print_user"))(id, username, is_connected);
 }

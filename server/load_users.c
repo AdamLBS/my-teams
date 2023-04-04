@@ -48,8 +48,8 @@ char **read_user_from_save(char *path)
         return NULL;
     size_t len = 0;
     char *line = NULL;
-    char **array = malloc(sizeof(char * ) * 10);
-    memset(array, 0, 10);
+    char **array = malloc(sizeof(char * ) * 100);
+    memset(array, 0, 100);
     int i = 0;
     while (getline(&line, &len, fptr) != -1) {
         if (line[strlen(line) - 1] == '\n') {
