@@ -9,7 +9,7 @@
 
 void create_team_command(struct client *client, char *buffer)
 {
-    char *team_name; char *team_desc; char *team_uuid;
+    char *team_name; char *team_uuid;
     buffer += 12; buffer[strlen(buffer)] = '\0';
     char *token = strtok(buffer, " ");
     team_uuid = token;
