@@ -48,10 +48,34 @@ int do_user_exists(char *user_uuid)
     return 0;
 }
 
-void save_server(void)
+void save_server(char ***users)
 {
     struct client *tmp;
-    LIST_FOREACH(tmp, &head, next) {
-        set_user_to_logged_out(tmp->id);
+    for (int i = 0; users[i]; i++) {
+        set_user_to_logged_out(users[i][0]);
     }
+}
+
+void unload_users_from_save(void)
+{
+    DIR *d; struct dirent *dir; char *path = NULL;
+    char ***userList = malloc(sizeof(char **) * 100);
+    memset(userList, 0, 100);
+    int index = 0; d = opendir("users/");
+    if (!d)
+        return;
+    while ((dir = readdir(d)) != NULL) {
+        path = dir->d_name;
+        if (strlen(path) > 4 && !strcmp(path + strlen(path) - 4, ".txt")) {
+            int size = strlen("users/") + strlen(dir->d_name) + 1;
+            char *fullpath = malloc(sizeof(char ) * size);
+            memset(fullpath, '\0', size);
+            strcpy(fullpath, "users/");
+            strcat(fullpath, dir->d_name);
+            char **val = read_user_from_save(fullpath);
+            userList[index] = val;
+            index++;
+        }
+    }
+    save_server(userList);
 }
