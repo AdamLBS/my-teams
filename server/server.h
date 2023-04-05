@@ -34,6 +34,12 @@
 #define MAX_BODY_LENGTH 512
 #define UNKNOWN_CMD "500 Syntax error, command unrecognized.\n"
 
+struct server {
+    char *name;
+    char *uuid;
+    char *desc;
+};
+
 struct client {
     int sock;
     char *username;
@@ -41,6 +47,7 @@ struct client {
     char *id;
     char *buffer;
     struct sockaddr_in addr;
+    struct server *server;
     LIST_ENTRY(client) next;
 };
 
@@ -59,7 +66,7 @@ void send_command(char *buffer);
 void create_save_folder(void);
 void save_user(char *user_uuid, char *user_name);
 int do_user_exists(char *user_uuid);
-void save_server(void);
+void save_server(char ***users);
 char **read_user_from_save(char *path);
 void load_users_from_save(void);
 void send_user_loaded(char ***userList);
@@ -69,3 +76,6 @@ void set_user_to_logged_out(char *uid);
 void send_users(char ***userList, struct client *client);
 void send_user(char **user, struct client *client);
 int commands(struct client *cli, char *buffer);
+void create_team_command(struct client *client, char *buffer);
+int other_commands(struct client *cli, char *buffer);
+void unload_users_from_save(void);
