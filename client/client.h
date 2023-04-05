@@ -49,6 +49,7 @@ void receive_user(char *buffer);
 void help_command(void);
 void send_command(char *buffer, struct client *client);
 void use_command(client_t *client, char *buffer);
+void info_command(client_t *client);
 // RECEIVE COMMANDS:
 void receive_commands(struct client *client);
 void receive_message(char *buffer);
