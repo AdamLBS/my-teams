@@ -20,6 +20,7 @@
 #include <uuid/uuid.h>
 #include <signal.h>
 #include <fcntl.h>
+#include "../libs/myteams/logging_client.h"
 
 #define MAX_NAME_LENGTH 32
 #define MAX_DESCRIPTION_LENGTH 255
@@ -34,20 +35,21 @@ typedef struct client {
 
 void create_client(char *ip, char *port);
 // COMMANDS:
-void send_commands(void *handle, client_t *client);
+void send_commands(client_t *client);
 void login_command(client_t *client, char *buffer);
 void logout_command(client_t *client, char *buffer);
 void users_command(client_t *client);
-void receive_users(char *buffer, void *handle);
+void receive_users(char *buffer);
 void user_command(client_t *client, char *buffer);
-void receive_user(void *handle, char *buffer);
+void receive_user(char *buffer);
 void help_command(void);
 void send_command(char *buffer, struct client *client);
 // RECEIVE COMMANDS:
-void receive_commands(void *handle, client_t *client);
-void receive_message(void *handle, char *buffer);
-void handle_received_data(void *handle, client_t *client);
+void receive_commands(struct client *client);
+void receive_message(char *buffer);
+void handle_received_data(client_t *client);
+void receive_users(char *buffer);
 // BUFFER HANDLING:
 int is_buffer_ended(client_t *client);
 //AUTH HANDLING:
-void log_unauthorized(void *handle);
+void log_unauthorized(void);

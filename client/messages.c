@@ -17,7 +17,7 @@ void send_command(char *buffer, struct client *client)
     send(client->sock, "\n", 1, 0);
 }
 
-void receive_message(void *handle, char *buffer)
+void receive_message(char *buffer)
 {
     buffer += 9; char *uuid; char *msg;
     buffer[strlen(buffer) - 1] = '\0';
@@ -25,6 +25,5 @@ void receive_message(void *handle, char *buffer)
     uuid = token;
     token = strtok(NULL, " ");
     msg = token;
-    ((int (*)(char const *, char const *))
-    dlsym(handle, "client_event_private_message_received"))(uuid, msg);
+    client_event_private_message_received(uuid, msg);
 }

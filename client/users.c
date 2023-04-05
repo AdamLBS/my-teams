@@ -12,7 +12,7 @@ void users_command(client_t *client)
     send(client->sock, "/users\n", strlen("/users\n"), 0);
 }
 
-void receive_users(char *buffer, void *handle)
+void receive_users(char *buffer)
 {
     for (int i = 0; i != 7; i++, buffer++);
     char *token = strtok(buffer, " ");
@@ -23,25 +23,22 @@ void receive_users(char *buffer, void *handle)
         token = strtok(NULL, " ");
         int is_connected = atoi(token);
         token = strtok(NULL, " ");
-        ((int (*)(char const *, char const *, int))
-        dlsym(handle, "client_print_users"))(id, username, is_connected);
+        client_print_users(id, username, is_connected);
     }
 }
 
-void receive_user(void *handle, char *buffer)
+void receive_user(char *buffer)
 {
     int error = strstr(buffer, "ERROR") != NULL;
     for (int i = 0; i != 6; i++, buffer++);
     char *id = strtok(buffer, " ");
     if (error) {
-        ((int (*)(char const *))
-        dlsym(handle, "client_error_unknown_user"))(id);
+        client_error_unknown_user(id);
         return;
     }
     char *username = strtok(NULL, " ");
     int is_connected = atoi(strtok(NULL, " "));
-    ((int (*)(char const *, char const *, int))
-    dlsym(handle, "client_print_user"))(id, username, is_connected);
+    client_print_user(id, username, is_connected);
 }
 
 void user_command(client_t *client, char *buffer)

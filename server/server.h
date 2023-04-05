@@ -25,6 +25,7 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <stdbool.h>
+#include "../libs/myteams/logging_server.h"
 
 #define MAX_CLIENTS 100
 #define MAX_NAME_LENGTH 32
@@ -46,23 +47,24 @@ extern LIST_HEAD(list_head, client) head;
 
 void create_server(char *port);
 void accept_socket(int m_sock, struct sockaddr_in addr, int rl);
-void operations_on_sockets(fd_set *fd, void *handle, struct client *tmp);
+void operations_on_sockets(fd_set *fd, struct client *tmp);
 void add_and_set_sockets(fd_set *fd, int *m_sd, int m_sock);
 void remove_client(int socket);
-void login_command(void *handle, struct client *client, char *buffer);
-void logout_command(void *handle, struct client *client);
+void login_command(struct client *client, char *buffer);
+void logout_command(struct client *client);
 void users_command(struct client *client);
 void user_command(struct client *client, char *buffer);
-void send_command(void *handle, char *buffer);
+void send_command(char *buffer);
 void create_save_folder(void);
 void save_user(char *user_uuid, char *user_name);
 int do_user_exists(char *user_uuid);
 void save_server(void);
 char **read_user_from_save(char *path);
-void load_users_from_save(void *handle);
-void send_user_loaded(char ***userList, void *handle);
+void load_users_from_save(void);
+void send_user_loaded(char ***userList);
 void get_users_from_save(struct client *client);
 void set_user_to_logged_in(char *uid);
 void set_user_to_logged_out(char *uid);
 void send_users(char ***userList, struct client *client);
 void send_user(char **user, struct client *client);
+int commands(struct client *cli, char *buffer);

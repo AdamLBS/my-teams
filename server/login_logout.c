@@ -7,7 +7,7 @@
 
 #include "server.h"
 
-void login_command(void *handle, struct client *client, char *buffer)
+void login_command(struct client *client, char *buffer)
 {
     char *str = strchr(buffer, ' ');
     if (str != NULL)
@@ -18,19 +18,15 @@ void login_command(void *handle, struct client *client, char *buffer)
     client->id = strdup(strtok(NULL, " "));
     if (do_user_exists(client->id) == 0) {
         save_user(client->id, client->username);
-        ((int (*)(char const *, char const *))
-        dlsym(handle, "server_event_user_created"))
-        (client->id, client->username);
+        server_event_user_created(client->id, client->username);
     }
-    ((int (*)(char const *))
-    dlsym(handle, "server_event_user_logged_in"))(client->id);
+    server_event_user_logged_in(client->id);
     set_user_to_logged_in(client->id);
 }
 
-void logout_command(void *handle, struct client *client)
+void logout_command(struct client *client)
 {
-    ((int (*)(char const *))
-    dlsym(handle, "server_event_user_logged_out"))(client->id);
+    server_event_user_logged_out(client->id);
     send(client->sock, "LOGOUT OK\n", 10, 0);
     set_user_to_logged_out(client->id);
 }

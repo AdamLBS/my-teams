@@ -7,23 +7,13 @@
 
 #include "client.h"
 
-void *get_lib(void)
-{
-    void *handle = dlopen("./libs/myteams/libmyteams.so", RTLD_LAZY);
-    if (!handle) {
-        fprintf(stderr, "%s\n", dlerror());
-        exit(84);
-    }
-    return handle;
-}
-
 void set_struct_client(client_t *cl)
 {
     cl->username = malloc(sizeof(char) * MAX_NAME_LENGTH);
     memset(cl->username, 0, MAX_NAME_LENGTH);
 }
 
-void receive_commands(void *handle, struct client *client)
+void receive_commands(struct client *client)
 {
     fd_set read_fds; FD_ZERO(&read_fds); FD_SET(client->sock, &read_fds);
     struct timeval timeout; timeout.tv_sec = 0; timeout.tv_usec = 200;
@@ -39,14 +29,13 @@ void receive_commands(void *handle, struct client *client)
     if (!is_buffer_ended(client))
         return;
     if (valread > 0) {
-        handle_received_data(handle, client);
+        handle_received_data(client);
         memset(client->buffer, 0, MAX_BODY_LENGTH);
     }
 }
 
 void create_client(char *ip, char *port)
 {
-    void *handle = get_lib();
     client_t client;
     client.buffer = malloc(sizeof(char) * MAX_BODY_LENGTH);
     memset(client.buffer, 0, MAX_BODY_LENGTH);
@@ -58,8 +47,7 @@ void create_client(char *ip, char *port)
     myaddr.sin_port = htons(atoi(port));
     connect(client.sock, (struct sockaddr *)&myaddr, sizeof(myaddr));
     while (1) {
-        receive_commands(handle, &client);
-        send_commands(handle, &client);
+        receive_commands(&client);
+        send_commands(&client);
     }
-    dlclose(handle);
 }

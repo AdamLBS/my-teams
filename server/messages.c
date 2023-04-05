@@ -7,7 +7,7 @@
 
 #include "server.h"
 
-void send_command(void *handle, char *buffer)
+void send_command(char *buffer)
 {
     buffer += 6; char *r_uuid; char *s_uuid; char *msg; char *token;
     token = strtok(buffer, " "); struct client *tmp;
@@ -18,8 +18,7 @@ void send_command(void *handle, char *buffer)
         token = strtok(NULL, " ");
         s_uuid = token;
     }
-    ((int (*)(char const *, char const *, char const *))
-    dlsym(handle, "server_event_private_message_sended"))(s_uuid, r_uuid, msg);
+    server_event_private_message_sended(s_uuid, r_uuid, msg);
     LIST_FOREACH(tmp, &head, next) {
         if (strcmp(r_uuid, tmp->id) == 0) {
             char *nbuff = malloc(sizeof(char) * MAX_BODY_LENGTH);

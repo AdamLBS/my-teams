@@ -9,16 +9,6 @@
 
 struct list_head head;
 
-void *get_lib(void)
-{
-    void *handle = dlopen("./libs/myteams/libmyteams.so", RTLD_LAZY);
-    if (!handle) {
-        fprintf(stderr, "%s\n", dlerror());
-        exit(84);
-    }
-    return handle;
-}
-
 void free_all_clients(void)
 {
     while (!LIST_EMPTY(&head)) {
@@ -31,7 +21,7 @@ void free_all_clients(void)
 
 void create_server(char *port)
 {
-    void *handle = get_lib(); load_users_from_save(handle);
+    load_users_from_save();
     struct client *tmp = NULL; LIST_INIT(&head);
     int max_sd, master_socket = socket(AF_INET, SOCK_STREAM, 0);
     setsockopt(master_socket, 1, 2, &(int){1}, sizeof(int));
@@ -48,7 +38,7 @@ void create_server(char *port)
             return save_server();
         if (FD_ISSET(master_socket, &readfds))
             accept_socket(master_socket, myaddr, addrlen);
-        operations_on_sockets(&readfds, handle, tmp);
+        operations_on_sockets(&readfds, tmp);
     }
-    close(master_socket); free_all_clients(); dlclose(handle);
+    close(master_socket); free_all_clients();
 }

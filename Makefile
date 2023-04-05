@@ -11,7 +11,7 @@ CLIENT_NAME = myteams_cli
 SEVER_SRC = server/*.c
 CLIENT_SRC = client/*.c
 
-FLAGS = -Wall -Wextra -g3 -luuid -ldl
+FLAGS = -L$(PWD)/libs/myteams -lmyteams -I./include -Wall -Wextra -g3 -luuid -Wl,-rpath=libs/myteams 
 
 all:
 	gcc -o $(SERVER_NAME) $(SEVER_SRC) $(FLAGS)

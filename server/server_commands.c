@@ -7,14 +7,14 @@
 
 #include "server.h"
 
-int commands(struct client *cli, char *buffer, void *handle)
+int commands(struct client *cli, char *buffer)
 {
     if (strstr(buffer, "/login")) {
-        login_command(handle, cli, buffer);
+        login_command(cli, buffer);
         send(cli->sock, "LOGIN OK\n", 9, 0); return 0;
     }
     if (strcmp(buffer, "/logout") == 0) {
-        logout_command(handle, cli); return 1;
+        logout_command(cli); return 1;
     }
     if (strcmp(buffer, "/users") == 0) {
         users_command(cli); return 0;
@@ -23,13 +23,13 @@ int commands(struct client *cli, char *buffer, void *handle)
         user_command(cli, buffer); return 0;
     }
     if (strstr(buffer, "/send")) {
-        send_command(handle, buffer); return 0;
+        send_command(buffer); return 0;
     }
     write(cli->sock, UNKNOWN_CMD, strlen(UNKNOWN_CMD));
     return 0;
 }
 
-int check_commands_socket(struct client *cli, void *handle)
+int check_commands_socket(struct client *cli)
 {
     int valread; char buffer[MAX_BODY_LENGTH] = {0};
     if ((valread = recv(cli->sock, buffer, sizeof(buffer), 0)) < 0) {
@@ -42,7 +42,7 @@ int check_commands_socket(struct client *cli, void *handle)
     }
     if (cli->buffer[strlen(cli->buffer) - 1] == '\n') {
         cli->buffer[strlen((cli->buffer)) - 1] = '\0';
-        if (commands(cli, cli->buffer, handle) == 1)
+        if (commands(cli, cli->buffer) == 1)
             return 1;
         free(cli->buffer);
         cli->buffer = malloc(sizeof(char) * MAX_BODY_LENGTH);
@@ -52,12 +52,12 @@ int check_commands_socket(struct client *cli, void *handle)
 }
 
 // to fix error with memory management
-void operations_on_sockets(fd_set *fd, void *handle, struct client *tmp)
+void operations_on_sockets(fd_set *fd, struct client *tmp)
 {
     int val = 0;
     LIST_FOREACH(tmp, &head, next) {
         if (FD_ISSET(tmp->sock, fd))
-            val = check_commands_socket(tmp, handle);
+            val = check_commands_socket(tmp);
         if (val == 1) {
             tmp->sock = -1;
             val = 0;

@@ -8,7 +8,7 @@
 #include "server.h"
 #include <stdio.h>
 
-void load_users_from_save(void *handle)
+void load_users_from_save(void)
 {
     DIR *d; struct dirent *dir; char *path = NULL;
     char ***userList = malloc(sizeof(char **) * 100);
@@ -29,15 +29,13 @@ void load_users_from_save(void *handle)
             index++;
         }
     }
-    send_user_loaded(userList, handle);
+    send_user_loaded(userList);
 }
 
-void send_user_loaded(char ***userList, void *handle)
+void send_user_loaded(char ***userList)
 {
     for (int i = 0; userList[i] ; i++) {
-        ((int (*)(char const *, char const *))
-        dlsym(handle, "server_event_user_loaded"))
-        (userList[i][1], userList[i][0]);
+        server_event_user_loaded(userList[i][1], userList[i][0]);
     }
 }
 
