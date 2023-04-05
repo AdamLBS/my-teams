@@ -7,6 +7,12 @@
 
 #include "client.h"
 
+void other_commands(client_t *client, char *buffer)
+{
+    if (strstr(buffer, "/use"))
+        use_command(client, buffer);
+}
+
 void send_commands(client_t *client)
 {
     char *buffer = malloc(sizeof(char) * MAX_BODY_LENGTH);
@@ -27,6 +33,7 @@ void send_commands(client_t *client)
         users_command(client);
     else if (strstr(buffer, "/user"))
         user_command(client, buffer);
+    other_commands(client, buffer);
     free(buffer);
 }
 

@@ -46,6 +46,7 @@ void create_client(char *ip, char *port)
     inet_aton(ip, &myaddr.sin_addr);
     myaddr.sin_port = htons(atoi(port));
     connect(client.sock, (struct sockaddr *)&myaddr, sizeof(myaddr));
+    client.context = 0;
     while (1) {
         receive_commands(&client);
         send_commands(&client);
