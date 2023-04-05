@@ -30,3 +30,12 @@ void logout_command(struct client *client)
     send(client->sock, "LOGOUT OK\n", 10, 0);
     set_user_to_logged_out(client->id);
 }
+
+void catch_client_logout(struct client *client)
+{
+    if (client->username) {
+        server_event_user_logged_out(client->id);
+        set_user_to_logged_out(client->id);
+    }
+    client->sock = -1;
+}

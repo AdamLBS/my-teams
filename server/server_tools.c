@@ -48,7 +48,8 @@ void remove_client(int socket)
     struct client *tmp;
     LIST_FOREACH(tmp, &head, next) {
         if (tmp->sock == socket) {
-            close(tmp->sock);
+            if (tmp->sock != -1)
+                close(tmp->sock);
             LIST_REMOVE(tmp, next);
             free(tmp->buffer);
             free(tmp);

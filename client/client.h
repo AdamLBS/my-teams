@@ -20,6 +20,8 @@
 #include <uuid/uuid.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <time.h>
+
 #include "../libs/myteams/logging_client.h"
 
 #define MAX_NAME_LENGTH 32
@@ -64,3 +66,7 @@ void receive_users(char *buffer);
 int is_buffer_ended(client_t *client);
 //AUTH HANDLING:
 void log_unauthorized(void);
+//MESSAGES HISTORY:
+void send_messages_command(char *buffer, struct client *client);
+void receive_messages_history(char *buffer, struct client *client);
+void print_history(char *token, char *id, char *msg, struct client *client);

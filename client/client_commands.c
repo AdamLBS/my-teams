@@ -37,6 +37,8 @@ void send_commands(client_t *client)
         send_command(buffer, client);
     if (strstr(buffer, "/create"))
         check_create_commands(client, buffer);
+    if (strstr(buffer, "/messages"))
+        send_messages_command(buffer, client);
     other_commands(client, buffer);
     free(buffer);
 }

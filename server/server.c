@@ -19,6 +19,19 @@ void free_all_clients(void)
     }
 }
 
+void remove_closed_clients(void)
+{
+    struct client *tmp;
+    LIST_FOREACH(tmp, &head, next) {
+        if (tmp->sock == -1) {
+            LIST_REMOVE(tmp, next);
+            free(tmp->buffer);
+            free(tmp);
+            return;
+        }
+    }
+}
+
 void create_server(char *port)
 {
     load_users_from_save();
@@ -38,7 +51,7 @@ void create_server(char *port)
             return unload_users_from_save();
         if (FD_ISSET(master_socket, &readfds))
             accept_socket(master_socket, myaddr, addrlen);
-        operations_on_sockets(&readfds, tmp);
+        operations_on_sockets(&readfds, tmp); remove_closed_clients();
     }
     close(master_socket); free_all_clients();
 }

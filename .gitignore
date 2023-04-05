@@ -6,3 +6,4 @@ myteams_server
 *.dSYM
 log.txt
 users/
+messages/

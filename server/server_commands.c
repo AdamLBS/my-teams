@@ -23,7 +23,10 @@ int commands(struct client *cli, char *buffer)
         user_command(cli, buffer); return 0;
     }
     if (strstr(buffer, "/send")) {
-        send_command(buffer); return 0;
+        send_command(buffer, cli); return 0;
+    }
+    if (strstr(buffer, "/messages")) {
+        messages_command(buffer, cli); return 0;
     }
     return (other_commands(cli, buffer));
 }
@@ -43,8 +46,8 @@ int other_commands(struct client *cli, char *buffer)
 int check_commands_socket(struct client *cli)
 {
     int valread; char buffer[MAX_BODY_LENGTH] = {0};
-    if ((valread = recv(cli->sock, buffer, sizeof(buffer), 0)) < 0) {
-        cli->sock = -1; return 0;
+    if ((valread = recv(cli->sock, buffer, sizeof(buffer), 0)) <= 0) {
+        catch_client_logout(cli); return 1;
     } else {
         if (cli->buffer[0] != '\0')
             strcat(cli->buffer, buffer);
@@ -67,8 +70,9 @@ void operations_on_sockets(fd_set *fd, struct client *tmp)
 {
     int val = 0;
     LIST_FOREACH(tmp, &head, next) {
-        if (FD_ISSET(tmp->sock, fd))
+        if (FD_ISSET(tmp->sock, fd)) {
             val = check_commands_socket(tmp);
+        }
         if (val == 1) {
             tmp->sock = -1;
             val = 0;

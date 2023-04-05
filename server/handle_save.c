@@ -10,6 +10,7 @@
 void create_save_folder(void)
 {
     mkdir("users", 0755);
+    mkdir("messages", 0755);
 }
 
 void save_user(char *user_uuid, char *user_name)
