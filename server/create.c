@@ -14,6 +14,6 @@ void create_team_command(struct client *client, char *buffer)
     char *token = strtok(buffer, " ");
     team_uuid = token;
     token = strtok(NULL, " ");
-    team_name = token; token = strtok(NULL, ""); team_desc = token;
+    team_name = token;
     server_event_team_created(team_uuid, team_name, client->id);
 }
