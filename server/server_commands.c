@@ -9,7 +9,6 @@
 
 int commands(struct client *cli, char *buffer)
 {
-    printf("buffer: %s\n", buffer);
     if (strstr(buffer, "/login")) {
         login_command(cli, buffer);
         send(cli->sock, "LOGIN OK\n", 9, 0); return 0;
@@ -27,7 +26,6 @@ int commands(struct client *cli, char *buffer)
         send_command(buffer); return 0;
     }
     if (strstr(buffer, "create_team")) {
-        printf("create team ?\n");
         create_team_command(cli, buffer); return 0;
     }
     write(cli->sock, UNKNOWN_CMD, strlen(UNKNOWN_CMD));

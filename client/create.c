@@ -28,7 +28,8 @@ void create_team_command(client_t *client, char *buffer)
     t_name = token; token = strtok(NULL, ""); t_desc = token;
     client_event_team_created(team_uuid, t_name, t_desc);
     send(client->sock, "create_team", 11, 0);
-    send(client->sock, team_uuid, 37, 0);
+    send(client->sock, " ", 1, 0);
+    send(client->sock, team_uuid, 36, 0);
     send(client->sock, " ", 1, 0);
     send(client->sock, t_name, strlen(t_name), 0);
     send(client->sock, " ", 1, 0);
