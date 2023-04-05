@@ -50,7 +50,6 @@ int do_user_exists(char *user_uuid)
 
 void save_server(char ***users)
 {
-    struct client *tmp;
     for (int i = 0; users[i]; i++) {
         set_user_to_logged_out(users[i][0]);
     }

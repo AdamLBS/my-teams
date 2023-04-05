@@ -7,8 +7,11 @@
 
 #include "server.h"
 
-void do_handler(void)
+void do_handler(int sig)
 {
+    unload_users_from_save();
+    if (sig >= 0)
+        exit(0);
     return;
 }
 
