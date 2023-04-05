@@ -35,7 +35,7 @@ void create_server(char *port)
         add_and_set_sockets(&readfds, &max_sd, master_socket);
         int ret_val = select(max_sd + 1, &readfds, NULL, NULL, NULL);
         if (ret_val <= 0)
-            return save_server();
+            return unload_users_from_save();
         if (FD_ISSET(master_socket, &readfds))
             accept_socket(master_socket, myaddr, addrlen);
         operations_on_sockets(&readfds, tmp);
