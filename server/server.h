@@ -25,6 +25,7 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <stdbool.h>
+#include <uuid/uuid.h>
 #include "../libs/myteams/logging_server.h"
 
 #define MAX_CLIENTS 100

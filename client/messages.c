@@ -19,11 +19,20 @@ void send_command(char *buffer, struct client *client)
 
 void receive_message(char *buffer)
 {
-    buffer += 9; char *uuid; char *msg;
+    buffer += 9; char *uuid; char msg[MAX_BODY_LENGTH];
+    uuid_t uuid_struct;
+    memset(msg, 0, MAX_BODY_LENGTH);
     buffer[strlen(buffer) - 1] = '\0';
     char *token = strtok(buffer, " ");
     uuid = token;
     token = strtok(NULL, " ");
-    msg = token;
+    strcpy(msg, token);
+    token = strtok(NULL, " ");
+    while (token != NULL && uuid_parse(token, uuid_struct) == -1) {
+        strcat(msg, " ");
+        strcat(msg, token);
+        token = strtok(NULL, " ");
+    }
     client_event_private_message_received(uuid, msg);
+    free(uuid);
 }
