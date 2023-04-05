@@ -34,5 +34,4 @@ void receive_message(char *buffer)
         token = strtok(NULL, " ");
     }
     client_event_private_message_received(uuid, msg);
-    free(uuid);
 }
