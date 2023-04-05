@@ -33,6 +33,12 @@
 #define MAX_BODY_LENGTH 512
 #define UNKNOWN_CMD "500 Syntax error, command unrecognized.\n"
 
+struct server {
+    char *name;
+    char *uuid;
+    char *desc;
+}
+
 struct client {
     int sock;
     char *username;
@@ -40,6 +46,7 @@ struct client {
     char *id;
     char *buffer;
     struct sockaddr_in addr;
+    struct server *server;
     LIST_ENTRY(client) next;
 };
 
