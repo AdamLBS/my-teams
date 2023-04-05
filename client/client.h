@@ -31,6 +31,10 @@ typedef struct client {
     char *username;
     char id[37];
     char *buffer;
+    int context; // 0 = no context / 1 = team_uuid / 2 = team_uuid + channel_uuid / 3 = team_uuid + channel_uuid + thread_uuid
+    char *c_team_uuid;
+    char *c_channel_uuid;
+    char *c_thread_uuid;
 } client_t;
 
 void create_client(char *ip, char *port);
@@ -44,6 +48,11 @@ void user_command(client_t *client, char *buffer);
 void receive_user(char *buffer);
 void help_command(void);
 void send_command(char *buffer, struct client *client);
+void check_create_commands(client_t *client, char *buffer);
+void create_team_command(client_t *client, char *buffer);
+void create_channel_command(client_t *client, char *buffer);
+void create_thread_command(client_t *client, char *buffer);
+void create_reply_command(client_t *client, char *buffer);
 // RECEIVE COMMANDS:
 void receive_commands(struct client *client);
 void receive_message(char *buffer);

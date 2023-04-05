@@ -23,6 +23,8 @@ void send_commands(client_t *client)
         help_command();
     if (strstr(buffer, "/send"))
         send_command(buffer, client);
+    if (strstr(buffer, "/create"))
+        check_create_commands(client, buffer);
     if (strcmp(buffer, "/users") == 0)
         users_command(client);
     else if (strstr(buffer, "/user"))
