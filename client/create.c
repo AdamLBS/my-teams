@@ -11,12 +11,6 @@ void check_create_commands(client_t *client, char *buffer)
 {
     if (client->context == 0)
         create_team_command(client, buffer);
-    // else if (client->context == 1)
-    //     create_channel_command(client, buffer);
-    // else if (client->context == 2)
-    //     create_thread_command(client, buffer);
-    // else if (client->context == 3)
-    //     create_reply_command(client, buffer);
 }
 
 void create_team_command(client_t *client, char *buffer)
@@ -36,18 +30,3 @@ void create_team_command(client_t *client, char *buffer)
     send(client->sock, t_desc, strlen(t_desc), 0);
     send(client->sock, "\n", 1, 0);
 }
-
-// void create_channel_command(client_t *client, char *buffer)
-// {
-
-// }
-
-// void create_thread_command(client_t *client, char *buffer)
-// {
-
-// }
-
-// void create_reply_command(client_t *client, char *buffer)
-// {
-
-// }

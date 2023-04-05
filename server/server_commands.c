@@ -25,6 +25,11 @@ int commands(struct client *cli, char *buffer)
     if (strstr(buffer, "/send")) {
         send_command(buffer); return 0;
     }
+    return (other_commands(cli, buffer));
+}
+
+int other_commands(struct client *cli, char *buffer)
+{
     if (strstr(buffer, "create_team")) {
         create_team_command(cli, buffer); return 0;
     }

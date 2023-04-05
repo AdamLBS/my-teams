@@ -77,3 +77,4 @@ void send_users(char ***userList, struct client *client);
 void send_user(char **user, struct client *client);
 int commands(struct client *cli, char *buffer);
 void create_team_command(struct client *client, char *buffer);
+int other_commands(struct client *cli, char *buffer);

@@ -9,6 +9,10 @@
 
 void other_commands(client_t *client, char *buffer)
 {
+    if (strcmp(buffer, "/users") == 0)
+        users_command(client);
+    else if (strstr(buffer, "/user"))
+        user_command(client, buffer);
     if (strstr(buffer, "/use"))
         use_command(client, buffer);
 }
@@ -31,10 +35,6 @@ void send_commands(client_t *client)
         send_command(buffer, client);
     if (strstr(buffer, "/create"))
         check_create_commands(client, buffer);
-    if (strcmp(buffer, "/users") == 0)
-        users_command(client);
-    else if (strstr(buffer, "/user"))
-        user_command(client, buffer);
     other_commands(client, buffer);
     free(buffer);
 }
