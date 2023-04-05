@@ -38,7 +38,7 @@ struct server {
     char *name;
     char *uuid;
     char *desc;
-}
+};
 
 struct client {
     int sock;
