@@ -69,3 +69,4 @@ void set_user_to_logged_out(char *uid);
 void send_users(char ***userList, struct client *client);
 void send_user(char **user, struct client *client);
 int commands(struct client *cli, char *buffer);
+void create_team_command(struct client *client, char *buffer);
