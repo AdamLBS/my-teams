@@ -72,3 +72,4 @@ void receive_messages_history(char *buffer, struct client *client);
 void print_history(char *token, char *id, char *msg, struct client *client);
 // UTILITIES:
 char *clean_text(char *text);
+char *get_file_line(int id, char *uuid, char *dir);

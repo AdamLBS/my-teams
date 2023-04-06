@@ -7,8 +7,18 @@
 
 #include "client.h"
 
+void info_team(client_t *client)
+{
+    char *team_uuid = get_file_line(0, client->team_uuid, "./teams/");
+    char *team_name = get_file_line(1, client->team_uuid, "./teams/");
+    char *team_desc = get_file_line(2, client->team_uuid, "./teams/");
+    client_print_team(team_uuid, team_name, team_desc);
+}
+
 void info_command(client_t *client)
 {
     if (client->context == 0)
         send(client->sock, "/users\n", 7, 0);
+    if (client->context == 1)
+        info_team(client);
 }
