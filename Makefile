@@ -18,7 +18,8 @@ all:
 	gcc -o $(CLIENT_NAME) $(CLIENT_SRC) $(FLAGS)
 
 clean:
-	rm -f *~ | rm -f *.o | rm -f ./messages/* | rm -f log.txt | rm -f ./users/*.txt | rm -rf ./teams/*.txt
+	rm -f *~ | rm -f *.o | rm -f ./messages/* | rm -f log.txt
+	rm -f ./users/*.txt | rm -rf ./teams/*.txt
 
 fclean: clean
 	rm -f $(SERVER_NAME) | rm -f $(CLIENT_NAME)
