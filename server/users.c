@@ -17,12 +17,14 @@ void user_command(struct client *client, char *buffer)
     char *id = strchr(buffer, '"');
     if (id != NULL)
         id++;
-    else
+    else {
         dprintf(client->sock, "ERROR\n"); return;
+    }
     if (id[strlen(id) - 1] == '"')
         id[strlen(id) - 1] = '\0';
-    else
+    else {
         dprintf(client->sock, "ERROR\n"); return;
+    }
     char *path = malloc(sizeof(char) * MAX_DESCRIPTION_LENGTH);
     memset(path, 0, MAX_DESCRIPTION_LENGTH);strcpy(path, "users/");
     strcat(path, id); strcat(path, ".txt"); FILE *fd = fopen(path, "r");

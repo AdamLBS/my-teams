@@ -27,7 +27,8 @@ void send_command(char *buffer, struct client *client)
 {
     buffer += 6; char *r_uuid; char *s_uuid; uuid_t uuid; char *msg;
     int runs = 0; char *token; token = strtok(buffer, " ");
-    msg = malloc(sizeof(char) * MAX_BODY_LENGTH); memset(msg, 0, MAX_BODY_LENGTH);
+    msg = malloc(sizeof(char) * MAX_BODY_LENGTH);
+    memset(msg, 0, MAX_BODY_LENGTH);
     if (token != NULL) {
         r_uuid = token; token = strtok(NULL, " "); if (!token) return;
         strcpy(msg, token); if (!token) return;token = strtok(NULL, " ");
@@ -38,11 +39,9 @@ void send_command(char *buffer, struct client *client)
         s_uuid = token;
     }
     r_uuid = remove_quotes_send_cmd(r_uuid); msg = remove_quotes_send_cmd(msg);
-    if (!r_uuid || !msg)
-        return;
+    if (!r_uuid || !msg) return;
     if (s_uuid == NULL) {
-        send_error(client, r_uuid);
-        return;
+        send_error(client, r_uuid); return;
     }
     server_event_private_message_sended(s_uuid, r_uuid, msg);
     send_message_to_clients(s_uuid, msg, r_uuid);
