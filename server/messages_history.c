@@ -24,9 +24,9 @@ void messages_command(char *buffer, struct client *client)
     }
     for (int i = 0; msg[i]; i++) {
         char *full_msg = get_msg(msg[i]);
-        send(client->sock, "msg_history: ", 13, 0); usleep(200);
+        send(client->sock, "msg_history: ", 13, 0);
         send(client->sock, full_msg, strlen(full_msg), 0); usleep(200);
-        free(full_msg);
+        send(client->sock, "\n", 1, 0); free(full_msg);
     }
     free_message_history_data(msg);
 }
@@ -47,7 +47,6 @@ char *get_msg(char **value)
         strcat(full_msg, value[i]);
         strcat (full_msg, " ");
     }
-    strcat(full_msg, "\n");
     return full_msg;
 }
 
