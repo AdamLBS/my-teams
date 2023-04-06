@@ -7,13 +7,13 @@
 
 #include "server.h"
 
-char *get_user_line(int id, char *uuid)
+char *get_file_line(int id, char *uuid, char *dir)
 {
     FILE *fd; char *line = NULL; size_t len = 0; int i = 0;
     char *path = malloc(sizeof(char) * MAX_DESCRIPTION_LENGTH);
     char **file = malloc(sizeof(char *) * 100); memset(file, 0, 100);
     memset(path, 0, MAX_DESCRIPTION_LENGTH);
-    strcpy(path, "users/");
+    strcpy(path, dir);
     strcat(path, uuid);
     strcat(path, ".txt");
     fd = fopen(path, "r");
@@ -27,13 +27,13 @@ char *get_user_line(int id, char *uuid)
     return NULL;
 }
 
-void set_user_line(int id, char *uuid, char *target)
+void set_file_line(int id, char *uuid, char *target, char *dir)
 {
     FILE *fd; char *line = NULL; size_t len = 0; int i = 0;
     char *path = malloc(sizeof(char) * MAX_DESCRIPTION_LENGTH);
     char **file = malloc(sizeof(char *) * 100); memset(file, 0, 100);
     memset(path, 0, MAX_DESCRIPTION_LENGTH);
-    strcpy(path, "users/");
+    strcpy(path, dir);
     strcat(path, uuid);
     strcat(path, ".txt");
     fd = fopen(path, "r");

@@ -7,3 +7,5 @@ myteams_server
 log.txt
 users/*.txt
 messages/
+teams/*.txt
+channels/*.txt
