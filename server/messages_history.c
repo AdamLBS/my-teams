@@ -13,8 +13,7 @@ void messages_command(char *buffer, struct client *client)
     if (id != NULL) {
         id++;
     } else {
-        dprintf(client->sock, "ERROR\n");
-        return;
+        dprintf(client->sock, "ERROR\n"); return;
     }
     char ***msg = get_messages_list(id, client);
     if (!msg) {
@@ -24,10 +23,8 @@ void messages_command(char *buffer, struct client *client)
     }
     for (int i = 0; msg[i]; i++) {
         char *full_msg = get_msg(msg[i]);
-        send(client->sock, "msg_history: ", 13, 0);
-        usleep(100);
-        send(client->sock, full_msg, strlen(full_msg), 0);
-        usleep(100);
+        send(client->sock, "msg_history: ", 13, 0); usleep(100);
+        send(client->sock, full_msg, strlen(full_msg), 0); usleep(100);
         free(full_msg);
     }
     free_message_history_data(msg);

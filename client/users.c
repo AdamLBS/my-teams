@@ -46,9 +46,8 @@ void user_command(client_t *client, char *buffer)
     char *id_find = strchr(buffer, '"');
     if (id_find != NULL)
         id_find++;
-    else {
+    else
        return;
-    }
     send(client->sock, buffer, strlen(buffer), 0);
     send(client->sock, "\n", strlen("\n"), 0);
 }
