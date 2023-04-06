@@ -106,3 +106,4 @@ char *get_user_line(int id, char *uuid);
 void set_user_line(int id, char *uuid, char *target);
 char *itoa(int num);
 void free_userlist(char ***userList);
+void create_team_file(char *t_uuid, char *t_name);

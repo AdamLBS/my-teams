@@ -22,7 +22,7 @@ void create_team_command(struct client *client, char *buffer)
     client->teams[nb_teams]->name = strdup(team_name);
     client->teams[nb_teams]->uuid = strdup(team_uuid);
     client->teams[nb_teams]->desc = strdup(team_desc);
-    printf("first team name: %s\n", client->teams[0]->name);
+    create_team_file(team_uuid, team_name);
 }
 
 void create_channel_command(char *buffer)
@@ -34,6 +34,5 @@ void create_channel_command(char *buffer)
     c_uuid = token; token = strtok(NULL, " ");
     c_name = token; token = strtok(NULL, " ");
     c_desc = token; token = strtok(NULL, " ");
-    printf("Channel created: %s, %s\n", c_name, c_desc);
     server_event_channel_created(team_uuid, c_uuid, c_name);
 }
