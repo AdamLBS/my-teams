@@ -52,7 +52,7 @@ void print_history(char *token, char *id, char *msg, struct client *client)
     tm.tm_isdst = timeInfos->tm_isdst;
     strptime(timestamp, "%a %b %d %H:%M:%S %Y", &tm);
     time_t t = mktime(&tm);
-    if (isSender[0] == '1')
+    if (isSender[0] == '0')
         client_private_message_print_messages(id, t, msg);
     else
         client_private_message_print_messages(client->id, t, msg);
