@@ -18,7 +18,7 @@ void receive_users(char *buffer)
     char *token = strtok(buffer, " ");
     while (token != NULL) {
         char *id = token;
-        token = strtok(NULL, " ");
+        token = strtok(NULL, "\"");
         char *username = token;
         token = strtok(NULL, " ");
         int is_connected = atoi(token);
@@ -36,7 +36,7 @@ void receive_user(char *buffer)
         client_error_unknown_user(id);
         return;
     }
-    char *username = strtok(NULL, " ");
+    char *username = strtok(NULL, "\"");
     int is_connected = atoi(strtok(NULL, " "));
     client_print_user(id, username, is_connected);
 }

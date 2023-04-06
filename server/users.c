@@ -17,17 +17,15 @@ void user_command(struct client *client, char *buffer)
     char *id = strchr(buffer, '"');
     if (id != NULL)
         id++;
-    else {
+    else
         dprintf(client->sock, "ERROR\n"); return;
-    }
     if (id[strlen(id) - 1] == '"')
         id[strlen(id) - 1] = '\0';
-    else {
+    else
         dprintf(client->sock, "ERROR\n"); return;
-    }
     char *path = malloc(sizeof(char) * MAX_DESCRIPTION_LENGTH);
-    memset(path, 0, MAX_DESCRIPTION_LENGTH); FILE *fd = fopen(path, "r");
-    strcpy(path, "users/"); strcat(path, id); strcat(path, ".txt");
+    memset(path, 0, MAX_DESCRIPTION_LENGTH);strcpy(path, "users/");
+    strcat(path, id); strcat(path, ".txt"); FILE *fd = fopen(path, "r");
     if (fd == 0) {
         send(client->sock, "user: ", 6, 0);
         send(client->sock, id, strlen(id), 0);
@@ -66,9 +64,9 @@ void send_users(char ***userList, struct client *client)
         if (i != 0)
             send(client->sock, " ", 1, 0);
         send(client->sock, userList[i][0], strlen(userList[i][0]), 0);
-        send(client->sock, " ", 1, 0);
+        send(client->sock, " \"", 2, 0);
         send(client->sock, userList[i][1], strlen(userList[i][1]), 0);
-        send(client->sock, " ", 1, 0);
+        send(client->sock, "\" ", 2, 0);
         send(client->sock, userList[i][2], strlen(userList[i][2]), 0);
     }
     send(client->sock, "\n", 1, 0);
@@ -78,9 +76,9 @@ void send_user(char **user, struct client *client)
 {
     send(client->sock, "user: ", 6, 0);
     send(client->sock, user[0], strlen(user[0]), 0);
-    send(client->sock, " ", 1, 0);
+    send(client->sock, " \"", 2, 0);
     send(client->sock, user[1], strlen(user[1]), 0);
-    send(client->sock, " ", 1, 0);
+    send(client->sock, "\" ", 2, 0);
     send(client->sock, user[2], strlen(user[2]), 0);
     send(client->sock, "\n", 1, 0);
 }

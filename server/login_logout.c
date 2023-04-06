@@ -14,7 +14,7 @@ void login_command(struct client *client, char *buffer)
         str++;
     else
         return;
-    client->username = strdup(strtok(str, " "));
+    client->username = strdup(strtok(str, "\""));
     client->id = strdup(strtok(NULL, " "));
     if (do_user_exists(client->id) == 0) {
         save_user(client->id, client->username);

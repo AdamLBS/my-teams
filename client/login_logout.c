@@ -49,7 +49,7 @@ void login_command(client_t *client, char *buff)
         fprintf(fp, "%s\n", client->id); fclose(fp);
     } else
         check_if_client_exist(fp, client, username);
-    send(client->sock, buff, strlen(buff), 0); send(client->sock, " ", 1, 0);
+    send(client->sock, buff, strlen(buff), 0); send(client->sock, "\" ", 2, 0);
     send(client->sock, client->id, strlen(client->id), 0);
     send(client->sock, "\n", 1, 0);
 }

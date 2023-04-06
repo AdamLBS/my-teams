@@ -25,9 +25,9 @@ void send_message_to_clients(char *s_uuid, char *msg, char *r_uuid)
 
 void send_command(char *buffer, struct client *client)
 {
-    buffer += 6; char *r_uuid; char *s_uuid; char msg[MAX_BODY_LENGTH];
-    memset(msg, 0, MAX_BODY_LENGTH); uuid_t uuid; int runs = 0; char *token;
-    token = strtok(buffer, " ");
+    buffer += 6; char *r_uuid; char *s_uuid; uuid_t uuid; char *msg;
+    int runs = 0; char *token; token = strtok(buffer, " ");
+    msg = malloc(sizeof(char) * MAX_BODY_LENGTH); memset(msg, 0, MAX_BODY_LENGTH);
     if (token != NULL) {
         r_uuid = token; token = strtok(NULL, " "); if (!token) return;
         strcpy(msg, token); if (!token) return;token = strtok(NULL, " ");
@@ -37,6 +37,9 @@ void send_command(char *buffer, struct client *client)
         }
         s_uuid = token;
     }
+    r_uuid = remove_quotes_send_cmd(r_uuid); msg = remove_quotes_send_cmd(msg);
+    if (!r_uuid || !msg)
+        return;
     if (s_uuid == NULL) {
         send_error(client, r_uuid);
         return;
@@ -50,4 +53,15 @@ void send_error(struct client *client, char *id)
     send(client->sock, "user: ", 6, 0);
     send(client->sock, id, strlen(id), 0);
     send(client->sock, " ERROR\n", 7, 0);
+}
+
+char *remove_quotes_send_cmd(char *str)
+{
+    if (str[0] == '"' && str[strlen(str) - 1] == '"') {
+        str[strlen(str) - 1] = '\0';
+        str++;
+    } else {
+        return NULL;
+    }
+    return str;
 }
