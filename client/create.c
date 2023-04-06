@@ -22,6 +22,7 @@ void create_team_command(client_t *client, char *buffer)
     buffer[strlen(buffer)] = '\0'; char *t_name; char *t_desc;
     char *token = strtok(buffer, " ");
     t_name = token; token = strtok(NULL, ""); t_desc = token;
+    t_name = clean_text(t_name); t_desc = clean_text(t_desc);
     client_event_team_created(team_uuid, t_name, t_desc);
     send(client->sock, "create_team", 11, 0);
     send(client->sock, " ", 1, 0);
@@ -40,6 +41,7 @@ void create_channel_command(client_t *client, char *buffer)
     buffer[strlen(buffer)] = '\0'; char *c_name; char *c_desc;
     char *token = strtok(buffer, " ");
     c_name = token; token = strtok(NULL, ""); c_desc = token;
+    c_name = clean_text(c_name); c_desc = clean_text(c_desc);
     client_event_channel_created(channel_uuid, c_name, c_desc);
     send(client->sock, "create_channel", 14, 0);
     send(client->sock, " ", 1, 0);

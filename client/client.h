@@ -70,3 +70,5 @@ void log_unauthorized(void);
 void send_messages_command(char *buffer, struct client *client);
 void receive_messages_history(char *buffer, struct client *client);
 void print_history(char *token, char *id, char *msg, struct client *client);
+// UTILITIES:
+char *clean_text(char *text);

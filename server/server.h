@@ -90,3 +90,4 @@ void free_message_history_data(char ***msg);
 void fill_messages_history(char ***messages, char **file);
 void send_error(struct client *client, char *id);
 char *remove_quotes_send_cmd(char *str);
+char *clean_text(char *text);
