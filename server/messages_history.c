@@ -9,12 +9,11 @@
 
 void messages_command(char *buffer, struct client *client)
 {
-    char *id = strchr(buffer, ' ');
-    if (id != NULL) {
-        id++;
-    } else {
-        dprintf(client->sock, "ERROR\n"); return;
-    }
+    char *id = strchr(buffer, '"');
+    if (id != NULL) id++;
+    else return;
+    if (id[strlen(id) - 1] == '"') id[strlen(id) - 1] = '\0';
+    else return;
     char ***msg = get_messages_list(id, client);
     if (!msg) {
         send(client->sock, "msg_history: ", 13, 0);
