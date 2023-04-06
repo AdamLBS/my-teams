@@ -40,8 +40,7 @@ void send_commands(client_t *client)
         check_create_commands(client, buffer);
     if (strstr(buffer, "/messages"))
         send_messages_command(buffer, client);
-    other_commands(client, buffer);
-    free(buffer);
+    other_commands(client, buffer); free(buffer);
 }
 
 void log_unauthorized(void)
