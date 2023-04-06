@@ -89,3 +89,4 @@ void catch_client_logout(struct client *client);
 void free_message_history_data(char ***msg);
 void fill_messages_history(char ***messages, char **file);
 void send_error(struct client *client, char *id);
+char *clean_text(char *text);
