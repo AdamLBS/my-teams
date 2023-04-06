@@ -13,6 +13,7 @@ void send_command(char *buffer, struct client *client)
     new_buffer = strcpy(new_buffer, buffer);
     new_buffer = strcat(new_buffer, " ");
     new_buffer = strcat(new_buffer, client->id);
+    new_buffer[strlen(new_buffer)] = '\0';
     send(client->sock, new_buffer, strlen(new_buffer), 0);
     send(client->sock, "\n", 1, 0);
 }
