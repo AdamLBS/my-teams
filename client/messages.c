@@ -9,13 +9,14 @@
 
 void send_command(char *buffer, struct client *client)
 {
-    char *new_buffer = malloc(sizeof(char) * MAX_BODY_LENGTH);
+    char *new_buffer = malloc(sizeof(char) * MAX_BODY_LENGTH * 2);
     new_buffer = strcpy(new_buffer, buffer);
     new_buffer = strcat(new_buffer, " ");
     new_buffer = strcat(new_buffer, client->id);
     new_buffer[strlen(new_buffer)] = '\0';
     send(client->sock, new_buffer, strlen(new_buffer), 0);
     send(client->sock, "\n", 1, 0);
+    free(new_buffer);
 }
 
 void receive_message(char *buffer)
