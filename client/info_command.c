@@ -15,10 +15,20 @@ void info_team(client_t *client)
     client_print_team(team_uuid, team_name, team_desc);
 }
 
+void info_channel(client_t *client)
+{
+    char *c_uuid = get_file_line(0, client->channel_uuid, "./channels/");
+    char *c_name = get_file_line(1, client->channel_uuid, "./channels/");
+    char *c_desc = get_file_line(2, client->channel_uuid, "./channels/");
+    client_print_channel(c_uuid, c_name, c_desc);
+}
+
 void info_command(client_t *client)
 {
     if (client->context == 0)
         send(client->sock, "/users\n", 7, 0);
     if (client->context == 1)
         info_team(client);
+    if (client->context == 2)
+        info_channel(client);
 }

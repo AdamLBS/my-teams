@@ -22,11 +22,11 @@ void use_command(client_t *client, char *buffer)
     if (team_uuid != NULL) {
         client->team_uuid = strdup(team_uuid); client->context = 1;
     }
-    channel_uuid = strtok(NULL, "\""); thread_uuid = strtok(NULL, "\"");
+    strtok(NULL, "\""); channel_uuid = strtok(NULL, "\"");
+    strtok(NULL, "\""); thread_uuid = strtok(NULL, "\"");
     if (channel_uuid != NULL) {
         client->channel_uuid = strdup(channel_uuid); client->context = 2;
-    }
-    if (thread_uuid != NULL) {
+    } if (thread_uuid != NULL) {
         client->thread_uuid = strdup(thread_uuid); client->context = 3;
     }
 }
