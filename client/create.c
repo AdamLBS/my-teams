@@ -9,7 +9,6 @@
 
 void check_create_commands(client_t *client, char *buffer)
 {
-    printf("context: %d\n", client->context);
     if (client->context == 0)
         create_team_command(client, buffer);
     else if (client->context == 1)
