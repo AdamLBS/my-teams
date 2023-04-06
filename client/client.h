@@ -42,7 +42,7 @@ typedef struct client {
 void create_client(char *ip, char *port);
 // COMMANDS:
 void send_commands(client_t *client);
-void login_command(client_t *client, char *buffer);
+void login_command(client_t *client, char *buff);
 void logout_command(client_t *client, char *buffer);
 void users_command(client_t *client);
 void receive_users(char *buffer);

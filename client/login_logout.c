@@ -30,15 +30,18 @@ void check_if_client_exist(FILE *fp, client_t *client, char *username)
     fclose(fp);
 }
 
-void login_command(client_t *client, char *buffer)
+void login_command(client_t *client, char *buff)
 {
-    char *username = strchr(buffer, ' ');
-    if (username != NULL)
+    char *username = strchr(buff, '"');
+    if (username != NULL && username[1] != '\0')
         username++;
     else
         return;
-    client->username = strdup(username);
-    FILE *fp = fopen("log.txt", "r");
+    if (username[strlen(username) - 1] == '"')
+        username[strlen(username) - 1] = '\0';
+    else
+        return;
+    client->username = strdup(username); FILE *fp = fopen("log.txt", "r");
     if (fp == NULL) {
         uuid_t uuid; uuid_generate_random(uuid);
         uuid_unparse(uuid, client->id); fp = fopen("log.txt", "w");
@@ -46,8 +49,7 @@ void login_command(client_t *client, char *buffer)
         fprintf(fp, "%s\n", client->id); fclose(fp);
     } else
         check_if_client_exist(fp, client, username);
-    send(client->sock, buffer, strlen(buffer), 0);
-    send(client->sock, " ", 1, 0);
+    send(client->sock, buff, strlen(buff), 0); send(client->sock, " ", 1, 0);
     send(client->sock, client->id, strlen(client->id), 0);
     send(client->sock, "\n", 1, 0);
 }

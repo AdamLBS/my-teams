@@ -14,26 +14,26 @@ void users_command(struct client *client)
 
 void user_command(struct client *client, char *buffer)
 {
-    char *id = strchr(buffer, ' ');
+    char *id = strchr(buffer, '"');
     if (id != NULL)
         id++;
     else {
-        dprintf(client->sock, "ERROR\n");
-        return;
+        dprintf(client->sock, "ERROR\n"); return;
+    }
+    if (id[strlen(id) - 1] == '"')
+        id[strlen(id) - 1] = '\0';
+    else {
+        dprintf(client->sock, "ERROR\n"); return;
     }
     char *path = malloc(sizeof(char) * MAX_DESCRIPTION_LENGTH);
-    memset(path, 0, MAX_DESCRIPTION_LENGTH);
+    memset(path, 0, MAX_DESCRIPTION_LENGTH); FILE *fd = fopen(path, "r");
     strcpy(path, "users/"); strcat(path, id); strcat(path, ".txt");
-    FILE *fd = fopen(path, "r");
     if (fd == 0) {
         send(client->sock, "user: ", 6, 0);
         send(client->sock, id, strlen(id), 0);
-        send(client->sock, " ERROR\n", 7, 0);
-        free(path);
-        return;
+        send(client->sock, " ERROR\n", 7, 0); free(path); return;
     }
-    char **val = read_user_from_save(path);
-    send_user(val, client);
+    char **val = read_user_from_save(path); send_user(val, client);
 }
 
 void get_users_from_save(struct client *client)
