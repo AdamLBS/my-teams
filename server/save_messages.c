@@ -28,7 +28,7 @@ void save_message_receiver(char *msg, char *send, char *rcv)
     strcat (msg_val, " 0\n"); file[i] = msg_val; fd = fopen(path, "w");
     for (i = 0; file[i]; i++) {
         fputs(file[i], fd); free(file[i]);
-    } fclose(fd); free(path); free(file); free(msg_val);
+    } fclose(fd); free(path); free(file);
 }
 
 void save_message_sender(char *msg, char *send, char *rcv)
