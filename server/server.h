@@ -48,6 +48,7 @@ struct team {
     char *name;
     char *uuid;
     char *desc;
+    int nb_teams;
     struct channel **channels;
 };
 
@@ -59,6 +60,7 @@ struct client {
     char *buffer;
     struct sockaddr_in addr;
     struct team **teams;
+    int nb_teams;
     LIST_ENTRY(client) next;
 };
 
@@ -90,7 +92,7 @@ int commands(struct client *cli, char *buffer);
 void create_team_command(struct client *client, char *buffer);
 int other_commands(struct client *cli, char *buffer);
 void unload_users_from_save(void);
-void create_channel_command(char *buffer);
+void create_channel_command(struct client *client, char *buffer);
 void save_message_receiver(char *msg, char *send, char *rcv);
 void save_message_sender(char *msg, char *send, char *rcv);
 void messages_command(char *buffer, struct client *client);
@@ -102,8 +104,9 @@ void fill_messages_history(char ***messages, char **file);
 void send_error(struct client *client, char *id);
 char *remove_quotes_send_cmd(char *str);
 char *clean_text(char *text);
-char *get_user_line(int id, char *uuid);
-void set_user_line(int id, char *uuid, char *target);
+char *get_file_line(int id, char *uuid, char *dir);
+void set_file_line(int id, char *uuid, char *target, char *dir);
 char *itoa(int num);
 void free_userlist(char ***userList);
-void create_team_file(char *t_uuid, char *t_name);
+void create_team_file(char *t_uuid, char *t_name, char *t_desc);
+void create_c_file(char *c_uuid, char *c_name, char *t_uuid, char *c_desc);
