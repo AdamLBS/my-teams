@@ -8,6 +8,17 @@
 #include "server.h"
 #include <stdio.h>
 
+void free_userlist(char ***userList)
+{
+    for (int i = 0; userList[i]; i++) {
+        for (int j = 0; userList[i][j]; j++) {
+            free(userList[i][j]);
+        }
+        free(userList[i]);
+    }
+    free(userList);
+}
+
 void load_users_from_save(void)
 {
     DIR *d; struct dirent *dir; char *path = NULL;
@@ -25,11 +36,11 @@ void load_users_from_save(void)
             strcpy(fullpath, "users/");
             strcat(fullpath, dir->d_name);
             char **val = read_user_from_save(fullpath);
-            userList[index] = val;
+            free(fullpath); userList[index] = val;
             index++;
         }
     }
-    send_user_loaded(userList);
+    send_user_loaded(userList); closedir(d); free_userlist(userList);
 }
 
 void send_user_loaded(char ***userList)
@@ -57,5 +68,6 @@ char **read_user_from_save(char *path)
         line = NULL;
         i++;
     }
+    fclose(fptr);
     return array;
 }

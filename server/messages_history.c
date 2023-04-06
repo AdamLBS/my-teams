@@ -69,10 +69,10 @@ char ***get_messages_list(char *uuid, struct client *client)
         }
     }
     fclose(fd);
-    if (i == 0)
-        return NULL;
-    fill_messages_history(messages, file); free(path);
-    return messages;
+    if (i == 0) {
+        free(path); return NULL;
+    }
+    fill_messages_history(messages, file); free(path); return messages;
 }
 
 void free_message_history_data(char ***msg)

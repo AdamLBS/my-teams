@@ -22,11 +22,11 @@ void set_user_to_logged_in(char *uid)
         line = NULL;
         i++;
     }
-    file[2] = strdup("1\n");
-    fclose(fd);
-    fd = fopen(path, "w");
-    for (i = 0; file[i]; i++) fputs(file[i], fd);
-    fclose(fd);
+    file[2] = strdup("1\n"); fclose(fd); fd = fopen(path, "w");
+    for (i = 0; file[i]; i++) {
+        fputs(file[i], fd); free(file[i]);
+    }
+    fclose(fd); free(path); free(file);
 }
 
 void set_user_to_logged_out(char *uid)
@@ -45,9 +45,9 @@ void set_user_to_logged_out(char *uid)
         line = NULL;
         i++;
     }
-    file[2] = strdup("0\n");
-    fclose(fd);
-    fd = fopen(path, "w");
-    for (i = 0; file[i]; i++) fputs(file[i], fd);
-    fclose(fd);
+    file[2] = strdup("0\n"); fclose(fd); fd = fopen(path, "w");
+    for (i = 0; file[i]; i++) {
+        fputs(file[i], fd); free(file[i]);
+    }
+    fclose(fd); free(path); free(file);
 }

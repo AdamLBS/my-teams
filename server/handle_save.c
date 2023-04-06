@@ -74,10 +74,10 @@ void unload_users_from_save(void)
             memset(fullpath, '\0', size);
             strcpy(fullpath, "users/");
             strcat(fullpath, dir->d_name);
-            char **val = read_user_from_save(fullpath);
+            char **val = read_user_from_save(fullpath); free(fullpath);
             userList[index] = val;
             index++;
         }
     }
-    save_server(userList);
+    save_server(userList); free_userlist(userList); closedir(d);
 }

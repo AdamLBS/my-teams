@@ -53,6 +53,9 @@ void remove_client(int socket)
                 close(tmp->sock);
             LIST_REMOVE(tmp, next);
             free(tmp->buffer);
+            free(tmp->username);
+            free(tmp->buffer);
+            free(tmp->id);
             free(tmp);
             return;
         }

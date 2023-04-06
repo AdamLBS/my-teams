@@ -21,14 +21,14 @@ void save_message_receiver(char *msg, char *send, char *rcv)
         while (getline(&line, &len, fd) != -1) {
             file[i] = line; line = NULL; i++;
         } fclose(fd);
-    }
-    int size = strlen(msg) + strlen(send) + strlen(time) + 10;
+    } int size = strlen(msg) + strlen(send) + strlen(time) + 10;
     char *msg_val = malloc(sizeof(char) * size);
     memset(msg_val, 0, size); strcat(msg_val, msg); strcat(msg_val, " ");
     strcat(msg_val, send); strcat(msg_val, " "); strcat(msg_val, time);
     strcat (msg_val, " 0\n"); file[i] = msg_val; fd = fopen(path, "w");
-    for (i = 0; file[i]; i++) fputs(file[i], fd);
-    fclose(fd);
+    for (i = 0; file[i]; i++) {
+        fputs(file[i], fd); free(file[i]);
+    } fclose(fd); free(path); free(file); free(msg_val);
 }
 
 void save_message_sender(char *msg, char *send, char *rcv)
@@ -52,5 +52,5 @@ void save_message_sender(char *msg, char *send, char *rcv)
     strcat(msg_val, rcv); strcat(msg_val, " "); strcat(msg_val, time);
     strcat (msg_val, " 1\n"); file[i] = msg_val; fd = fopen(path, "w");
     for (i = 0; file[i]; i++) fputs(file[i], fd);
-    fclose(fd);
+    fclose(fd); free(path); free(file); free(msg_val);
 }

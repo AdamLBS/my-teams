@@ -105,3 +105,4 @@ char *clean_text(char *text);
 char *get_user_line(int id, char *uuid);
 void set_user_line(int id, char *uuid, char *target);
 char *itoa(int num);
+void free_userlist(char ***userList);

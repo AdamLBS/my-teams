@@ -29,11 +29,11 @@ void receive_messages_history(char *buffer, struct client *client)
     }
     char *id = token;
     if (error) {
-        client_error_unknown_user(full_msg);
+        client_error_unknown_user(full_msg); free(full_msg);
         return;
     }
     token = strtok(NULL, " ");
-    print_history(token, id, full_msg, client);
+    print_history(token, id, full_msg, client); free(full_msg);
 }
 
 void print_history(char *token, char *id, char *msg, struct client *client)

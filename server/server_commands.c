@@ -74,7 +74,7 @@ void operations_on_sockets(fd_set *fd, struct client *tmp)
             val = check_commands_socket(tmp);
         }
         if (val == 1) {
-            tmp->sock = -1;
+            remove_client(tmp->sock);
             val = 0;
         }
     }
