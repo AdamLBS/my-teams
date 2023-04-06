@@ -14,6 +14,7 @@ void add_new_socket_to_array(int cfd, struct sockaddr_in addr)
     cl->sock = cfd;
     cl->username = NULL;
     cl->passwd = 0;
+    cl->teams = malloc(sizeof(struct teams *) * MAX_CLIENT_TEAMS);
     cl->buffer = malloc(sizeof(char) * MAX_BODY_LENGTH);
     memset(cl->buffer, 0, MAX_BODY_LENGTH);
     LIST_INSERT_HEAD(&head, cl, next);

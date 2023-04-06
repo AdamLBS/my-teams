@@ -32,12 +32,23 @@
 #define MAX_NAME_LENGTH 32
 #define MAX_DESCRIPTION_LENGTH 255
 #define MAX_BODY_LENGTH 512
+#define MAX_CLIENT_TEAMS 100
+#define MAX_TEAM_CHANNELS 100
 #define UNKNOWN_CMD "500 Syntax error, command unrecognized.\n"
 
-struct server {
+struct channel {
     char *name;
     char *uuid;
     char *desc;
+    char *t_uuid;
+    char *t_name;
+};
+
+struct team {
+    char *name;
+    char *uuid;
+    char *desc;
+    struct channel **channels;
 };
 
 struct client {
@@ -47,7 +58,7 @@ struct client {
     char *id;
     char *buffer;
     struct sockaddr_in addr;
-    struct server *server;
+    struct team **teams;
     LIST_ENTRY(client) next;
 };
 
@@ -91,3 +102,6 @@ void fill_messages_history(char ***messages, char **file);
 void send_error(struct client *client, char *id);
 char *remove_quotes_send_cmd(char *str);
 char *clean_text(char *text);
+char *get_user_line(int id, char *uuid);
+void set_user_line(int id, char *uuid, char *target);
+char *itoa(int num);
