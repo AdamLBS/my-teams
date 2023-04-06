@@ -14,7 +14,7 @@ void create_team_command(struct client *client, char *buffer)
     buffer += 12; buffer[strlen(buffer)] = '\0';
     char *token = strtok(buffer, " ");
     team_uuid = token; token = strtok(NULL, " "); team_name = token;
-    token = strtok(NULL, " "); team_desc = token;
+    token = strtok(NULL, "\""); team_desc = token;
     server_event_team_created(team_uuid, team_name, client->id);
     int nb_teams = atoi(get_file_line(3, client->id, "users/"));
     client->nb_teams = nb_teams + 1;
@@ -34,8 +34,8 @@ void create_channel_command(struct client *client, char *buffer)
     char *token = strtok(buffer, " ");
     team_uuid = token; token = strtok(NULL, " ");
     c_uuid = token; token = strtok(NULL, " ");
-    c_name = token; token = strtok(NULL, " ");
-    c_desc = token; token = strtok(NULL, " ");
+    c_name = token; token = strtok(NULL, "\"");
+    c_desc = token;
     server_event_channel_created(team_uuid, c_uuid, c_name);
     int nb_channels = atoi(get_file_line(4, team_uuid, "teams/"));
     set_file_line(4, team_uuid, itoa(nb_channels + 1), "teams/"); int i = 0;
