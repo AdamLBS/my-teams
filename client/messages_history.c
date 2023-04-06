@@ -33,7 +33,7 @@ void receive_messages_history(char *buffer, struct client *client)
         return;
     }
     token = strtok(NULL, " ");
-    print_history(token, id, full_msg, client); free(full_msg);
+    print_history(token, id, full_msg, client);
 }
 
 void print_history(char *token, char *id, char *msg, struct client *client)

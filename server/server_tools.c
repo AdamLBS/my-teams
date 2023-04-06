@@ -13,6 +13,7 @@ void add_new_socket_to_array(int cfd, struct sockaddr_in addr)
     cl->addr = addr;
     cl->sock = cfd;
     cl->username = NULL;
+    cl->id = NULL;
     cl->passwd = 0;
     cl->teams = malloc(sizeof(struct teams *) * MAX_CLIENT_TEAMS);
     cl->buffer = malloc(sizeof(char) * MAX_BODY_LENGTH);
@@ -52,10 +53,12 @@ void remove_client(int socket)
             if (tmp->sock != -1)
                 close(tmp->sock);
             LIST_REMOVE(tmp, next);
-            free(tmp->buffer);
-            free(tmp->username);
-            free(tmp->buffer);
-            free(tmp->id);
+            if (tmp->buffer)
+                free(tmp->buffer);
+            if (tmp->username)
+                free(tmp->username);
+            if (tmp->id)
+                free(tmp->id);
             free(tmp);
             return;
         }
