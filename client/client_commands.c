@@ -27,7 +27,7 @@ void send_commands(client_t *client)
     if (strstr(buffer, "/login"))
         login_command(client, buffer);
     if (strlen(buffer) > 0 && client->username[0] == '\0') {
-        log_unauthorized(); return;
+        log_unauthorized(); free(buffer); return;
     }
     if (strcmp(buffer, "/logout") == 0)
         logout_command(client, buffer);
