@@ -6,7 +6,9 @@
 */
 
 #pragma once
-
+#define _XOPEN_SOURCE
+#define _GNU_SOURCE
+#include <time.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -20,8 +22,6 @@
 #include <uuid/uuid.h>
 #include <signal.h>
 #include <fcntl.h>
-#include <time.h>
-
 #include "../libs/myteams/logging_client.h"
 
 #define MAX_NAME_LENGTH 32
