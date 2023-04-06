@@ -34,7 +34,7 @@ jobs:
         - name: Check number of "MAJOR:" occurrences
           run: |
             major_occurrences=$(grep -c "MAJOR:" coding-style-reports.log)
-            if [ "$major_occurrences" -gt 9 ]; then
+            if [ "$major_occurrences" -gt 7 ]; then
                 echo "Too many MAJOR occurrences ($major_occurrences - 9)!"
                 cat coding-style-reports.log
                 exit 1
