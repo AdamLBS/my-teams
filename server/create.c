@@ -24,8 +24,7 @@ void create_team_command(struct client *client, char *buffer)
     client->teams[nb_teams]->uuid = strdup(team_uuid);
     client->teams[nb_teams]->desc = strdup(team_desc);
     client->teams[nb_teams]->channels = malloc(sizeof(struct channel *) * 100);
-    printf("team uuid: %s\n", client->teams[0]->uuid);
-    create_team_file(team_uuid, team_name);
+    create_team_file(team_uuid, team_name, team_desc);
 }
 
 void create_channel_command(struct client *client, char *buffer)
@@ -38,11 +37,10 @@ void create_channel_command(struct client *client, char *buffer)
     c_name = token; token = strtok(NULL, " ");
     c_desc = token; token = strtok(NULL, " ");
     server_event_channel_created(team_uuid, c_uuid, c_name);
-    int nb_channels = atoi(get_file_line(3, team_uuid, "teams/"));
-    set_file_line(3, team_uuid, itoa(nb_channels + 1), "teams/"); int i = 0;
+    int nb_channels = atoi(get_file_line(4, team_uuid, "teams/"));
+    set_file_line(4, team_uuid, itoa(nb_channels + 1), "teams/"); int i = 0;
     while (i < client->nb_teams) {
-        if (strcmp(client->teams[i]->uuid, team_uuid) == 0)
-            break;
+        if (strcmp(client->teams[i]->uuid, team_uuid) == 0) break;
         i++;
     }
     client->teams[i]->channels[nb_channels] = malloc(sizeof(struct channel));
@@ -50,5 +48,5 @@ void create_channel_command(struct client *client, char *buffer)
     client->teams[i]->channels[nb_channels]->uuid = strdup(c_uuid);
     client->teams[i]->channels[nb_channels]->desc = strdup(c_desc);
     client->teams[i]->channels[nb_channels]->t_uuid = strdup(team_uuid);
-    create_channel_file(c_uuid, c_name, team_uuid);
+    create_c_file(c_uuid, c_name, team_uuid, c_desc);
 }

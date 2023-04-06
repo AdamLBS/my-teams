@@ -108,5 +108,5 @@ char *get_file_line(int id, char *uuid, char *dir);
 void set_file_line(int id, char *uuid, char *target, char *dir);
 char *itoa(int num);
 void free_userlist(char ***userList);
-void create_team_file(char *t_uuid, char *t_name);
-void create_channel_file(char *c_uuid, char *c_name, char *t_uuid);
+void create_team_file(char *t_uuid, char *t_name, char *t_desc);
+void create_c_file(char *c_uuid, char *c_name, char *t_uuid, char *c_desc);
