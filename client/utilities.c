@@ -44,14 +44,14 @@ char *get_file_line(int id, char *uuid, char *dir)
     return NULL;
 }
 
-int check_if_file_exist(char *team_uuid, char *dir)
+int check_if_file_exist(char *uuid, char *dir)
 {
     DIR *d = opendir(dir);
     struct dirent *direc;
     if (!d)
         return 0;
     while ((direc = readdir(d)) != NULL) {
-        if (strstr(direc->d_name, team_uuid)) {
+        if (strstr(direc->d_name, uuid)) {
             closedir(d);
             return 1;
         }
