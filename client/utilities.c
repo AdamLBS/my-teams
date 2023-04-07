@@ -9,7 +9,6 @@
 
 char *clean_text(char *text)
 {
-    printf("text: %sEND\n", text);
     int count = 0;
     for (int i = 0; text[i] != '\0'; i++) {
         if (text[i] == '"')
