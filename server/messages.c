@@ -10,10 +10,11 @@
 void send_message_to_clients(char *s_uuid, char *msg, char *r_uuid)
 {
     save_message_receiver(msg, s_uuid, r_uuid);
-    save_message_sender(msg, s_uuid, r_uuid);
     struct client *tmp;
+    bool hasReceived = false;
     LIST_FOREACH(tmp, &head, next) {
         if (strcmp(r_uuid, tmp->id) == 0) {
+            hasReceived = true;
             char *nbuff = malloc(sizeof(char) * MAX_BODY_LENGTH);
             nbuff = strcpy(nbuff, "receive: ");
             nbuff = strcat(nbuff, s_uuid); nbuff = strcat(nbuff, " ");
@@ -22,6 +23,7 @@ void send_message_to_clients(char *s_uuid, char *msg, char *r_uuid)
             free(nbuff);
         }
     }
+    save_message_sender(msg, s_uuid, r_uuid, hasReceived);
 }
 
 void send_command(char *buffer, struct client *client)

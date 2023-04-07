@@ -94,7 +94,7 @@ int other_commands(struct client *cli, char *buffer);
 void unload_users_from_save(void);
 void create_channel_command(struct client *client, char *buffer);
 void save_message_receiver(char *msg, char *send, char *rcv);
-void save_message_sender(char *msg, char *send, char *rcv);
+void save_message_sender(char *msg, char *send, char *rcv, bool received);
 void messages_command(char *buffer, struct client *client);
 char ***get_messages_list(char *uuid, struct client *client);
 char *get_msg(char **value);
