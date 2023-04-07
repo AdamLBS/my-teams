@@ -45,7 +45,8 @@ void create_channel_command(struct client *client, char *buffer)
     client->teams[i]->channels[n_channel]->uuid = strdup(c_uuid);
     client->teams[i]->channels[n_channel]->desc = strdup(c_desc);
     client->teams[i]->channels[n_channel]->t_uuid = strdup(team_uuid);
-    client->teams[i]->channels[n_channel]->threads = malloc(sizeof(struct thread *) * 100);
+    client->teams[i]->channels[n_channel]->threads =
+    malloc(sizeof(struct thread *) * 100);
     create_c_file(c_uuid, c_name, team_uuid, c_desc);
 }
 
@@ -63,7 +64,8 @@ void create_thread_command(struct client *client, char *buffer)
     set_file_line(4, c_uuid, itoa(nb_threads + 1), "channels/");
     int i = find_indice_team(tm_uuid, client);
     int j = find_indice_channel(c_uuid, client, tm_uuid);
-    client->teams[i]->channels[j]->threads[nb_threads] = malloc(sizeof(struct thread));
+    client->teams[i]->channels[j]->threads[nb_threads] =
+    malloc(sizeof(struct thread));
     client->teams[i]->channels[j]->threads[nb_threads]->name = strdup(t_name);
     client->teams[i]->channels[j]->threads[nb_threads]->uuid = strdup(t_uuid);
     client->teams[i]->channels[j]->threads[nb_threads]->body = strdup(t_body);
