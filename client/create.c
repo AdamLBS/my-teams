@@ -60,12 +60,24 @@ void create_channel_command(client_t *client, char *buffer)
     send(client->sock, "\"\n", 2, 0);
 }
 
+void send_info(client_t *client, char *t_name, char *t_body, char *time)
+{
+    send(client->sock, " \"", 2, 0);
+    send(client->sock, time, (strlen(time) - 1), 0);
+    send(client->sock, "\" \"", 3, 0);
+    send(client->sock, t_name, strlen(t_name), 0);
+    send(client->sock, "\" \"", 3, 0);
+    send(client->sock, t_body, strlen(t_body), 0);
+    send(client->sock, "\"\n", 2, 0);
+}
+
 void create_thread_command(client_t *client, char *buffer)
 {
     if (check_if_file_exist(client->channel_uuid, "./channels/") == 0) {
         client_error_unknown_team(client->channel_uuid); return;
     }
-    time_t curTime = time( NULL );
+    time_t curTime = time( NULL ); char *time = ctime(&curTime);
+    time[strlen(time) - 1] = '\0';
     char t_uuid[37]; uuid_t uuid; uuid_generate_random(uuid);
     uuid_unparse(uuid, t_uuid); buffer += 8; buffer[strlen(buffer)] = '\0';
     char *t_name; char *t_body; char *token = strtok(buffer, "\"");
@@ -77,9 +89,5 @@ void create_thread_command(client_t *client, char *buffer)
     send(client->sock, client->channel_uuid, 36, 0);
     send(client->sock, " ", 1, 0); send(client->sock, client->id, 36, 0);
     send(client->sock, " ", 1, 0); send(client->sock, t_uuid, 36, 0);
-    send(client->sock, " \"", 1, 0);
-    send(client->sock, t_name, strlen(t_name), 0);
-    send(client->sock, "\" \"", 3, 0);
-    send(client->sock, t_body, strlen(t_body), 0);
-    send(client->sock, "\"\n", 2, 0);
+    send_info(client, t_name, t_body, time);
 }

@@ -41,6 +41,9 @@ struct thread {
     char *uuid;
     char *body;
     char *c_uuid;
+    char *o_uuid;
+    char *time;
+    char *t_uuid;
 };
 
 struct channel {
