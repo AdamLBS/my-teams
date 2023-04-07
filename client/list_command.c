@@ -70,4 +70,6 @@ void list_command(client_t *client)
         list_channels(client);
     if (client->context == 2)
         list_threads(client);
+    if (client->context == 3)
+        list_replies(client);
 }

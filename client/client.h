@@ -23,6 +23,7 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <dirent.h>
+#include <sys/stat.h>
 #include "../libs/myteams/logging_client.h"
 
 #define MAX_NAME_LENGTH 32
@@ -60,6 +61,7 @@ void create_thread_command(client_t *client, char *buffer);
 void create_reply_command(client_t *client, char *buffer);
 void list_command(client_t *client);
 void list_threads(client_t *client);
+void list_replies(client_t *client);
 // RECEIVE COMMANDS:
 void receive_commands(struct client *client);
 void receive_message(char *buffer);
