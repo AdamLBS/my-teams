@@ -19,7 +19,7 @@ char *clean_text(char *text)
         }
         i++;
     }
-    new_text[j] = '\0';
+    new_text[j + 1] = '\0';
     return new_text;
 }
 
