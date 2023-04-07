@@ -7,7 +7,7 @@
 
 #include "server.h"
 
-void save_message_receiver(char *msg, char *send, char *rcv)
+void save_message_receiver(char *msg, char *send, char *rcv, bool received)
 {
     time_t timestamp = time(NULL); char *time = ctime(&timestamp);
     time[strlen(time) - 1] = '\0';
@@ -16,8 +16,7 @@ void save_message_receiver(char *msg, char *send, char *rcv)
     char **file = malloc(sizeof(char *) * 1000);
     memset(file, 0, 100); memset(path, 0, MAX_DESCRIPTION_LENGTH);
     strcpy(path, "messages/"); strcat(path, rcv); strcat(path, ".txt");
-    fd = fopen(path, "r");
-    if (fd) {
+    fd = fopen(path, "r"); if (fd) {
         while (getline(&line, &len, fd) != -1) {
             file[i] = line; line = NULL; i++;
         } fclose(fd);
@@ -25,13 +24,14 @@ void save_message_receiver(char *msg, char *send, char *rcv)
     char *msg_val = malloc(sizeof(char) * size);
     memset(msg_val, 0, size); strcat(msg_val, msg); strcat(msg_val, " ");
     strcat(msg_val, send); strcat(msg_val, " "); strcat(msg_val, time);
-    strcat (msg_val, " 01\n"); file[i] = msg_val; fd = fopen(path, "w");
+    strcat (msg_val, " 0"); file[i] = msg_val; fd = fopen(path, "w");
+    strcat(msg_val, itoa(received)); strcat(msg_val, "\n");
     for (i = 0; file[i]; i++) {
         fputs(file[i], fd); free(file[i]);
-    } fclose(fd); free(path); free(file);
+    }fclose(fd); free(path); free(file);
 }
 
-void save_message_sender(char *msg, char *send, char *rcv, bool received)
+void save_message_sender(char *msg, char *send, char *rcv)
 {
     time_t timestamp = time(NULL); char *time = ctime(&timestamp);
     time[strlen(time) - 1] = '\0';
@@ -49,8 +49,8 @@ void save_message_sender(char *msg, char *send, char *rcv, bool received)
     int size = strlen(msg) + strlen(send) + strlen(time) + 10;
     char *msg_val = malloc(sizeof(char) * size); memset(msg_val, 0, size);
     strcat(msg_val, msg); strcat(msg_val, " "); strcat(msg_val, rcv);
-    strcat(msg_val, " "); strcat(msg_val, time); strcat (msg_val, " 1");
-    file[i] = msg_val; fd = fopen(path, "w"); strcat(msg_val, itoa(received));
+    strcat(msg_val, " "); strcat(msg_val, time); strcat (msg_val, " 11");
+    file[i] = msg_val; fd = fopen(path, "w");
     strcat(msg_val, "\n"); for (i = 0; file[i]; i++) fputs(file[i], fd);
     fclose(fd); free(path); free(file); free(msg_val);
 }

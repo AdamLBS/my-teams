@@ -9,7 +9,6 @@
 
 void send_message_to_clients(char *s_uuid, char *msg, char *r_uuid)
 {
-    save_message_receiver(msg, s_uuid, r_uuid);
     struct client *tmp;
     bool hasReceived = false;
     LIST_FOREACH(tmp, &head, next) {
@@ -23,7 +22,8 @@ void send_message_to_clients(char *s_uuid, char *msg, char *r_uuid)
             free(nbuff);
         }
     }
-    save_message_sender(msg, s_uuid, r_uuid, hasReceived);
+    save_message_receiver(msg, s_uuid, r_uuid, hasReceived);
+    save_message_sender(msg, s_uuid, r_uuid);
 }
 
 void send_command(char *buffer, struct client *client)

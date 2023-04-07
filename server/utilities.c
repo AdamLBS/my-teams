@@ -70,3 +70,20 @@ int check_if_file_exist(char *uuid, char *dir)
     closedir(d);
     return 0;
 }
+
+char **get_file_data(char *path)
+{
+    FILE *fd = fopen(path, "r");
+    char *line = NULL; size_t len = 0; int i = 0;
+    char **file = malloc(sizeof(char *) * 100); memset(file, 0, 100);
+    while (getline(&line, &len, fd) != -1) {
+        if (line[strlen(line) - 1] == '\n')
+            line[strlen(line) - 1] = '\0';
+        file[i] = malloc(sizeof(char) * strlen(line) + 1);
+        memset(file[i], 0, strlen(line) + 1);
+        file[i] = strcpy(file[i], line);
+        i++;
+    }
+    fclose(fd);
+    return file;
+}
