@@ -30,6 +30,9 @@ int main(int ac, char **av)
         help();
     struct sigaction act;
     act.sa_handler = do_handler;
+    sigemptyset(&act.sa_mask);
+    sigaddset(&act.sa_mask, SIGINT);
+    act.sa_flags = 0;
     sigaction(SIGINT, &act, NULL);
     create_save_folder();
     create_server(av[1]);

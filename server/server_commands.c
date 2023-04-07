@@ -10,8 +10,7 @@
 int commands(struct client *cli, char *buffer)
 {
     if (strstr(buffer, "/login")) {
-        login_command(cli, buffer);
-        send(cli->sock, "LOGIN OK\n", 9, 0); return 0;
+        login_command(cli, buffer); return 0;
     }
     if (strcmp(buffer, "/logout") == 0) {
         logout_command(cli); return 1;
@@ -49,7 +48,7 @@ int other_commands(struct client *cli, char *buffer)
 int check_commands_socket(struct client *cli)
 {
     int valread; char buffer[MAX_BODY_LENGTH] = {0};
-    if ((valread = recv(cli->sock, buffer, sizeof(buffer), 0)) <= 0) {
+    if ((valread = recv(cli->sock, buffer, 1, 0)) <= 0) {
         catch_client_logout(cli); return 1;
     } else {
         if (cli->buffer[0] != '\0')
@@ -77,7 +76,6 @@ void operations_on_sockets(fd_set *fd, struct client *tmp)
             val = check_commands_socket(tmp);
         }
         if (val == 1) {
-            remove_client(tmp->sock);
             val = 0;
         }
     }

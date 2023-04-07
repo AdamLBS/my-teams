@@ -17,10 +17,11 @@ void check_if_client_exist(FILE *fp, client_t *client, char *username)
             getline(&line, &len, fp);
             line[strlen(line) - 1] = '\0';
             strcpy(client->id, line); fclose(fp);
+            free(line);
             return;
         }
     }
-    fclose(fp);
+    free(line); fclose(fp);
     fp = fopen("log.txt", "a");
     fprintf(fp, "%s\n", username);
     uuid_t uuid;
@@ -41,8 +42,8 @@ void login_command(client_t *client, char *buff)
         username[strlen(username) - 1] = '\0';
     else
         return;
-    client->username = strdup(username); FILE *fp = fopen("log.txt", "r");
-    if (fp == NULL) {
+    client->username = strcpy(client->username, username);
+    FILE *fp = fopen("log.txt", "r"); if (fp == NULL) {
         uuid_t uuid; uuid_generate_random(uuid);
         uuid_unparse(uuid, client->id); fp = fopen("log.txt", "w");
         fprintf(fp, "%s\n", username);

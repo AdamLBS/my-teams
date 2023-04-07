@@ -22,6 +22,8 @@ void login_command(struct client *client, char *buffer)
     }
     server_event_user_logged_in(client->id);
     set_user_to_logged_in(client->id);
+    send(client->sock, "LOGIN OK\n", 9, 0);
+    check_pending_messages(client);
 }
 
 void logout_command(struct client *client)
