@@ -36,6 +36,9 @@ void create_team_command(client_t *client, char *buffer)
 
 void create_channel_command(client_t *client, char *buffer)
 {
+    if (check_if_file_exist(client->team_uuid, "./teams/") == 0) {
+        client_error_unknown_team(client->team_uuid); return;
+    }
     char channel_uuid[37]; uuid_t uuid; uuid_generate_random(uuid);
     uuid_unparse(uuid, channel_uuid); buffer += 8;
     buffer[strlen(buffer)] = '\0'; char *c_name; char *c_desc;
