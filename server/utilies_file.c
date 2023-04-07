@@ -31,3 +31,17 @@ int find_indice_channel(char *c_uuid, struct client *client, char *team_uuid)
     }
     return -1;
 }
+
+int find_indice_thread(char *c_uuid, struct client *client, char *team_uuid, char *thread_uuid)
+{
+    int i = 0;
+    int j = find_indice_team(team_uuid, client);
+    int k = find_indice_channel(c_uuid, client, team_uuid);
+    while (i < client->teams[j]->channels[k]->nb_threads) {
+        if (strcmp(client->teams[j]->channels[k]->threads[i]->uuid, thread_uuid) == 0) {
+            return i;
+        }
+        i++;
+    }
+    return -1;
+}
