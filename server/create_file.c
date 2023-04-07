@@ -21,10 +21,7 @@ void create_team_file(char *t_uuid, char *t_name, char *t_desc)
     fwrite(t_name, 1, strlen(t_name), fd);
     fwrite("\n", 1, 1, fd);
     fwrite(t_desc, 1, strlen(t_desc), fd);
-    fwrite("\n", 1, 1, fd);
-    fwrite("0", 1, 1, fd);
-    fwrite("\n", 1, 1, fd);
-    fwrite("0\n", 1, 2, fd);
+    fwrite("\n0\n0\n", 1, 5, fd);
     fclose (fd);
     free(path);
 }
