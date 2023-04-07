@@ -9,3 +9,4 @@ users/*.txt
 messages/
 teams/*.txt
 channels/*.txt
+threads/*.txt
