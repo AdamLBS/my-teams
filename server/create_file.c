@@ -63,6 +63,7 @@ void create_thread_file(struct thread *thread)
     fwrite(thread->body, 1, strlen(thread->body), fd);
     fwrite("\n", 1, 1, fd);
     fwrite(thread->c_uuid, 1, strlen(thread->c_uuid), fd);
+    fwrite("\n", 1, 1, fd);
     fclose (fd);
     free(path);
 }

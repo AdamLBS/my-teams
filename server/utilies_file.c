@@ -23,7 +23,6 @@ int find_indice_channel(char *c_uuid, struct client *client, char *team_uuid)
 {
     int i = 0;
     int j = find_indice_team(team_uuid, client);
-    printf("j = %d\n", j);
     while (i < client->teams[j]->nb_channels) {
         if (strcmp(client->teams[j]->channels[i]->uuid, c_uuid) == 0) {
             return i;

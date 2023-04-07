@@ -72,7 +72,7 @@ void create_thread_command(client_t *client, char *buffer)
     t_name = token; strtok(NULL, "\""); token = strtok(NULL, "");
     t_body = token; t_name = clean_text(t_name); t_body = clean_text(t_body);
     client_event_thread_created(t_uuid, client->id, currentTime, t_name, t_body);
-    send(client->sock, "create_thread ", 14, 0);
+    send(client->sock, "create_thread", 13, 0); send(client->sock, " ", 1, 0);
     send(client->sock, client->team_uuid, 36, 0);
     send(client->sock, " ", 1, 0);
     send(client->sock, client->channel_uuid, 36, 0);

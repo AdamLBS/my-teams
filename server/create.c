@@ -52,7 +52,7 @@ void create_channel_command(struct client *client, char *buffer)
 void create_thread_command(struct client *client, char *buffer)
 {
     char *t_name; char *t_uuid; char *c_uuid; char *t_body; char *tm_uuid;
-    buffer += 15; buffer[strlen(buffer)] = '\0'; char *u_uuid;
+    buffer += 14; buffer[strlen(buffer)] = '\0'; char *u_uuid;
     char *token = strtok(buffer, " "); tm_uuid = token;
     token = strtok(NULL, " "); c_uuid = token; token = strtok(NULL, " ");
     u_uuid = token; token = strtok(NULL, " ");
