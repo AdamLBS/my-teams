@@ -21,6 +21,7 @@ clean:
 	rm -f *~ | rm -f *.o | rm -f ./messages/* | rm -f log.txt
 	rm -f ./users/*.txt | rm -rf ./teams/*.txt
 	rm -f ./channels/*.txt | rm -f ./threads/*.txt
+	rm -f ./replies/*.txt
 
 fclean: clean
 	rm -f $(SERVER_NAME) | rm -f $(CLIENT_NAME)

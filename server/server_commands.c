@@ -42,6 +42,9 @@ int other_commands(struct client *cli, char *buffer)
     if (strstr(buffer, "create_thread")) {
         create_thread_command(cli, buffer); return 0;
     }
+    if (strstr(buffer, "create_reply")) {
+        create_reply_command(cli, buffer); return 0;
+    }
     write(cli->sock, UNKNOWN_CMD, strlen(UNKNOWN_CMD));
     return 0;
 }

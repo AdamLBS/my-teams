@@ -12,6 +12,7 @@ void put_s(struct thread *thread, char *time, char *t_uuid, char *o_uuid)
     thread->o_uuid = strdup(o_uuid);
     thread->t_uuid = strdup(t_uuid);
     thread->time = strdup(time);
+    thread->replies = malloc(sizeof(struct reply *) * 100);
     create_thread_file(thread);
 }
 
@@ -23,8 +24,8 @@ void create_thread_command(struct client *client, char *buffer)
     token = strtok(NULL, " "); c_uuid = token; token = strtok(NULL, " ");
     u_uuid = token; token = strtok(NULL, " "); t_uuid = token;
     token = strtok(NULL, "\""); times = token; strtok(NULL, "\"");
-    token = strtok(NULL, "\""); t_name = token;
-    strtok(NULL, "\""); token = strtok(NULL, "\""); t_body = token;
+    token = strtok(NULL, "\""); t_name = token; strtok(NULL, "\"");
+    token = strtok(NULL, "\""); t_body = token;
     server_event_thread_created(c_uuid, t_uuid, u_uuid, t_name, t_body);
     int n = atoi(get_file_line(4, c_uuid, "channels/"));
     set_file_line(4, c_uuid, itoa(n + 1), "channels/");
@@ -32,6 +33,7 @@ void create_thread_command(struct client *client, char *buffer)
     int j = find_indice_channel(c_uuid, client, tm_uuid);
     client->teams[i]->channels[j]->threads[n] =
     malloc(sizeof(struct thread));
+    client->teams[i]->channels[j]->nb_threads = n + 1;
     client->teams[i]->channels[j]->threads[n]->name = strdup(t_name);
     client->teams[i]->channels[j]->threads[n]->uuid = strdup(t_uuid);
     client->teams[i]->channels[j]->threads[n]->body = strdup(t_body);
@@ -57,5 +59,5 @@ void create_thread_file(struct thread *thread)
     fwrite(thread->t_uuid, 1, strlen(thread->t_uuid), fd);
     fwrite("\n", 1, 1, fd);
     fwrite(thread->c_uuid, 1, strlen(thread->c_uuid), fd);
-    fwrite("\n", 1, 1, fd); fclose (fd); free(path);
+    fwrite("\n0\n", 1, 3, fd); fclose (fd); free(path);
 }
