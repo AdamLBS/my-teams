@@ -9,7 +9,6 @@
 
 void create_team_command(struct client *client, char *buffer)
 {
-    printf("buffer: %s\n", buffer);
     char *team_name, *team_uuid, *team_desc;
     char **file = malloc(sizeof(char *) * 100); memset(file, 0, 100);
     buffer += 12; buffer[strlen(buffer)] = '\0';

@@ -10,6 +10,7 @@
 char *clean_text(char *text)
 {
     char *new_text = malloc(sizeof(char) * strlen(text));
+    memset(new_text, 0, strlen(text));
     int i = 0;
     int j = 0;
     while (text[i] != '\0') {
@@ -19,7 +20,6 @@ char *clean_text(char *text)
         }
         i++;
     }
-    new_text[j] = '\0';
     return new_text;
 }
 

@@ -17,6 +17,8 @@ void other_commands(client_t *client, char *buffer)
         use_command(client, buffer);
     if (strcmp(buffer, "/info") == 0)
         info_command(client);
+    if (strcmp(buffer, "/list") == 0)
+        list_command(client);
 }
 
 void send_commands(client_t *client)
