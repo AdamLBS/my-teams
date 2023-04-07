@@ -9,8 +9,15 @@
 
 char *clean_text(char *text)
 {
-    char *new_text = malloc(sizeof(char) * strlen(text));
-    memset(new_text, 0, strlen(text));
+    int count = 0;
+    for (int i = 0; text[i] != '\0'; i++) {
+        if (text[i] == '"')
+            count++;
+    }
+    if (count == 0)
+        return text;
+    char *new_text = malloc(sizeof(char) * (strlen(text) - count + 1));
+    memset(new_text, 0, strlen(text) - count + 1);
     int i = 0;
     int j = 0;
     while (text[i] != '\0') {

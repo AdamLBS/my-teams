@@ -36,19 +36,27 @@
 #define MAX_TEAM_CHANNELS 100
 #define UNKNOWN_CMD "500 Syntax error, command unrecognized.\n"
 
+struct thread {
+    char *name;
+    char *uuid;
+    char *body;
+    char *c_uuid;
+};
+
 struct channel {
     char *name;
     char *uuid;
     char *desc;
     char *t_uuid;
     char *t_name;
+    struct thread **threads;
 };
 
 struct team {
     char *name;
     char *uuid;
     char *desc;
-    int nb_teams;
+    int nb_channels;
     struct channel **channels;
 };
 
@@ -111,3 +119,7 @@ void free_userlist(char ***userList);
 void create_team_file(char *t_uuid, char *t_name, char *t_desc);
 void create_c_file(char *c_uuid, char *c_name, char *t_uuid, char *c_desc);
 int check_if_file_exist(char *uuid, char *dir);
+int find_indice_team(char *t_uuid, struct client *client);
+int find_indice_channel(char *c_uuid, struct client *client, char *team_uuid);
+void create_thread_file(struct thread *thread);
+void create_thread_command(struct client *client, char *buffer);

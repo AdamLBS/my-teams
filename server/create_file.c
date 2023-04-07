@@ -21,10 +21,7 @@ void create_team_file(char *t_uuid, char *t_name, char *t_desc)
     fwrite(t_name, 1, strlen(t_name), fd);
     fwrite("\n", 1, 1, fd);
     fwrite(t_desc, 1, strlen(t_desc), fd);
-    fwrite("\n", 1, 1, fd);
-    fwrite("0", 1, 1, fd);
-    fwrite("\n", 1, 1, fd);
-    fwrite("0\n", 1, 2, fd);
+    fwrite("\n0\n0\n", 1, 5, fd);
     fclose (fd);
     free(path);
 }
@@ -45,6 +42,27 @@ void create_c_file(char *c_uuid, char *c_name, char *t_uuid, char *c_desc)
     fwrite(c_desc, 1, strlen(c_desc), fd);
     fwrite("\n", 1, 1, fd);
     fwrite(t_uuid, 1, strlen(t_uuid), fd);
+    fwrite("\n0\n", 1, 3, fd);
+    fclose (fd);
+    free(path);
+}
+
+void create_thread_file(struct thread *thread)
+{
+    int size = strlen("threads/") + strlen(thread->uuid) + 6;
+    char *path = malloc(sizeof(char) * size);
+    memset(path, '\0', size);
+    strcpy(path, "threads/");
+    strcat(path, thread->uuid);
+    strcat(path, ".txt");
+    FILE *fd = fopen(path, "w");
+    fwrite(thread->uuid, 1, strlen(thread->uuid), fd);
+    fwrite("\n", 1, 1, fd);
+    fwrite(thread->name, 1, strlen(thread->name), fd);
+    fwrite("\n", 1, 1, fd);
+    fwrite(thread->body, 1, strlen(thread->body), fd);
+    fwrite("\n", 1, 1, fd);
+    fwrite(thread->c_uuid, 1, strlen(thread->c_uuid), fd);
     fwrite("\n", 1, 1, fd);
     fclose (fd);
     free(path);
