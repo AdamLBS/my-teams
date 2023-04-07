@@ -22,7 +22,7 @@ void list_teams(void)
             team_name = get_file_line(1, uuid, "./teams/");
             team_desc = get_file_line(2, uuid, "./teams/");
             client_print_teams(team_uuid, team_name, team_desc);
-            free(team_uuid);
+            free(team_uuid); free(team_name); free(team_desc);
         }
         file = readdir(dir);
     }
@@ -42,7 +42,7 @@ void list_channel(struct dirent *file, client_t *client)
         char *c_name = get_file_line(1, uuid, "./channels/");
         char *c_desc = get_file_line(2, uuid, "./channels/");
         client_team_print_channels(c_uuid, c_name, c_desc);
-        free(c_uuid);
+        free(c_uuid); free(c_name); free(c_desc);
     }
 }
 
@@ -68,4 +68,6 @@ void list_command(client_t *client)
         list_teams();
     if (client->context == 1)
         list_channels(client);
+    if (client->context == 2)
+        list_threads(client);
 }
