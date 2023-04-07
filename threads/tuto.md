@@ -1,8 +1,13 @@
 [uuid]
 
+[owner_uuid]
+
+[timestamp]
+
 [thread_name]
 
 [thread_desc]
 
-[channel_uuid]
+[team_uuid]
 
+[channel_uuid]
