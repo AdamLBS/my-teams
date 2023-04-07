@@ -7,7 +7,7 @@
 
 #include "server.h"
 
-void put_s(struct reply *reply, char *uuid, char *tm_uuid, char *t_uuid)
+void put_r(struct reply *reply, char *uuid, char *tm_uuid, char *t_uuid)
 {
     reply->t_uuid = strdup(t_uuid);
     reply->tm_uuid = strdup(tm_uuid);
@@ -36,7 +36,7 @@ void create_reply_command(struct client *c, char *buffer)
     c->teams[i]->channels[j]->threads[k]->replies[n]->uuid = strdup(r_uuid);
     c->teams[i]->channels[j]->threads[k]->replies[n]->time = strdup(times);
     c->teams[i]->channels[j]->threads[k]->replies[n]->c_uuid = strdup(c_uuid);
-    put_s(c->teams[i]->channels[j]->threads[k]->replies[n], u_uuid, tm, t_uuid);
+    put_r(c->teams[i]->channels[j]->threads[k]->replies[n], u_uuid, tm, t_uuid);
 }
 
 void create_reply_file(struct reply *reply)
