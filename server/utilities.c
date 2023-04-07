@@ -54,3 +54,19 @@ char *itoa(int num)
     snprintf(str, len + 1, "%d", num);
     return str;
 }
+
+int check_if_file_exist(char *team_uuid, char *dir)
+{
+    DIR *d = opendir(dir);
+    struct dirent *direc;
+    if (!d)
+        return 0;
+    while ((direc = readdir(d)) != NULL) {
+        if (strstr(direc->d_name, team_uuid)) {
+            closedir(d);
+            return 1;
+        }
+    }
+    closedir(d);
+    return 0;
+}

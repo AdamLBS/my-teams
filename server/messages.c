@@ -41,7 +41,7 @@ void send_command(char *buffer, struct client *client)
     }
     r_uuid = remove_quotes_send_cmd(r_uuid); msg = remove_quotes_send_cmd(msg);
     if (!r_uuid || !msg) return;
-    if (s_uuid == NULL) {
+    if (s_uuid == NULL || check_if_file_exist(r_uuid, "./users") == 0) {
         send_error(client, r_uuid); return;
     }
     server_event_private_message_sended(s_uuid, r_uuid, msg);
