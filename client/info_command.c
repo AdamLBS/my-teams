@@ -21,6 +21,10 @@ void info_team(client_t *client)
 
 void info_channel(client_t *client)
 {
+    if (check_if_file_exist(client->team_uuid, "./teams/") == 0) {
+        client_error_unknown_team(client->team_uuid);
+        return;
+    }
     if (check_if_file_exist(client->channel_uuid, "./channels/") == 0) {
         client_error_unknown_channel(client->channel_uuid);
         return;
