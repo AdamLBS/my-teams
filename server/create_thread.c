@@ -29,8 +29,7 @@ void create_thread_command(struct client *client, char *buffer)
     server_event_thread_created(c_uuid, t_uuid, u_uuid, t_name, t_body);
     int n = atoi(get_file_line(4, c_uuid, "channels/"));
     set_file_line(4, c_uuid, itoa(n + 1), "channels/");
-    int i = find_indice_team(tm_uuid, client);
-    int j = find_indice_channel(c_uuid, client, tm_uuid);
+    int i = find_t(tm_uuid, client); int j = find_c(c_uuid, client, tm_uuid);
     client->teams[i]->channels[j]->threads[n] =
     malloc(sizeof(struct thread));
     client->teams[i]->channels[j]->nb_threads = n + 1;
