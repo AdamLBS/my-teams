@@ -22,6 +22,7 @@
 #include <uuid/uuid.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <dirent.h>
 #include "../libs/myteams/logging_client.h"
 
 #define MAX_NAME_LENGTH 32
@@ -73,3 +74,4 @@ void print_history(char *token, char *id, char *msg, struct client *client);
 // UTILITIES:
 char *clean_text(char *text);
 char *get_file_line(int id, char *uuid, char *dir);
+int check_if_file_exist(char *team_uuid, char *dir);
