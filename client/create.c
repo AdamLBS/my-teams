@@ -15,6 +15,8 @@ void check_create_commands(client_t *client, char *buffer)
         create_channel_command(client, buffer);
     else if (client->context == 2)
         create_thread_command(client, buffer);
+    if (client->context == 3)
+        create_reply_command(client, buffer);
 }
 
 void create_team_command(client_t *client, char *buffer)

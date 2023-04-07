@@ -36,6 +36,16 @@
 #define MAX_TEAM_CHANNELS 100
 #define UNKNOWN_CMD "500 Syntax error, command unrecognized.\n"
 
+struct reply {
+    char *msg;
+    char *uuid;
+    char *time;
+    char *t_uuid;
+    char *tm_uuid;
+    char *o_uuid;
+    char *c_uuid;
+};
+
 struct thread {
     char *name;
     char *uuid;
@@ -44,6 +54,7 @@ struct thread {
     char *o_uuid;
     char *time;
     char *t_uuid;
+    struct reply **replies;
 };
 
 struct channel {
@@ -52,6 +63,7 @@ struct channel {
     char *desc;
     char *t_uuid;
     char *t_name;
+    int nb_threads;
     struct thread **threads;
 };
 
@@ -122,8 +134,8 @@ void free_userlist(char ***userList);
 void create_team_file(char *t_uuid, char *t_name, char *t_desc);
 void create_c_file(char *c_uuid, char *c_name, char *t_uuid, char *c_desc);
 int check_if_file_exist(char *uuid, char *dir);
-int find_indice_team(char *t_uuid, struct client *client);
-int find_indice_channel(char *c_uuid, struct client *client, char *team_uuid);
+int find_t(char *t_uuid, struct client *client);
+int find_c(char *c_uuid, struct client *client, char *team_uuid);
 void create_thread_file(struct thread *thread);
 void create_thread_command(struct client *client, char *buffer);
 void check_pending_messages(struct client *client);
@@ -133,3 +145,7 @@ char **get_file_data(char *path);
 void write_file_data(char *path, char **data);
 void clear_message_queue(struct client *client);
 int is_message_waiting(char **msg);
+int find_th(char *c_uuid, struct client *client, char *team_uuid,
+char *thread_uuid);
+void create_reply_command(struct client *client, char *buffer);
+void create_reply_file(struct reply *reply);

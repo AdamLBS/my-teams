@@ -18,7 +18,7 @@ void create_channel_command(struct client *client, char *buffer)
     server_event_channel_created(team_uuid, c_uuid, c_name);
     int n_channel = atoi(get_file_line(4, team_uuid, "teams/"));
     set_file_line(4, team_uuid, itoa(n_channel + 1), "teams/");
-    int i = find_indice_team(team_uuid, client);
+    int i = find_t(team_uuid, client);
     client->teams[i]->nb_channels = n_channel + 1;
     client->teams[i]->channels[n_channel] = malloc(sizeof(struct channel));
     client->teams[i]->channels[n_channel]->name = strdup(c_name);
