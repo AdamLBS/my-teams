@@ -7,6 +7,19 @@
 
 #include "client.h"
 
+void free_client(client_t *client)
+{
+    free(client->username);
+    close(client->sock);
+    if (client->context >= 1 && client->team_uuid != NULL)
+        free(client->team_uuid);
+    if (client->context >= 2 && client->channel_uuid != NULL)
+        free(client->channel_uuid);
+    if (client->context >= 3 && client->thread_uuid != NULL)
+        free(client->thread_uuid);
+    exit(0);
+}
+
 void handle_received_data(client_t *client)
 {
     if (strstr(client->buffer, "receive:"))
@@ -22,6 +35,6 @@ void handle_received_data(client_t *client)
     }
     if (strstr(client->buffer, "LOGOUT OK\n")) {
         client_event_logged_out(client->id, client->username);
-        free(client->username); close(client->sock); exit(0);
+        free_client(client);
     }
 }

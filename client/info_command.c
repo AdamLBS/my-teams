@@ -17,6 +17,7 @@ void info_team(client_t *client)
     char *team_name = get_file_line(1, client->team_uuid, "./teams/");
     char *team_desc = get_file_line(2, client->team_uuid, "./teams/");
     client_print_team(team_uuid, team_name, team_desc);
+    free(team_uuid); free(team_name); free(team_desc);
 }
 
 void info_channel(client_t *client)
@@ -33,6 +34,7 @@ void info_channel(client_t *client)
     char *c_name = get_file_line(1, client->channel_uuid, "./channels/");
     char *c_desc = get_file_line(2, client->channel_uuid, "./channels/");
     client_print_channel(c_uuid, c_name, c_desc);
+    free(c_uuid); free(c_name); free(c_desc);
 }
 
 void info_thread(client_t *client)

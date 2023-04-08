@@ -11,6 +11,10 @@ void set_struct_client(client_t *cl)
 {
     cl->username = malloc(sizeof(char) * MAX_NAME_LENGTH);
     memset(cl->username, 0, MAX_NAME_LENGTH);
+    cl->context = 0;
+    cl->team_uuid = NULL;
+    cl->channel_uuid = NULL;
+    cl->thread_uuid = NULL;
 }
 
 void receive_commands(struct client *client)
@@ -46,7 +50,6 @@ void create_client(char *ip, char *port)
     inet_aton(ip, &myaddr.sin_addr);
     myaddr.sin_port = htons(atoi(port));
     connect(client.sock, (struct sockaddr *)&myaddr, sizeof(myaddr));
-    client.context = 0;
     while (1) {
         receive_commands(&client);
         send_commands(&client);

@@ -42,12 +42,13 @@ char *get_file_line(int id, char *uuid, char *dir)
     fd = fopen(path, "r");
     while (getline(&line, &len, fd) != -1) {
         if (i == id) {
-            fclose(fd);
+            fclose(fd); free(path); free(file);
             line[strlen(line) - 1] = '\0';
             return line;
         }
         i++;
     }
+    fclose(fd); free(path); free(file);
     return NULL;
 }
 

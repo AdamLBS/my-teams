@@ -12,13 +12,12 @@ reply_t list_reply(struct dirent *file, client_t *client)
     reply_t reply; reply.user_uuid = NULL;
     if (file->d_name[0] != '.' && strstr(file->d_name, ".txt")) {
         char *uuid = malloc(sizeof(char) * 37); memset(uuid, 0, 37);
-        strncpy(uuid, file->d_name, 36);
-        if (strcmp(get_file_line(1, uuid, "./replies/")
-            , client->team_uuid) != 0 || strcmp(get_file_line(2, uuid
-            , "./replies/"), client->channel_uuid) != 0 ||
-            strcmp(get_file_line(3, uuid, "./replies/")
-            , client->thread_uuid) != 0) {
-            free(uuid); return reply;
+        strncpy(uuid, file->d_name, 36); char *tmp = get_file_line(1, uuid
+        , "./replies/"), *tmp2 = get_file_line(2, uuid, "./replies/"), *tmp3 =
+        get_file_line(3, uuid, "./replies/"); if (strcmp(tmp
+        , client->team_uuid) != 0 || strcmp(tmp2, client->channel_uuid) != 0 ||
+            strcmp(tmp3, client->thread_uuid) != 0) {
+            free(uuid); free(tmp); free(tmp2); free(tmp3); return reply;
         }
         reply.thread_uuid = get_file_line(3, uuid, "./replies/");
         reply.user_uuid = get_file_line(4, uuid, "./replies/");
@@ -27,7 +26,8 @@ reply_t list_reply(struct dirent *file, client_t *client)
         time_t currentTime = time(NULL); struct tm *timeInfos =
         localtime(&currentTime), tm; tm.tm_isdst = timeInfos->tm_isdst;
         strptime(r_time, "%a %b %d %H:%M:%S %Y", &tm);
-        reply.timestamp = mktime(&tm); free(uuid); return reply;
+        reply.timestamp = mktime(&tm); free(uuid); free(tmp); free(tmp2);
+        free(tmp3); free(r_time); return reply;
     } return reply;
 }
 
