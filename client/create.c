@@ -15,8 +15,18 @@ void check_create_commands(client_t *client, char *buffer)
         create_channel_command(client, buffer);
     else if (client->context == 2)
         create_thread_command(client, buffer);
-    if (client->context == 3)
+    if (client->context == 3) {
+        if (check_if_file_exist(client->team_uuid, "./teams/") == 0) {
+            client_error_unknown_team(client->team_uuid); return;
+        }
+        if (check_if_file_exist(client->channel_uuid, "./channels/") == 0) {
+            client_error_unknown_team(client->channel_uuid); return;
+        }
+        if (check_if_file_exist(client->thread_uuid, "./threads/") == 0) {
+            client_error_unknown_team(client->thread_uuid); return;
+        }
         create_reply_command(client, buffer);
+    }
 }
 
 void create_team_command(client_t *client, char *buffer)
@@ -75,6 +85,9 @@ void send_info(client_t *client, char *t_name, char *t_body, char *time)
 
 void create_thread_command(client_t *client, char *buffer)
 {
+    if (check_if_file_exist(client->team_uuid, "./teams/") == 0) {
+        client_error_unknown_team(client->team_uuid); return;
+    }
     if (check_if_file_exist(client->channel_uuid, "./channels/") == 0) {
         client_error_unknown_team(client->channel_uuid); return;
     }
