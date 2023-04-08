@@ -70,6 +70,16 @@ void list_command(client_t *client)
         list_channels(client);
     if (client->context == 2)
         list_threads(client);
-    if (client->context == 3)
+    if (client->context == 3) {
+        if (check_if_file_exist(client->team_uuid, "./teams/") == 0) {
+            client_error_unknown_team(client->team_uuid); return;
+        }
+        if (check_if_file_exist(client->channel_uuid, "./channels/") == 0) {
+            client_error_unknown_channel(client->channel_uuid); return;
+        }
+        if (check_if_file_exist(client->thread_uuid, "./threads/") == 0) {
+            client_error_unknown_thread(client->thread_uuid); return;
+        }
         list_replies(client);
+    }
 }

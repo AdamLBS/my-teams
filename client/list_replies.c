@@ -7,8 +7,9 @@
 
 #include "client.h"
 
-void list_reply(struct dirent *file, client_t *client)
+reply_t list_reply(struct dirent *file, client_t *client)
 {
+    reply_t reply; reply.user_uuid = NULL;
     if (file->d_name[0] != '.' && strstr(file->d_name, ".txt")) {
         char *uuid = malloc(sizeof(char) * 37); memset(uuid, 0, 37);
         strncpy(uuid, file->d_name, 36);
@@ -17,38 +18,46 @@ void list_reply(struct dirent *file, client_t *client)
             , "./replies/"), client->channel_uuid) != 0 ||
             strcmp(get_file_line(3, uuid, "./replies/")
             , client->thread_uuid) != 0) {
-            free(uuid); return;
+            free(uuid); return reply;
         }
-        char *r_t_uuid = get_file_line(3, uuid, "./replies/");
-        char *r_u_uuid = get_file_line(4, uuid, "./replies/");
-        char *r_desc = get_file_line(6, uuid, "./replies/");
+        reply.thread_uuid = get_file_line(3, uuid, "./replies/");
+        reply.user_uuid = get_file_line(4, uuid, "./replies/");
+        reply.body = get_file_line(6, uuid, "./replies/");
         char *r_time = get_file_line(5, uuid, "./replies/");
         time_t currentTime = time(NULL); struct tm *timeInfos =
         localtime(&currentTime), tm; tm.tm_isdst = timeInfos->tm_isdst;
-        strptime(r_time, "%a %b %d %H:%M:%S %Y", &tm);time_t t = mktime(&tm);
-        client_thread_print_replies(r_t_uuid, r_u_uuid, t, r_desc);
-        free(r_t_uuid); free(r_u_uuid); free(r_desc); free(r_time);
-    }
+        strptime(r_time, "%a %b %d %H:%M:%S %Y", &tm);
+        reply.timestamp = mktime(&tm); free(uuid); return reply;
+    } return reply;
+}
+
+int compare_time(const void *a, const void *b)
+{
+    reply_t *reply_a = (reply_t *)a;
+    reply_t *reply_b = (reply_t *)b;
+    return (int)(reply_a->timestamp - reply_b->timestamp);
 }
 
 void list_replies(client_t *client)
 {
-    if (check_if_file_exist(client->team_uuid, "./teams/") == 0) {
-        client_error_unknown_team(client->team_uuid); return;
-    }
-    if (check_if_file_exist(client->channel_uuid, "./channels/") == 0) {
-        client_error_unknown_channel(client->channel_uuid); return;
-    }
-    if (check_if_file_exist(client->thread_uuid, "./threads/") == 0) {
-        client_error_unknown_thread(client->thread_uuid); return;
-    }
     DIR *dir = opendir("./replies/");
-    if (dir == NULL)
-        return;
+    if (dir == NULL) return;
     struct dirent *file = readdir(dir);
+    reply_t *replies = malloc(sizeof(reply_t) * MAX_BODY_LENGTH);
+    reply_t tmp; int i = 0;
     while (file != NULL) {
-        list_reply(file, client);
+        tmp = list_reply(file, client);
+        if (tmp.user_uuid != NULL) {
+            replies[i] = tmp; i++;
+        }
         file = readdir(dir);
     }
-    closedir(dir);
+    closedir(dir); qsort(replies, i, sizeof(reply_t), compare_time);
+    for (int j = 0; j < i; j++) {
+        client_thread_print_replies(replies[j].thread_uuid
+        , replies[j].user_uuid,replies[j].timestamp, replies[j].body);
+        free(replies[j].user_uuid); free(replies[j].body);
+        free(replies[j].thread_uuid);
+    }
+    free(replies);
 }

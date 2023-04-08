@@ -41,6 +41,13 @@ typedef struct client {
     char *thread_uuid;
 } client_t;
 
+typedef struct reply {
+    char *thread_uuid;
+    char *user_uuid;
+    time_t timestamp;
+    char *body;
+} reply_t;
+
 void create_client(char *ip, char *port);
 // COMMANDS:
 void send_commands(client_t *client);
