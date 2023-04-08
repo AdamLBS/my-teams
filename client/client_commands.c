@@ -11,9 +11,9 @@ void other_commands(client_t *client, char *buffer)
 {
     if (strcmp(buffer, "/users") == 0)
         users_command(client);
-    else if (strstr(buffer, "/user"))
+    if (strstr(buffer, "/user "))
         user_command(client, buffer);
-    if (strstr(buffer, "/use"))
+    else if (strstr(buffer, "/use"))
         use_command(client, buffer);
     if (strcmp(buffer, "/info") == 0)
         info_command(client);
