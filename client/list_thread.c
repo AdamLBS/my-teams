@@ -7,45 +7,24 @@
 
 #include "client.h"
 
-void list_thread(struct dirent *file, client_t *client)
+void list_threads(client_t *client, char *buffer)
 {
-    if (file->d_name[0] != '.' && strstr(file->d_name, ".txt")) {
-        char *uuid = malloc(sizeof(char) * 37); memset(uuid, 0, 37);
-        strncpy(uuid, file->d_name, 36); char *tmp = get_file_line(5, uuid
-        , "./threads/"), *tmp2 = get_file_line(6, uuid, "./threads/");
-        if (strcmp(tmp, client->team_uuid) != 0
-            || strcmp(tmp2, client->channel_uuid) != 0) {
-            free(uuid); free(tmp); free(tmp2); return;
-        }
-        char *t_uuid = get_file_line(0, uuid, "./threads/"), *t_u_uuid =
-        get_file_line(1, uuid, "./threads/"), *t_name = get_file_line(3, uuid
-        , "./threads/"), *t_desc = get_file_line(4, uuid, "./threads/");
-        char *t_time = get_file_line(2, uuid, "./threads/");
-        time_t currentTime = time(NULL);
+    char *str = strchr(buffer, ' ');
+    if (str != NULL) str++;
+    else
+        return;
+    if (check_if_error(str, client)) return;
+    char *token = strtok(str, "\"");
+    while (token != NULL) {
+        char *t_uuid = token; strtok(NULL, "\"");
+        token = strtok(NULL, "\"");char *t_u_uuid = token; strtok(NULL, "\"");
+        token = strtok(NULL, "\""); char *t_name = token; strtok(NULL, "\"");
+        token = strtok(NULL, "\""); char *t_desc = token; strtok(NULL, "\"");
+        token = strtok(NULL, "\""); char *t_time = token; strtok(NULL, "\"");
+        token = strtok(NULL, "\""); time_t currentTime = time(NULL);
         struct tm *timeInfos = localtime(&currentTime); struct tm tm;
-        tm.tm_isdst = timeInfos->tm_isdst; free(uuid);
+        tm.tm_isdst = timeInfos->tm_isdst;
         strptime(t_time, "%a %b %d %H:%M:%S %Y", &tm); time_t t = mktime(&tm);
         client_channel_print_threads(t_uuid, t_u_uuid, t, t_name, t_desc);
-        free(t_uuid); free(t_u_uuid); free(t_name); free(t_desc); free(t_time);
-        free(tmp); free(tmp2);
     }
-}
-
-void list_threads(client_t *client)
-{
-    if (check_if_file_exist(client->team_uuid, "./teams/") == 0) {
-        client_error_unknown_team(client->team_uuid); return;
-    }
-    if (check_if_file_exist(client->channel_uuid, "./channels/") == 0) {
-        client_error_unknown_channel(client->channel_uuid); return;
-    }
-    DIR *dir = opendir("./threads/");
-    if (dir == NULL)
-        return;
-    struct dirent *file = readdir(dir);
-    while (file != NULL) {
-        list_thread(file, client);
-        file = readdir(dir);
-    }
-    closedir(dir);
 }

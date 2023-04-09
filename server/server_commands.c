@@ -47,6 +47,9 @@ int other_commands(struct client *cli, char *buffer)
     if (strstr(buffer, "/info")) {
         info_command(cli, buffer); return 0;
     }
+    if (strstr(buffer, "/list")) {
+        list_command(cli, buffer); return 0;
+    }
     write(cli->sock, UNKNOWN_CMD, strlen(UNKNOWN_CMD));
     return 0;
 }

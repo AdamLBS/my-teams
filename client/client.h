@@ -42,13 +42,6 @@ typedef struct client {
     int login;
 } client_t;
 
-typedef struct reply {
-    char *thread_uuid;
-    char *user_uuid;
-    time_t timestamp;
-    char *body;
-} reply_t;
-
 void create_client(char *ip, char *port);
 // COMMANDS:
 void send_commands(client_t *client);
@@ -69,8 +62,9 @@ void create_channel_command(client_t *client, char *buffer);
 void create_thread_command(client_t *client, char *buffer);
 void create_reply_command(client_t *client, char *buffer);
 void list_command(client_t *client);
-void list_threads(client_t *client);
-void list_replies(client_t *client);
+void list_threads(client_t *client, char *buffer);
+void list_replies(client_t *client, char *buffer);
+int check_if_error(char *str, client_t *client);
 // RECEIVE COMMANDS:
 void receive_commands(struct client *client);
 void receive_message(char *buffer);
@@ -89,3 +83,4 @@ char *clean_text(char *text);
 char *get_file_line(int id, char *uuid, char *dir);
 int check_if_file_exist(char *uuid, char *dir);
 int check_if_title_exist(char *title, char *dir);
+void list_command_receive(client_t *client, char *buffer);

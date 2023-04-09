@@ -7,79 +7,81 @@
 
 #include "client.h"
 
-void list_teams(void)
+void list_teams(char *buffer)
 {
-    DIR *dir = opendir("./teams/");
-    if (dir == NULL)
+    char *str = strchr(buffer, ' ');
+    if (str != NULL)
+        str++;
+    else
         return;
-    struct dirent *file = readdir(dir);
-    char *team_uuid = NULL, *team_name = NULL, *team_desc = NULL;
-    while (file != NULL) {
-        if (file->d_name[0] != '.' && strstr(file->d_name, ".txt")) {
-            char *uuid = malloc(sizeof(char) * 37); memset(uuid, 0, 37);
-            strncpy(uuid, file->d_name, 36);
-            team_uuid = get_file_line(0, uuid, "./teams/");
-            team_name = get_file_line(1, uuid, "./teams/");
-            team_desc = get_file_line(2, uuid, "./teams/");
-            client_print_teams(team_uuid, team_name, team_desc);
-            free(team_uuid); free(team_name); free(team_desc); free(uuid);
-        }
-        file = readdir(dir);
-    }
-    closedir(dir);
-}
-
-void list_channel(struct dirent *file, client_t *client)
-{
-    if (file->d_name[0] != '.' && strstr(file->d_name, ".txt")) {
-        char *uuid = malloc(sizeof(char) * 37); memset(uuid, 0, 37);
-        strncpy(uuid, file->d_name, 36);
-        char *tmp = get_file_line(3, uuid, "./channels/");
-        if (strcmp(tmp, client->team_uuid) != 0) {
-            free(uuid); free(tmp); return;
-        }
-        char *c_uuid = get_file_line(0, uuid, "./channels/");
-        char *c_name = get_file_line(1, uuid, "./channels/");
-        char *c_desc = get_file_line(2, uuid, "./channels/");
-        client_team_print_channels(c_uuid, c_name, c_desc);
-        free(c_uuid); free(c_name); free(c_desc); free(uuid); free(tmp);
+    char *token = strtok(str, "\"");
+    while (token != NULL) {
+        char *uuid = token; strtok(NULL, "\"");
+        token = strtok(NULL, "\"");
+        char *name = token; strtok(NULL, "\"");
+        token = strtok(NULL, "\"");
+        char *desc = token; strtok(NULL, "\"");
+        token = strtok(NULL, "\"");
+        client_print_teams(uuid, name, desc);
     }
 }
 
-void list_channels(client_t *client)
+void list_channels(client_t *client, char *buffer)
 {
-    if (check_if_file_exist(client->team_uuid, "./teams/") == 0) {
-        client_error_unknown_team(client->team_uuid); return;
-    }
-    DIR *dir = opendir("./channels/");
-    if (dir == NULL)
+    char *str = strchr(buffer, ' ');
+    if (str != NULL) str++;
+    else
         return;
-    struct dirent *file = readdir(dir);
-    while (file != NULL) {
-        list_channel(file, client);
-        file = readdir(dir);
+    if (strstr(str, "ERROR")) {
+        int val = str[6] - '0';
+        if (val == 1) client_error_unknown_team(client->team_uuid);
+        if (val == 2) client_error_unknown_channel(client->channel_uuid);
+        if (val == 3) client_error_unknown_thread(client->thread_uuid);
+        return;
     }
-    closedir(dir);
+    char *token = strtok(str, "\"");
+    while (token != NULL) {
+        char *uuid = token; strtok(NULL, "\"");
+        token = strtok(NULL, "\"");
+        char *name = token; strtok(NULL, "\"");
+        token = strtok(NULL, "\"");
+        char *desc = token; strtok(NULL, "\""); token = strtok(NULL, "\"");
+        client_team_print_channels(uuid, name, desc);
+    }
 }
 
 void list_command(client_t *client)
 {
     if (client->context == 0)
-        list_teams();
-    if (client->context == 1)
-        list_channels(client);
-    if (client->context == 2)
-        list_threads(client);
-    if (client->context == 3) {
-        if (check_if_file_exist(client->team_uuid, "./teams/") == 0) {
-            client_error_unknown_team(client->team_uuid); return;
-        }
-        if (check_if_file_exist(client->channel_uuid, "./channels/") == 0) {
-            client_error_unknown_channel(client->channel_uuid); return;
-        }
-        if (check_if_file_exist(client->thread_uuid, "./threads/") == 0) {
-            client_error_unknown_thread(client->thread_uuid); return;
-        }
-        list_replies(client);
+        send(client->sock, "/list 0\n", 8, 0);
+    if (client->context == 1) {
+        send(client->sock, "/list 1 ", 8, 0);
+        send(client->sock, client->team_uuid, strlen(client->team_uuid), 0);
+        send(client->sock, "\n", 1, 0);
+    } if (client->context == 2) {
+        send(client->sock, "/list 2 ", 8, 0);
+        send(client->sock, client->team_uuid, strlen(client->team_uuid), 0);
+        send(client->sock, " ", 1, 0);send(client->sock, client->channel_uuid
+        , strlen(client->channel_uuid), 0); send(client->sock, "\n", 1, 0);
+    } if (client->context == 3) {
+        send(client->sock, "/list 3 ", 8, 0);
+        send(client->sock, client->team_uuid, strlen(client->team_uuid), 0);
+        send(client->sock, " ", 1, 0);
+        send(client->sock, client->channel_uuid, strlen(client->channel_uuid)
+        , 0); send(client->sock, " ", 1, 0);
+        send(client->sock, client->thread_uuid, strlen(client->thread_uuid), 0);
+        send(client->sock, "\n", 1, 0);
     }
+}
+
+void list_command_receive(client_t *client, char *buffer)
+{
+    if (client->context == 0)
+        list_teams(buffer);
+    if (client->context == 1)
+        list_channels(client, buffer);
+    if (client->context == 2)
+        list_threads(client, buffer);
+    if (client->context == 3)
+        list_replies(client, buffer);
 }

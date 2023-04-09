@@ -35,7 +35,7 @@ void info_team(struct client *client, char *team_uuid)
 void info_channel(struct client *client, char *team_uuid, char *channel_uuid)
 {
     if (check_if_file_exist(team_uuid, "./teams/") == 0) {
-       send_error_info(client, "1"); return;
+        send_error_info(client, "1"); return;
     }
     if (check_if_file_exist(channel_uuid, "./channels/") == 0) {
         send_error_info(client, "2"); return;
@@ -57,7 +57,7 @@ void info_thread(struct client *client, char *team_uuid, char *channel_uuid
 , char *thread_uuid)
 {
     if (check_if_file_exist(team_uuid, "./teams/") == 0) {
-       send_error_info(client, "1"); return;
+        send_error_info(client, "1"); return;
     } if (check_if_file_exist(channel_uuid, "./channels/") == 0) {
         send_error_info(client, "2"); return;
     } if (check_if_file_exist(thread_uuid, "./threads/") == 0) {

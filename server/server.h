@@ -26,6 +26,7 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <uuid/uuid.h>
+#include <time.h>
 #include "../libs/myteams/logging_server.h"
 
 #define MAX_CLIENTS 100
@@ -45,6 +46,13 @@ struct reply {
     char *o_uuid;
     char *c_uuid;
 };
+
+typedef struct replies {
+    char *thread_uuid;
+    char *user_uuid;
+    char *timestamp;
+    char *body;
+} replies_t;
 
 struct thread {
     char *name;
@@ -151,3 +159,7 @@ void create_reply_command(struct client *client, char *buffer);
 void create_reply_file(struct reply *reply);
 void info_command(struct client *client, char *buffer);
 char *get_file_line_n(int id, char *uuid, char *dir);
+void list_command(struct client *client, char *buffer);
+void list_threads(struct client *client, char *team_uuid, char *channel_uuid);
+void list_replies(struct client *client, char *team_uuid, char *channel_uuid
+, char *thread_uuid);
