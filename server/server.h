@@ -6,7 +6,8 @@
 */
 
 #pragma once
-
+#define _XOPEN_SOURCE
+#define _GNU_SOURCE
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -52,6 +53,7 @@ typedef struct replies {
     char *user_uuid;
     char *timestamp;
     char *body;
+    time_t time;
 } replies_t;
 
 struct thread {

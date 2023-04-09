@@ -23,8 +23,11 @@ replies_t list_reply(struct dirent *file, char data[3][37])
         reply.user_uuid = get_file_line_n(4, uuid, "./replies/");
         reply.body = get_file_line_n(6, uuid, "./replies/");
         reply.timestamp = get_file_line_n(5, uuid, "./replies/");
-        free(uuid); free(tmp); free(tmp2);
-        free(tmp3); return reply;
+        time_t currentTime = time(NULL); struct tm *timeInfos =
+        localtime(&currentTime); struct tm tm;tm.tm_isdst = timeInfos->tm_isdst;
+        strptime(reply.timestamp, "%a %b %d %H:%M:%S %Y", &tm);
+        reply.time = mktime(&tm);
+        free(uuid); free(tmp); free(tmp2); free(tmp3); return reply;
     } return reply;
 }
 
@@ -32,7 +35,7 @@ int compare_time(const void *a, const void *b)
 {
     replies_t *reply_a = (replies_t *)a;
     replies_t *reply_b = (replies_t *)b;
-    return (int)(reply_a->timestamp - reply_b->timestamp);
+    return (int)(reply_a->time - reply_b->time);
 }
 
 int check_errors(struct client *client, char data[3][37])
