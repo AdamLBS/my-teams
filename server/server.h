@@ -149,3 +149,5 @@ int find_th(char *c_uuid, struct client *client, char *team_uuid,
 char *thread_uuid);
 void create_reply_command(struct client *client, char *buffer);
 void create_reply_file(struct reply *reply);
+void info_command(struct client *client, char *buffer);
+char *get_file_line_n(int id, char *uuid, char *dir);

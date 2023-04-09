@@ -16,3 +16,27 @@ void write_file_data(char *path, char **data)
     }
     fclose(fd);
 }
+
+char *get_file_line_n(int id, char *uuid, char *dir)
+{
+    FILE *fd; char *line = NULL; size_t len = 0; int i = 0;
+    char *path = malloc(sizeof(char) * MAX_DESCRIPTION_LENGTH);
+    char **file = malloc(sizeof(char *) * 100); memset(file, 0, 100);
+    memset(path, 0, MAX_DESCRIPTION_LENGTH);
+    strcpy(path, dir);
+    strcat(path, uuid);
+    strcat(path, ".txt");
+    fd = fopen(path, "r");
+    if (!fd)
+        return NULL;
+    while (getline(&line, &len, fd) != -1) {
+        if (i == id) {
+            fclose(fd); free(path); free(file);
+            line[strlen(line) - 1] = '\0';
+            return line;
+        }
+        i++;
+    }
+    fclose(fd); free(path); free(file);
+    return NULL;
+}

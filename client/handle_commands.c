@@ -37,4 +37,7 @@ void handle_received_data(client_t *client)
         client_event_logged_out(client->id, client->username);
         free_client(client);
     }
+    if (strstr(client->buffer, "/info")) {
+        info_command_receive(client, client->buffer);
+    }
 }

@@ -62,6 +62,7 @@ void help_command(void);
 void send_command(char *buffer, struct client *client);
 void use_command(client_t *client, char *buffer);
 void info_command(client_t *client);
+void info_command_receive(client_t *client, char *buffer);
 void check_create_commands(client_t *client, char *buffer);
 void create_team_command(client_t *client, char *buffer);
 void create_channel_command(client_t *client, char *buffer);
