@@ -31,7 +31,7 @@ void handle_received_data(client_t *client)
     if (strstr(client->buffer, "msg_history:"))
         receive_messages_history(client->buffer, client);
     if (strstr(client->buffer, "LOGIN OK\n")) {
-        client_event_logged_in(client->id, client->username);
+        client_event_logged_in(client->id, client->username);client->login = 1;
     }
     if (strstr(client->buffer, "LOGOUT OK\n")) {
         client_event_logged_out(client->id, client->username);

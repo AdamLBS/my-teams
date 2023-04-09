@@ -39,6 +39,7 @@ typedef struct client {
     char *team_uuid;
     char *channel_uuid;
     char *thread_uuid;
+    int login;
 } client_t;
 
 typedef struct reply {
@@ -86,3 +87,4 @@ void print_history(char *token, char *id, char *msg, struct client *client);
 char *clean_text(char *text);
 char *get_file_line(int id, char *uuid, char *dir);
 int check_if_file_exist(char *uuid, char *dir);
+int check_if_title_exist(char *title, char *dir);

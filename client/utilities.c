@@ -40,6 +40,8 @@ char *get_file_line(int id, char *uuid, char *dir)
     strcat(path, uuid);
     strcat(path, ".txt");
     fd = fopen(path, "r");
+    if (!fd)
+        return NULL;
     while (getline(&line, &len, fd) != -1) {
         if (i == id) {
             fclose(fd); free(path); free(file);
@@ -66,4 +68,27 @@ int check_if_file_exist(char *uuid, char *dir)
     }
     closedir(d);
     return 0;
+}
+
+int check_if_title_exist(char *title, char *dir)
+{
+    DIR *d = opendir(dir);
+    struct dirent *direc;
+    if (!d) return 0;
+    int line = (strcmp(dir, "./teams/") == 0
+    || strcmp(dir, "./channels/") == 0) ? 1 : 3;
+    while ((direc = readdir(d)) != NULL) {
+        if (direc->d_name[0] == '.' || strcmp(direc->d_name, "tuto.md") == 0)
+            continue;
+        char *uuid = malloc(sizeof(char) * 37); memset(uuid, 0, 37);
+        strncpy(uuid, direc->d_name, 36);
+        char *file_title = get_file_line(line, uuid, dir);
+        if (file_title && strcmp(file_title, title) == 0) {
+            closedir(d); free(file_title); free(uuid);
+            return 1;
+        }
+        if (file_title) free(file_title);
+        free(uuid);
+    }
+    closedir(d); return 0;
 }
