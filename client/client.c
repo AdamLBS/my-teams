@@ -44,6 +44,8 @@ void create_client(char *ip, char *port)
     client_t client;
     client.buffer = malloc(sizeof(char) * MAX_BODY_LENGTH * 2);
     memset(client.buffer, 0, MAX_BODY_LENGTH * 2);
+    client.in_buffer = malloc(sizeof(char) * MAX_BODY_LENGTH);
+    memset(client.in_buffer, 0, MAX_BODY_LENGTH);
     client.sock = socket(AF_INET, SOCK_STREAM, 0);
     set_struct_client(&client);
     struct sockaddr_in myaddr;

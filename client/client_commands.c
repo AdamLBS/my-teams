@@ -21,17 +21,8 @@ void other_commands(client_t *client, char *buffer)
         list_command(client);
 }
 
-void send_commands(client_t *client)
+void check_commands(char *buffer, client_t *client)
 {
-    char *buffer = malloc(sizeof(char) * MAX_BODY_LENGTH);
-    memset(buffer, 0, MAX_BODY_LENGTH); read(0, buffer, MAX_BODY_LENGTH);
-    if (strlen(buffer) > 0 )
-        buffer[strlen(buffer) - 1] = '\0';
-    if (strstr(buffer, "/login"))
-        login_command(client, buffer);
-    else if (strlen(buffer) > 0 && client->login == 0) {
-        log_unauthorized(); free(buffer); return;
-    }
     if (strcmp(buffer, "/logout") == 0)
         logout_command(client, buffer);
     if (strstr(buffer, "/help"))
@@ -42,7 +33,25 @@ void send_commands(client_t *client)
         check_create_commands(client, buffer);
     if (strstr(buffer, "/messages"))
         send_messages_command(buffer, client);
-    other_commands(client, buffer); free(buffer);
+    other_commands(client, buffer);
+}
+
+void send_commands(client_t *client)
+{
+    char buffer[MAX_BODY_LENGTH] = {0};
+    if (read(0, buffer, MAX_BODY_LENGTH) > 0)
+        strcat(client->in_buffer, buffer);
+    if (!is_in_buffer_ended(client))
+        return;
+    if (strlen(client->in_buffer) > 0 )
+        client->in_buffer[strlen(client->in_buffer) - 1] = '\0';
+    if (strstr(client->in_buffer, "/login"))
+        login_command(client, client->in_buffer);
+    else if (strlen(client->in_buffer) > 0 && client->login == 0) {
+        log_unauthorized(); memset(client->in_buffer, 0, 512); return;
+    }
+    check_commands(client->in_buffer, client);
+    memset(client->in_buffer, 0, MAX_BODY_LENGTH);
 }
 
 void log_unauthorized(void)

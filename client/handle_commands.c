@@ -11,6 +11,7 @@ void free_client(client_t *client)
 {
     free(client->username);
     close(client->sock);
+    free(client->in_buffer);
     if (client->context >= 1 && client->team_uuid != NULL)
         free(client->team_uuid);
     if (client->context >= 2 && client->channel_uuid != NULL)

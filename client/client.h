@@ -35,6 +35,7 @@ typedef struct client {
     char *username;
     char id[37];
     char *buffer;
+    char *in_buffer;
     int context;
     char *team_uuid;
     char *channel_uuid;
@@ -72,6 +73,7 @@ void handle_received_data(client_t *client);
 void receive_users(char *buffer);
 // BUFFER HANDLING:
 int is_buffer_ended(client_t *client);
+int is_in_buffer_ended(client_t *client);
 //AUTH HANDLING:
 void log_unauthorized(void);
 //MESSAGES HISTORY:
