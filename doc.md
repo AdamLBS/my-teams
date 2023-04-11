@@ -16,4 +16,10 @@
 
 ### 91X -> Team / 92X -> Channel / 93X -> Thread / 94X -> Reply
 
-- 9X1: Success command
+- 911: Successfully created team
+
+- 921: Successfully created channel
+
+- 931: Successfully created thread
+
+- 941: Successfully created reply

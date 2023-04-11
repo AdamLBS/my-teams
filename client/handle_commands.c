@@ -23,8 +23,11 @@ void free_client(client_t *client)
 
 void handle_received_more(client_t *client)
 {
-    if (strstr(client->buffer, "311"))
+    if (strstr(client->buffer, "312"))
         client_error_already_exist();
+    if (strstr(client->buffer, "911"))
+        client_event_team_created(client->s_team->t_uuid, client->s_team->t_name,
+            client->s_team->t_desc);
 }
 
 void handle_received_data(client_t *client)

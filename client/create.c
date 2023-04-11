@@ -12,9 +12,6 @@ void check_create_commands(client_t *client, char *buffer)
     if (client->context == 0)
         create_team_command(client, buffer);
     if (client->context == 1) {
-        // if (check_if_file_exist(client->team_uuid, "./teams/") == 0) {
-        //     client_error_unknown_team(client->team_uuid); return;
-        // }
         create_channel_command(client, buffer);
     } if (client->context == 2) {
         if (check_if_file_exist(client->channel_uuid, "./channels/") == 0) {
@@ -39,10 +36,9 @@ void create_team_command(client_t *client, char *buffer)
     char *token = strtok(buffer, "\""); t_name = token;
     strtok(NULL, "\""); token = strtok(NULL, ""); t_desc = token;
     t_name = clean_text(t_name); t_desc = clean_text(t_desc);
-    // if (check_if_title_exist(t_name, "./teams/") == 1) {
-    //     client_error_already_exist(); free(t_desc); return;
-    // }
-    // client_event_team_created(team_uuid, t_name, t_desc);
+    client->s_team->t_name = strdup(t_name);
+    client->s_team->t_uuid = strdup(team_uuid);
+    client->s_team->t_desc = strdup(t_desc);
     send(client->sock, "create_team", 11, 0);
     send(client->sock, " ", 1, 0);
     send(client->sock, team_uuid, 36, 0);

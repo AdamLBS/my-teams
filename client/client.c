@@ -16,6 +16,7 @@ void set_struct_client(client_t *cl)
     cl->channel_uuid = NULL;
     cl->thread_uuid = NULL;
     cl->login = 0;
+    cl->s_team = malloc(sizeof(struct save_team));
 }
 
 void receive_commands(struct client *client)

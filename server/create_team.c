@@ -31,7 +31,7 @@ void create_team_command(struct client *client, char *buffer)
     team_uuid = token; token = strtok(NULL, "\""); team_name = token;
     strtok(NULL, "\""); token = strtok(NULL, "\""); team_desc = token;
     if (check_if_title_exist(team_name, "./teams/") == 1) {
-        send(client->sock, "311\n", 4, 0); return;
+        send(client->sock, "312\n", 4, 0); return;
     }
     server_event_team_created(team_uuid, team_name, client->id);
     int nb_teams = atoi(get_file_line(3, client->id, "users/"));
@@ -44,6 +44,7 @@ void create_team_command(struct client *client, char *buffer)
     client->teams[nb_teams]->channels = malloc(sizeof(struct channel *) * 100);
     create_team_file(team_uuid, team_name, team_desc);
     write_new_member(client->id, team_uuid);
+    send(client->sock, "911\n", 4, 0);
 }
 
 void create_team_file(char *t_uuid, char *t_name, char *t_desc)

@@ -166,6 +166,6 @@ void list_replies(struct client *client, char *team_uuid, char *channel_uuid
 , char *thread_uuid);
 int find_last_line(char *path);
 void write_new_member(char *u_uuid, char *t_uuid);
-int check_team_error(struct client *client, char *t_name, char *t_uuid);
 int check_if_file_exist(char *uuid, char *dir);
 int check_if_title_exist(char *title, char *dir);
+int check_team_error(struct client *client, char *t_uuid, char *team_name);

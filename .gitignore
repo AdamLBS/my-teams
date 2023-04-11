@@ -11,3 +11,4 @@ teams/*.txt
 channels/*.txt
 threads/*.txt
 replies/*.txt
+./doc.md

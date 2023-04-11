@@ -30,6 +30,12 @@
 #define MAX_DESCRIPTION_LENGTH 255
 #define MAX_BODY_LENGTH 512
 
+struct save_team {
+    char *t_name;
+    char *t_uuid;
+    char *t_desc;
+};
+
 typedef struct client {
     int sock;
     char *username;
@@ -41,6 +47,7 @@ typedef struct client {
     char *channel_uuid;
     char *thread_uuid;
     int login;
+    struct save_team *s_team;
 } client_t;
 
 void create_client(char *ip, char *port);
