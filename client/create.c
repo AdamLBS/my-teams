@@ -14,17 +14,9 @@ void check_create_commands(client_t *client, char *buffer)
     if (client->context == 1) {
         create_channel_command(client, buffer);
     } if (client->context == 2) {
-        if (check_if_file_exist(client->channel_uuid, "./channels/") == 0) {
-            client_error_unknown_channel(client->channel_uuid); return;
-        } create_thread_command(client, buffer);
+        create_thread_command(client, buffer);
     } if (client->context == 3) {
-        if (check_if_file_exist(client->team_uuid, "./teams/") == 0) {
-            client_error_unknown_team(client->team_uuid); return;
-        } if (check_if_file_exist(client->channel_uuid, "./channels/") == 0) {
-            client_error_unknown_channel(client->channel_uuid); return;
-        } if (check_if_file_exist(client->thread_uuid, "./threads/") == 0) {
-            client_error_unknown_thread(client->thread_uuid); return;
-        } create_reply_command(client, buffer);
+        create_reply_command(client, buffer);
     }
 }
 
@@ -85,9 +77,6 @@ void send_info(client_t *client, char *t_name, char *t_body, char *time)
 
 void create_thread_command(client_t *client, char *buffer)
 {
-    if (check_if_file_exist(client->channel_uuid, "./channels/") == 0) {
-        client_error_unknown_channel(client->channel_uuid); return;
-    }
     time_t curTime = time( NULL ); char *time = ctime(&curTime);
     time[strlen(time) - 1] = '\0';
     char t_uuid[37]; uuid_t uuid; uuid_generate_random(uuid);
@@ -95,10 +84,10 @@ void create_thread_command(client_t *client, char *buffer)
     char *t_name; char *t_body; char *token = strtok(buffer, "\"");
     t_name = token; strtok(NULL, "\""); token = strtok(NULL, "");
     t_body = token; t_name = clean_text(t_name); t_body = clean_text(t_body);
-    if (check_if_title_exist(t_name, "./threads/") == 1) {
-        client_error_already_exist(); free(t_body); return;
-    }
-    client_event_thread_created(t_uuid, client->id, curTime, t_name, t_body);
+    client->s_thread->t_name = strdup(t_name);
+    client->s_thread->t_uuid = strdup(t_uuid);
+    client->s_thread->t_desc = strdup(t_body);
+    client->s_thread->t_time = curTime;
     send(client->sock, "create_thread", 13, 0); send(client->sock, " ", 1, 0);
     send(client->sock, client->team_uuid, 36, 0);send(client->sock, " ", 1, 0);
     send(client->sock, client->channel_uuid, 36, 0);

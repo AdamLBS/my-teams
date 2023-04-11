@@ -7,15 +7,18 @@
 
 #include "server.h"
 
-int check_channel_error(struct client *client, char *c_name, char *t_uuid)
+int check_channel_error(struct client *client, char *c_name, char *t_uuid, char *c_uuid)
 {
-    if (check_if_file_exist(t_uuid, "./teams/") == 0) {
+    if (check_if_file_exist(c_uuid, "./channels/") == 1) {
+        printf("awa\n");
         send(client->sock, "321\n", 4, 0); return 1;
     }
     if (check_if_title_exist(c_name, "./channels/") == 1) {
+        printf("nawa\n");
         send(client->sock, "322\n", 4, 0); return 1;
     }
     if (check_permissions(client, t_uuid) == 1) {
+        printf("poala\n");
         send(client->sock, "101\n", 4, 0); return 1;
     }
     return 0;
@@ -29,7 +32,7 @@ void create_channel_command(struct client *client, char *buffer)
     team_uuid = token; token = strtok(NULL, " ");
     c_uuid = token; token = strtok(NULL, "\""); c_name = token;
     strtok(NULL, "\""); token = strtok(NULL, "\""); c_desc = token;
-    if (check_channel_error(client, c_name, team_uuid) == 1)
+    if (check_channel_error(client, c_name, team_uuid, c_uuid) == 1)
         return;
     server_event_channel_created(team_uuid, c_uuid, c_name);
     int n_channel = atoi(get_file_line(4, team_uuid, "teams/"));
