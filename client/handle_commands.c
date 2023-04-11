@@ -20,6 +20,12 @@ void free_client(client_t *client)
     exit(0);
 }
 
+void handle_received_more(client_t *client)
+{
+    if (strstr(client->buffer, "311"))
+        client_error_already_exist();
+}
+
 void handle_received_data(client_t *client)
 {
     if (strstr(client->buffer, "receive:"))
@@ -41,4 +47,5 @@ void handle_received_data(client_t *client)
         info_command_receive(client, client->buffer);
     if (strstr(client->buffer, "/list"))
         list_command_receive(client, client->buffer);
+    handle_received_more(client);
 }

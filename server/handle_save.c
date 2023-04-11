@@ -26,6 +26,7 @@ void save_user(char *user_uuid, char *user_name)
     fwrite("\n", 1, 1, fd);
     fwrite(user_name, 1, strlen(user_name), fd);
     fwrite("\n0\n0", 1, 4, fd);
+    fwrite("\n", 1, 1, fd);
     fclose (fd);
     free(path);
 }

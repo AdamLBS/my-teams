@@ -70,6 +70,7 @@ void receive_commands(struct client *client);
 void receive_message(char *buffer);
 void handle_received_data(client_t *client);
 void receive_users(char *buffer);
+void handle_received_more(client_t *client);
 // BUFFER HANDLING:
 int is_buffer_ended(client_t *client);
 //AUTH HANDLING:
