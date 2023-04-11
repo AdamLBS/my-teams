@@ -37,8 +37,11 @@ void send_info_command(client_t *client)
 
 void info_command(client_t *client)
 {
-    if (client->context == 0)
-        send(client->sock, "/users\n", 7, 0);
+    if (client->context == 0) {
+        send(client->sock, "/user \"", 7, 0);
+        send(client->sock, client->id, 36, 0);
+        send(client->sock, "\"\n", 2, 0);
+    }
     if (client->context == 1) {
         send_info_command(client);
     }
