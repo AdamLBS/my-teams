@@ -11,6 +11,10 @@ void create_save_folder(void)
 {
     mkdir("users", 0755);
     mkdir("messages", 0755);
+    mkdir("teams", 0755);
+    mkdir("channels", 0755);
+    mkdir("threads", 0755);
+    mkdir("replies", 0755);
 }
 
 void save_user(char *user_uuid, char *user_name)
