@@ -57,10 +57,9 @@ void create_channel_command(client_t *client, char *buffer)
     char *token = strtok(buffer, "\""); c_name = token;
     strtok(NULL, "\""); token = strtok(NULL, ""); c_desc = token;
     c_name = clean_text(c_name); c_desc = clean_text(c_desc);
-    if (check_if_title_exist(c_name, "./channels/") == 1) {
-        client_error_already_exist(); free(c_desc); return;
-    }
-    client_event_channel_created(channel_uuid, c_name, c_desc);
+    client->s_channel->c_name = strdup(c_name);
+    client->s_channel->c_uuid = strdup(channel_uuid);
+    client->s_channel->c_desc = strdup(c_desc);
     send(client->sock, "create_channel", 14, 0);
     send(client->sock, " ", 1, 0);
     send(client->sock, client->team_uuid, 36, 0);
