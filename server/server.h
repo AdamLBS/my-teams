@@ -143,7 +143,6 @@ char *itoa(int num);
 void free_userlist(char ***userList);
 void create_team_file(char *t_uuid, char *t_name, char *t_desc);
 void create_c_file(char *c_uuid, char *c_name, char *t_uuid, char *c_desc);
-int check_if_file_exist(char *uuid, char *dir);
 int find_t(char *t_uuid, struct client *client);
 int find_c(char *c_uuid, struct client *client, char *team_uuid);
 void create_thread_file(struct thread *thread);
@@ -165,3 +164,8 @@ void list_command(struct client *client, char *buffer);
 void list_threads(struct client *client, char *team_uuid, char *channel_uuid);
 void list_replies(struct client *client, char *team_uuid, char *channel_uuid
 , char *thread_uuid);
+int find_last_line(char *path);
+void write_new_member(char *u_uuid, char *t_uuid);
+int check_team_error(struct client *client, char *t_name, char *t_uuid);
+int check_if_file_exist(char *uuid, char *dir);
+int check_if_title_exist(char *title, char *dir);

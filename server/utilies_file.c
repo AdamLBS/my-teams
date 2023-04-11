@@ -46,3 +46,16 @@ int find_th(char *c_uuid, struct client *client, char *tm_uuid, char *t_uuid)
     }
     return -1;
 }
+
+int find_last_line(char *path)
+{
+    FILE *fd = fopen(path, "r");
+    char *line = NULL;
+    size_t len = 0;
+    int i = 0;
+    while (getline(&line, &len, fd) != -1) {
+        i++;
+    }
+    fclose(fd);
+    return i;
+}
