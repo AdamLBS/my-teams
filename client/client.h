@@ -59,7 +59,7 @@ typedef struct client {
     char *username;
     char id[37];
     char *buffer;
-    char *in_buffer;
+    char in_buffer[MAX_BODY_LENGTH];
     int context;
     char *team_uuid;
     char *channel_uuid;
@@ -115,3 +115,6 @@ char *get_file_line(int id, char *uuid, char *dir);
 int check_if_file_exist(char *uuid, char *dir);
 int check_if_title_exist(char *title, char *dir);
 void list_command_receive(client_t *client, char *buffer);
+//EVENT HANDLING
+void get_client_login_event(client_t *client);
+void get_client_logout_event(client_t *client);

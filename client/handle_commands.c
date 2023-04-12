@@ -11,14 +11,14 @@ void free_client(client_t *client)
 {
     free(client->username);
     close(client->sock);
-    free(client->in_buffer);
     if (client->context >= 1 && client->team_uuid != NULL)
         free(client->team_uuid);
     if (client->context >= 2 && client->channel_uuid != NULL)
         free(client->channel_uuid);
     if (client->context >= 3 && client->thread_uuid != NULL)
         free(client->thread_uuid);
-    free(client->s_team); free(client->s_channel);
+    free(client->s_team); free(client->s_channel); free(client->s_thread);
+    free(client->s_reply); free(client->buffer);
     exit(0);
 }
 
@@ -33,6 +33,10 @@ void handle_received_more_2(client_t *client)
         , client->s_reply->t_time, client->s_reply->r_body);
     if (strstr(client->buffer, "101"))
         client_error_unauthorized();
+    if (strstr(client->buffer, "user_logged_in: "))
+        get_client_login_event(client);
+    if (strstr(client->buffer, "user_logged_out: "))
+        get_client_logout_event(client);
 }
 
 void handle_received_more(client_t *client)

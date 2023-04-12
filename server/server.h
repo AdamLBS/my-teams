@@ -172,3 +172,5 @@ int check_team_error(struct client *client, char *t_uuid, char *team_name);
 int check_permissions(struct client *client, char *uuid);
 int check_channel_error(struct client *client, char *c_name, char *t_uuid
 , char *c_uuid);
+void send_login_event(struct client *cli);
+void send_logout_event(struct client *cli);
