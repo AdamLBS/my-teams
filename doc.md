@@ -6,6 +6,8 @@
 
 - 102: Already subscribed
 
+- 103: User is not subscribed
+
 ## 3XX -> Error server side
 
 ### 31X -> Team / 32X -> Channel / 33X -> Thread / 34X -> Reply
