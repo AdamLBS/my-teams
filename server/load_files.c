@@ -60,19 +60,11 @@ void load_threads(struct client *cli, int nb, int na)
         if (strcmp(cli->teams[nb]->channels[na]->uuid, get_file_line_n(6, t_uuid
         , "./threads/")) != 0) {
             fclose(fd); free(t_uuid); continue;
-        } cli->teams[nb]->channels[na]->threads[i] = malloc(sizeof(struct thread));
+        }
+        struct thread *thr = get_thread_struct(cli->teams[nb], na, i);
         cli->teams[nb]->channels[na]->nb_threads++;
-        cli->teams[nb]->channels[na]->threads[i] = malloc(sizeof(struct thread));
-        cli->teams[nb]->channels[na]->threads[i]->uuid = strdup(t_uuid);
-        cli->teams[nb]->channels[na]->threads[i]->o_uuid = strdup(get_file_line_n(1, t_uuid, "./threads/"));
-        cli->teams[nb]->channels[na]->threads[i]->time = strdup(get_file_line_n(2, t_uuid, "./threads/"));
-        cli->teams[nb]->channels[na]->threads[i]->name = strdup(get_file_line_n(3, t_uuid, "./threads/"));
-        cli->teams[nb]->channels[na]->threads[i]->body = strdup(get_file_line_n(4, t_uuid, "./threads/"));
-        cli->teams[nb]->channels[na]->threads[i]->t_uuid = strdup(get_file_line_n(5, t_uuid, "./threads/"));
-        cli->teams[nb]->channels[na]->threads[i]->c_uuid = strdup(get_file_line_n(6, t_uuid, "./threads/"));
-        cli->teams[nb]->channels[na]->threads[i]->replies = malloc(sizeof(struct reply *));
-        load_replies(cli, nb, na, i);
-        free(t_uuid); fclose(fd);
+        update_thread_struct(thr, t_uuid);
+        load_replies(cli, nb, na, i); free(t_uuid); fclose(fd);
     } closedir(dir);
 }
 
@@ -88,14 +80,13 @@ void load_replies(struct client *cli, int nb, int na, int nz)
         if (strcmp(cli->teams[nb]->channels[na]->threads[nz]->uuid, get_file_line_n(3, r_uuid
         , "./replies/")) != 0) {
             fclose(fd); free(r_uuid); continue;
-        } cli->teams[nb]->channels[na]->threads[nz]->replies[i] = malloc(sizeof(struct reply));
-        cli->teams[nb]->channels[na]->threads[nz]->replies[i]->uuid = strdup(r_uuid);
-        cli->teams[nb]->channels[na]->threads[nz]->replies[i]->tm_uuid = strdup(get_file_line_n(1, r_uuid, "./replies/"));
-        cli->teams[nb]->channels[na]->threads[nz]->replies[i]->c_uuid = strdup(get_file_line_n(2, r_uuid, "./replies/"));
-        cli->teams[nb]->channels[na]->threads[nz]->replies[i]->t_uuid = strdup(get_file_line_n(3, r_uuid, "./replies/"));
-        cli->teams[nb]->channels[na]->threads[nz]->replies[i]->o_uuid = strdup(get_file_line_n(4, r_uuid, "./replies/"));
-        cli->teams[nb]->channels[na]->threads[nz]->replies[i]->time = strdup(get_file_line_n(5, r_uuid, "./replies/"));
-        cli->teams[nb]->channels[na]->threads[nz]->replies[i]->msg = strdup(get_file_line_n(6, r_uuid, "./replies/"));
+        } struct reply *reply = get_reply_struct(cli->teams[nb], na, nz, i);
+        reply = strdup(get_file_line_n(1, r_uuid, "./replies/"));
+        reply = strdup(get_file_line_n(2, r_uuid, "./replies/"));
+        reply = strdup(get_file_line_n(3, r_uuid, "./replies/"));
+        reply = strdup(get_file_line_n(4, r_uuid, "./replies/"));
+        reply = strdup(get_file_line_n(5, r_uuid, "./replies/"));
+        reply = strdup(get_file_line_n(6, r_uuid, "./replies/"));
         free(r_uuid); fclose(fd);
     } closedir(dir);
 }
