@@ -174,3 +174,7 @@ int check_channel_error(struct client *client, char *c_name, char *t_uuid
 , char *c_uuid);
 void subscribe_command(struct client *cli, char *buffer);
 int more_commands(struct client *cli, char *buffer);
+void load_teams(struct client *cli, char *to_find);
+void load_channels(struct client *cli, int nb);
+void put_r(struct reply *reply, char *uuid, char *tm_uuid, char *t_uuid);
+void put_s(struct thread *thread, char *time, char *t_uuid, char *o_uuid);

@@ -25,32 +25,23 @@ int check_reply_error(struct client *client, char *team_uuid, char *c_uuid
     return 0;
 }
 
-void put_r(struct reply *reply, char *uuid, char *tm_uuid, char *t_uuid)
-{
-    reply->t_uuid = strdup(t_uuid);
-    reply->tm_uuid = strdup(tm_uuid);
-    reply->o_uuid = strdup(uuid);
-    create_reply_file(reply);
-}
-
-
-void send_info_reply(struct client *client, int i, int j, int k, int n)
+void send_info_reply(struct client *client, int nb[5])
 {
     struct client *tmp;
     LIST_FOREACH(tmp, &head, next) {
-        if (check_permissions(tmp, client->teams[i]->uuid) == 1) continue;
+        if (check_permissions(tmp, client->teams[nb[0]]->uuid) == 1) continue;
         send(tmp->sock, "941 \"", 5, 0);
-        send(tmp->sock, client->teams[i]->channels[j]->threads[k]->uuid, 36, 0);
+        send(tmp->sock, client->teams[nb[0]]->channels[nb[1]]->threads[nb[2]]->uuid, 36, 0);
         send(tmp->sock, "\" \"", 3, 0);
         send(tmp->sock, client->id, 36, 0);
         send(tmp->sock, "\" \"", 3, 0);
         send(tmp->sock,
-        client->teams[i]->channels[j]->threads[k]->replies[n]->time,
-        strlen(client->teams[i]->channels[j]->threads[k]->replies[n]->time), 0);
+        client->teams[nb[0]]->channels[nb[1]]->threads[nb[2]]->replies[nb[3]]->time,
+        strlen(client->teams[nb[0]]->channels[nb[1]]->threads[nb[2]]->replies[nb[3]]->time), 0);
         send(tmp->sock, "\" \"", 3, 0);
         send(tmp->sock,
-        client->teams[i]->channels[j]->threads[k]->replies[n]->msg,
-        strlen(client->teams[i]->channels[j]->threads[k]->replies[n]->msg), 0);
+        client->teams[nb[0]]->channels[nb[1]]->threads[nb[2]]->replies[nb[3]]->msg,
+        strlen(client->teams[nb[0]]->channels[nb[1]]->threads[nb[2]]->replies[nb[3]]->msg), 0);
         send(tmp->sock, "\"\n", 2, 0);
     }
 }
@@ -76,7 +67,7 @@ void create_reply_command(struct client *c, char *buffer)
     c->teams[i]->channels[j]->threads[k]->replies[n]->time = strdup(times);
     c->teams[i]->channels[j]->threads[k]->replies[n]->c_uuid = strdup(c_uuid);
     put_r(c->teams[i]->channels[j]->threads[k]->replies[n], u_uuid, tm, t_uuid);
-    send_info_reply(c, i, j, k, n);
+    int nb[5] = {i, j, k, n, 0}; send_info_reply(c, nb);
 }
 
 void create_reply_file(struct reply *reply)

@@ -33,15 +33,6 @@ int check_thread_error2(struct client *client, char *c_uuid)
     return 0;
 }
 
-void put_s(struct thread *thread, char *time, char *t_uuid, char *o_uuid)
-{
-    thread->o_uuid = strdup(o_uuid);
-    thread->t_uuid = strdup(t_uuid);
-    thread->time = strdup(time);
-    thread->replies = malloc(sizeof(struct reply *) * 100);
-    create_thread_file(thread);
-}
-
 void send_info_thread(struct client *client, int i, int j, int n)
 {
     struct client *tmp;
