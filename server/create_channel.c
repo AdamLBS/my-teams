@@ -29,16 +29,17 @@ void send_info_channel(struct client *client, int i, int j)
 {
     struct client *tmp;
     LIST_FOREACH(tmp, &head, next) {
-        if (check_permissions(tmp, client->teams[i]->uuid) == 1) continue;
-        send(tmp->sock, "921 \"", 5, 0);
-        send(tmp->sock, client->teams[i]->channels[j]->name
-        , strlen(client->teams[i]->channels[j]->name), 0);
-        send(tmp->sock, "\" \"", 3, 0);
-        send(tmp->sock, client->teams[i]->channels[j]->uuid, 36, 0);
-        send(tmp->sock, "\" \"", 3, 0);
-        send(tmp->sock, client->teams[i]->channels[j]->desc
-        , strlen(client->teams[i]->channels[j]->desc), 0);
-        send(tmp->sock, "\"\n", 2, 0);
+        if (check_permissions(tmp, client->teams[i]->uuid) != 1) {
+            send(tmp->sock, "921 \"", 5, 0);
+            send(tmp->sock, client->teams[i]->channels[j]->name
+            , strlen(client->teams[i]->channels[j]->name), 0);
+            send(tmp->sock, "\" \"", 3, 0);
+            send(tmp->sock, client->teams[i]->channels[j]->uuid, 36, 0);
+            send(tmp->sock, "\" \"", 3, 0);
+            send(tmp->sock, client->teams[i]->channels[j]->desc
+            , strlen(client->teams[i]->channels[j]->desc), 0);
+            send(tmp->sock, "\"\n", 2, 0);
+        }
     }
 }
 

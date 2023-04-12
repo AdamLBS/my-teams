@@ -9,7 +9,6 @@
 
 void load_teams(struct client *cli, char *to_find)
 {
-    cli->nb_teams++;
     cli->teams[cli->nb_teams + 1] = malloc(sizeof(struct team));
     cli->teams[cli->nb_teams + 1]->uuid = strdup(to_find);
     cli->teams[cli->nb_teams + 1]->name =
@@ -19,7 +18,8 @@ void load_teams(struct client *cli, char *to_find)
     cli->teams[cli->nb_teams + 1]->nb_channels =
     atoi(get_file_line_n(4, to_find, "./teams/"));
     cli->teams[cli->nb_teams + 1]->channels = malloc(sizeof(struct channels *));
-    load_channels(cli, cli->nb_teams + 1);
+    cli->nb_teams++;
+    load_channels(cli, cli->nb_teams);
 }
 
 void load_channels(struct client *cli, int nb)

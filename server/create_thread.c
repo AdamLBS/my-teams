@@ -37,21 +37,22 @@ void send_info_thread(struct client *client, int i, int j, int n)
 {
     struct client *tmp;
     LIST_FOREACH(tmp, &head, next) {
-        if (check_permissions(tmp, client->teams[i]->uuid) == 1) continue;
-        send(tmp->sock, "931 \"", 5, 0);
-        send(tmp->sock, client->teams[i]->channels[j]->threads[n]->uuid, 36, 0);
-        send(tmp->sock, "\" \"", 3, 0);
-        send(tmp->sock, client->id, 36, 0);
-        send(tmp->sock, "\" \"", 3, 0);
-        send(tmp->sock, client->teams[i]->channels[j]->threads[n]->time,
-        strlen(client->teams[i]->channels[j]->threads[n]->time), 0);
-        send(tmp->sock, "\" \"", 3, 0);
-        send(tmp->sock, client->teams[i]->channels[j]->threads[n]->name,
-        strlen(client->teams[i]->channels[j]->threads[n]->name), 0);
-        send(tmp->sock, "\" \"", 3, 0);
-        send(tmp->sock, client->teams[i]->channels[j]->threads[n]->body,
-        strlen(client->teams[i]->channels[j]->threads[n]->body), 0);
-        send(tmp->sock, "\"\n", 2, 0);
+        if (check_permissions(tmp, client->teams[i]->uuid) != 1) {
+            send(tmp->sock, "931 \"", 5, 0);
+            send(tmp->sock, client->teams[i]->channels[j]->threads[n]->uuid, 36
+            , 0); send(tmp->sock, "\" \"", 3, 0);
+            send(tmp->sock, client->id, 36, 0);
+            send(tmp->sock, "\" \"", 3, 0);
+            send(tmp->sock, client->teams[i]->channels[j]->threads[n]->time,
+            strlen(client->teams[i]->channels[j]->threads[n]->time), 0);
+            send(tmp->sock, "\" \"", 3, 0);
+            send(tmp->sock, client->teams[i]->channels[j]->threads[n]->name,
+            strlen(client->teams[i]->channels[j]->threads[n]->name), 0);
+            send(tmp->sock, "\" \"", 3, 0);
+            send(tmp->sock, client->teams[i]->channels[j]->threads[n]->body,
+            strlen(client->teams[i]->channels[j]->threads[n]->body), 0);
+            send(tmp->sock, "\"\n", 2, 0);
+        }
     }
 }
 
