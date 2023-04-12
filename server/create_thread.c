@@ -9,6 +9,9 @@
 
 int check_thread_error(struct client *client, char *t_name, char *team_uuid, char *t_uuid)
 {
+    if (check_if_file_exist(team_uuid, "./teams/") == 0) {
+        send(client->sock, "311\n", 4, 0); return 1;
+    }
     if (check_if_file_exist(t_uuid, "./threads/") == 1) {
         send(client->sock, "331\n", 4, 0); return 1;
     }
@@ -17,6 +20,14 @@ int check_thread_error(struct client *client, char *t_name, char *team_uuid, cha
     }
     if (check_permissions(client, team_uuid) == 1) {
         send(client->sock, "101\n", 4, 0); return 1;
+    }
+    return 0;
+}
+
+int check_thread_error2(struct client *client, char *c_uuid)
+{
+    if (check_if_file_exist(c_uuid, "./channels/") == 0) {
+        send(client->sock, "321\n", 4, 0); return 1;
     }
     return 0;
 }
@@ -40,7 +51,9 @@ void create_thread_command(struct client *client, char *buffer)
     token = strtok(NULL, "\""); times = token; strtok(NULL, "\"");
     token = strtok(NULL, "\""); t_name = token; strtok(NULL, "\"");
     token = strtok(NULL, "\""); t_body = token;
+    printf("tm uuid: %s\n", tm_uuid);
     if (check_thread_error(client, t_name, tm_uuid, t_uuid) == 1) return;
+    if (check_thread_error2(client, c_uuid) == 1) return;
     server_event_thread_created(c_uuid, t_uuid, u_uuid, t_name, t_body);
     int n = atoi(get_file_line(4, c_uuid, "channels/"));
     set_file_line(4, c_uuid, itoa(n + 1), "channels/");

@@ -30,6 +30,11 @@
 #define MAX_DESCRIPTION_LENGTH 255
 #define MAX_BODY_LENGTH 512
 
+struct save_reply {
+    char *r_body;
+    time_t t_time;
+};
+
 struct save_thread {
     char *t_name;
     char *t_uuid;
@@ -63,6 +68,7 @@ typedef struct client {
     struct save_team *s_team;
     struct save_channel *s_channel;
     struct save_thread *s_thread;
+    struct save_reply *s_reply;
 } client_t;
 
 void create_client(char *ip, char *port);

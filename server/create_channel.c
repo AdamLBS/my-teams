@@ -9,16 +9,16 @@
 
 int check_channel_error(struct client *client, char *c_name, char *t_uuid, char *c_uuid)
 {
+    if (check_if_file_exist(t_uuid, "./teams/") == 0) {
+        send(client->sock, "311\n", 4, 0); return 1;
+    }
     if (check_if_file_exist(c_uuid, "./channels/") == 1) {
-        printf("awa\n");
         send(client->sock, "321\n", 4, 0); return 1;
     }
     if (check_if_title_exist(c_name, "./channels/") == 1) {
-        printf("nawa\n");
         send(client->sock, "322\n", 4, 0); return 1;
     }
     if (check_permissions(client, t_uuid) == 1) {
-        printf("poala\n");
         send(client->sock, "101\n", 4, 0); return 1;
     }
     return 0;

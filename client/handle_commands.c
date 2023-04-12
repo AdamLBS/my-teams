@@ -32,14 +32,19 @@ void handle_received_more(client_t *client)
     if (strstr(client->buffer, "921"))
         client_event_channel_created(client->s_channel->c_uuid,
             client->s_channel->c_name, client->s_channel->c_desc);
-    if (strstr(client->buffer, "321"))
+    if (strstr(client->buffer, "311"))
         client_error_unknown_team(client->team_uuid);
+    if (strstr(client->buffer, "321"))
+        client_error_unknown_channel(client->channel_uuid);
     if (strstr(client->buffer, "331"))
         client_error_unknown_thread(client->s_thread->t_uuid);
     if (strstr(client->buffer, "931"))
         client_event_thread_created(client->s_thread->t_uuid, client->id
         , client->s_thread->t_time, client->s_thread->t_name,
             client->s_thread->t_desc);
+    if (strstr(client->buffer, "941"))
+        client_print_reply_created(client->thread_uuid, client->id
+        , client->s_reply->t_time, client->s_reply->r_body);
     if (strstr(client->buffer, "101"))
         client_error_unauthorized();
 }

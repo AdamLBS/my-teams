@@ -7,6 +7,23 @@
 
 #include "server.h"
 
+int check_reply_error(struct client *client, char *team_uuid, char *c_uuid, char *t_uuid)
+{
+    if (check_if_file_exist(team_uuid, "./teams/") == 0) {
+        send(client->sock, "311\n", 4, 0); return 1;
+    }
+    if (check_if_file_exist(c_uuid, "./channels/") == 0) {
+        send(client->sock, "321\n", 4, 0); return 1;
+    }
+    if (check_if_file_exist(t_uuid, "./threads/") == 0) {
+        send(client->sock, "331\n", 4, 0); return 1;
+    }
+    if (check_permissions(client, team_uuid) == 1) {
+        send(client->sock, "101\n", 4, 0); return 1;
+    }
+    return 0;
+}
+
 void put_r(struct reply *reply, char *uuid, char *tm_uuid, char *t_uuid)
 {
     reply->t_uuid = strdup(t_uuid);
@@ -25,6 +42,7 @@ void create_reply_command(struct client *c, char *buffer)
     token = strtok(NULL, " "); u_uuid = token; token = strtok(NULL, "\"");
     times = token; strtok(NULL, "\""); token = strtok(NULL, "\"");
     r_body = token; strtok(NULL, "\"");
+    if (check_reply_error(c, tm, c_uuid, t_uuid) == 1) return;
     server_event_reply_created(t_uuid, u_uuid, r_body);
     int n = atoi(get_file_line(7, t_uuid, "threads/"));
     set_file_line(7, t_uuid, itoa(7 + 1), "threads/");
@@ -37,6 +55,7 @@ void create_reply_command(struct client *c, char *buffer)
     c->teams[i]->channels[j]->threads[k]->replies[n]->time = strdup(times);
     c->teams[i]->channels[j]->threads[k]->replies[n]->c_uuid = strdup(c_uuid);
     put_r(c->teams[i]->channels[j]->threads[k]->replies[n], u_uuid, tm, t_uuid);
+    send(c->sock, "941\n", 4, 0);
 }
 
 void create_reply_file(struct reply *reply)
