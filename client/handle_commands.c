@@ -22,6 +22,19 @@ void free_client(client_t *client)
     exit(0);
 }
 
+void handle_received_more_2(client_t *client)
+{
+    if (strstr(client->buffer, "931"))
+        client_event_thread_created(client->s_thread->t_uuid, client->id
+        , client->s_thread->t_time, client->s_thread->t_name,
+            client->s_thread->t_desc);
+    if (strstr(client->buffer, "941"))
+        client_print_reply_created(client->thread_uuid, client->id
+        , client->s_reply->t_time, client->s_reply->r_body);
+    if (strstr(client->buffer, "101"))
+        client_error_unauthorized();
+}
+
 void handle_received_more(client_t *client)
 {
     if (client->buffer[0] == '3' && client->buffer[2] == '2')
@@ -38,15 +51,7 @@ void handle_received_more(client_t *client)
         client_error_unknown_channel(client->channel_uuid);
     if (strstr(client->buffer, "331"))
         client_error_unknown_thread(client->s_thread->t_uuid);
-    if (strstr(client->buffer, "931"))
-        client_event_thread_created(client->s_thread->t_uuid, client->id
-        , client->s_thread->t_time, client->s_thread->t_name,
-            client->s_thread->t_desc);
-    if (strstr(client->buffer, "941"))
-        client_print_reply_created(client->thread_uuid, client->id
-        , client->s_reply->t_time, client->s_reply->r_body);
-    if (strstr(client->buffer, "101"))
-        client_error_unauthorized();
+    handle_received_more_2(client);
 }
 
 void handle_received_data(client_t *client)

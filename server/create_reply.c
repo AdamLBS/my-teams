@@ -7,7 +7,8 @@
 
 #include "server.h"
 
-int check_reply_error(struct client *client, char *team_uuid, char *c_uuid, char *t_uuid)
+int check_reply_error(struct client *client, char *team_uuid, char *c_uuid
+, char *t_uuid)
 {
     if (check_if_file_exist(team_uuid, "./teams/") == 0) {
         send(client->sock, "311\n", 4, 0); return 1;
@@ -34,20 +35,18 @@ void put_r(struct reply *reply, char *uuid, char *tm_uuid, char *t_uuid)
 
 void create_reply_command(struct client *c, char *buffer)
 {
-    char *r_uuid; char *r_body; char *tm; char *c_uuid; char *t_uuid;
-    buffer += 12; buffer[strlen(buffer)] = '\0'; char *u_uuid; char *times;
-    char *token = strtok(buffer, " "); r_uuid = token;
-    token = strtok(NULL, " "); tm = token; token = strtok(NULL, " ");
-    c_uuid = token; token = strtok(NULL, " "); t_uuid = token;
+    char *r_uuid, *r_body, *tm, *c_uuid, *t_uuid, *u_uuid, *times;
+    buffer += 12; buffer[strlen(buffer)] = '\0'; char *token = strtok(buffer
+    , " "); r_uuid = token; token = strtok(NULL, " "); tm = token; token =
+    strtok(NULL, " ");c_uuid = token; token = strtok(NULL, " "); t_uuid = token;
     token = strtok(NULL, " "); u_uuid = token; token = strtok(NULL, "\"");
     times = token; strtok(NULL, "\""); token = strtok(NULL, "\"");
     r_body = token; strtok(NULL, "\"");
     if (check_reply_error(c, tm, c_uuid, t_uuid) == 1) return;
     server_event_reply_created(t_uuid, u_uuid, r_body);
-    int n = atoi(get_file_line(7, t_uuid, "threads/"));
-    set_file_line(7, t_uuid, itoa(7 + 1), "threads/");
-    int i = find_t(tm, c); int j = find_c(c_uuid, c, tm);
-    int k = find_th(c_uuid, c, tm, t_uuid);
+    int n = atoi(get_file_line(7, t_uuid, "threads/")); set_file_line(7, t_uuid
+    , itoa(7 + 1), "threads/"); int i = find_t(tm, c); int j = find_c(c_uuid
+    , c, tm); int k = find_th(c_uuid, c, tm, t_uuid);
     c->teams[i]->channels[j]->threads[k]->replies[n] =
     malloc(sizeof(struct reply));
     c->teams[i]->channels[j]->threads[k]->replies[n]->msg = strdup(r_body);
