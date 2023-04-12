@@ -178,3 +178,4 @@ void load_teams(struct client *cli, char *to_find);
 void load_channels(struct client *cli, int nb);
 void put_r(struct reply *reply, char *uuid, char *tm_uuid, char *t_uuid);
 void put_s(struct thread *thread, char *time, char *t_uuid, char *o_uuid);
+void subscribed_command(struct client *cli, char *buffer);
