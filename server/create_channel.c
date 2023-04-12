@@ -7,7 +7,8 @@
 
 #include "server.h"
 
-int check_channel_error(struct client *client, char *c_name, char *t_uuid, char *c_uuid)
+int check_channel_error(struct client *client, char *c_name, char *t_uuid
+, char *c_uuid)
 {
     if (check_if_file_exist(c_uuid, "./channels/") == 1) {
         printf("awa\n");
@@ -27,27 +28,23 @@ int check_channel_error(struct client *client, char *c_name, char *t_uuid, char 
 void create_channel_command(struct client *client, char *buffer)
 {
     char *c_name; char *c_uuid; char *team_uuid; char *c_desc;
-    buffer += 15; buffer[strlen(buffer)] = '\0';
-    char *token = strtok(buffer, " ");
-    team_uuid = token; token = strtok(NULL, " ");
+    buffer += 15; buffer[strlen(buffer)] = '\0'; char *token =
+    strtok(buffer, " "); team_uuid = token; token = strtok(NULL, " ");
     c_uuid = token; token = strtok(NULL, "\""); c_name = token;
     strtok(NULL, "\""); token = strtok(NULL, "\""); c_desc = token;
-    if (check_channel_error(client, c_name, team_uuid, c_uuid) == 1)
-        return;
+    if (check_channel_error(client, c_name, team_uuid, c_uuid) == 1) return;
     server_event_channel_created(team_uuid, c_uuid, c_name);
     int n_channel = atoi(get_file_line(4, team_uuid, "teams/"));
-    set_file_line(4, team_uuid, itoa(n_channel + 1), "teams/");
-    int i = find_t(team_uuid, client);
-    client->teams[i]->nb_channels = n_channel + 1;
+    set_file_line(4, team_uuid, itoa(n_channel + 1), "teams/"); int i =
+    find_t(team_uuid, client); client->teams[i]->nb_channels = n_channel + 1;
     client->teams[i]->channels[n_channel] = malloc(sizeof(struct channel));
     client->teams[i]->channels[n_channel]->name = strdup(c_name);
     client->teams[i]->channels[n_channel]->uuid = strdup(c_uuid);
     client->teams[i]->channels[n_channel]->desc = strdup(c_desc);
     client->teams[i]->channels[n_channel]->t_uuid = strdup(team_uuid);
     client->teams[i]->channels[n_channel]->threads =
-    malloc(sizeof(struct thread *) * 100);
-    create_c_file(c_uuid, c_name, team_uuid, c_desc);
-    send(client->sock, "921\n", 4, 0);
+    malloc(sizeof(struct thread *) * 100); create_c_file(c_uuid, c_name
+    , team_uuid, c_desc); send(client->sock, "921\n", 4, 0);
 }
 
 void create_c_file(char *c_uuid, char *c_name, char *t_uuid, char *c_desc)

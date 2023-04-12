@@ -170,4 +170,5 @@ int check_if_file_exist(char *uuid, char *dir);
 int check_if_title_exist(char *title, char *dir);
 int check_team_error(struct client *client, char *t_uuid, char *team_name);
 int check_permissions(struct client *client, char *uuid);
-int check_channel_error(struct client *client, char *c_name, char *t_uuid, char *c_uuid);
+int check_channel_error(struct client *client, char *c_name, char *t_uuid
+, char *c_uuid);
