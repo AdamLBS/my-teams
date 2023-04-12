@@ -95,6 +95,7 @@ void list_threads(client_t *client, char *buffer);
 void list_replies(client_t *client, char *buffer);
 int check_if_error(char *str, client_t *client);
 void subscribe_command(client_t *client, char *buffer);
+void subscribed_command(client_t *client, char *buffer);
 // RECEIVE COMMANDS:
 void receive_commands(struct client *client);
 void receive_message(char *buffer);

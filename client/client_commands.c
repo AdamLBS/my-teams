@@ -31,10 +31,8 @@ void other_commands(client_t *client, char *buffer)
     if (strcmp(buffer, "/list") == 0)
         list_command(client);
     if (strstr(buffer, "/subscribed")) {
-        send(client->sock, buffer, strlen(buffer), 0);
-        send(client->sock, "\n", 1, 0); return;
-    }
-    if (strstr(buffer, "/subscribe"))
+        subscribed_command(client, buffer); return;
+    } if (strstr(buffer, "/subscribe"))
         subscribe_command(client, buffer);
 }
 

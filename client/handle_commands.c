@@ -45,6 +45,8 @@ void handle_received_more(client_t *client)
         event_channel_created(client->buffer);
     if (strstr(client->buffer, "311"))
         client_error_unknown_team(client->team_uuid);
+    if (strstr(client->buffer, "313"))
+        client_error_unknown_team(client->s_team->t_uuid);
     if (strstr(client->buffer, "321"))
         client_error_unknown_channel(client->channel_uuid);
     if (strstr(client->buffer, "331"))
