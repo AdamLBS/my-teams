@@ -33,16 +33,17 @@ void set_file_line(int id, char *uuid, char *target, char *dir)
     char *path = malloc(sizeof(char) * MAX_DESCRIPTION_LENGTH);
     char **file = malloc(sizeof(char *) * 100); memset(file, 0, 100);
     memset(path, 0, MAX_DESCRIPTION_LENGTH);
-    strcpy(path, dir);
-    strcat(path, uuid);
-    strcat(path, ".txt");
+    strcpy(path, dir); strcat(path, uuid); strcat(path, ".txt");
+    char *to_put = malloc(sizeof(char) * (strlen(target) + 2));
+    strcpy(to_put, target); to_put[strlen(target)] = '\n';
+    to_put[strlen(target) + 1] = '\0';
     fd = fopen(path, "r");
     while (getline(&line, &len, fd) != -1) {
         file[i] = line;
         line = NULL;
         i++;
     }
-    file[id] = strdup(target); fclose(fd); fd = fopen(path, "w");
+    file[id] = strdup(to_put); fclose(fd); fd = fopen(path, "w");
     for (i = 0; file[i]; i++) fputs(file[i], fd);
     fclose(fd);
 }

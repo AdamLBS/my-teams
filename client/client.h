@@ -30,6 +30,30 @@
 #define MAX_DESCRIPTION_LENGTH 255
 #define MAX_BODY_LENGTH 512
 
+struct save_reply {
+    char *r_body;
+    time_t t_time;
+};
+
+struct save_thread {
+    char *t_name;
+    char *t_uuid;
+    char *t_desc;
+    time_t t_time;
+};
+
+struct save_channel {
+    char *c_name;
+    char *c_uuid;
+    char *c_desc;
+};
+
+struct save_team {
+    char *t_name;
+    char *t_uuid;
+    char *t_desc;
+};
+
 typedef struct client {
     int sock;
     char *username;
@@ -41,6 +65,10 @@ typedef struct client {
     char *channel_uuid;
     char *thread_uuid;
     int login;
+    struct save_team *s_team;
+    struct save_channel *s_channel;
+    struct save_thread *s_thread;
+    struct save_reply *s_reply;
 } client_t;
 
 void create_client(char *ip, char *port);
@@ -71,6 +99,7 @@ void receive_commands(struct client *client);
 void receive_message(char *buffer);
 void handle_received_data(client_t *client);
 void receive_users(char *buffer);
+void handle_received_more(client_t *client);
 // BUFFER HANDLING:
 int is_buffer_ended(client_t *client);
 int is_in_buffer_ended(client_t *client);

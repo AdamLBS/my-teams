@@ -40,3 +40,14 @@ char *get_file_line_n(int id, char *uuid, char *dir)
     fclose(fd); free(path); free(file);
     return NULL;
 }
+
+int check_permissions(struct client *client, char *uuid)
+{
+    int i = 0;
+    while (i < client->nb_teams) {
+        if (strcmp(client->teams[i]->uuid, uuid) == 0)
+            return 0;
+        i++;
+    }
+    return 1;
+}

@@ -26,8 +26,8 @@ void create_reply_command(client_t *client, char *buffer)
     uuid_unparse(uuid, r_uuid); buffer += 8; buffer[strlen(buffer)] = '\0';
     char *r_body; char *token = strtok(buffer, "\"");
     r_body = token; r_body = clean_text(r_body);
-    client_print_reply_created(client->thread_uuid, client->id
-    , curTime, r_body);
+    client->s_reply->r_body = strdup(r_body);
+    client->s_reply->t_time = curTime;
     send(client->sock, "create_reply", 12, 0); send(client->sock, " ", 1, 0);
     send(client->sock, r_uuid, 36, 0);send(client->sock, " ", 1, 0);
     send(client->sock, client->team_uuid, 36, 0);send(client->sock, " ", 1, 0);
