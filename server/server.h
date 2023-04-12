@@ -184,3 +184,5 @@ void subscribed_command(struct client *cli, char *buffer);
 struct reply *get_reply_struct(struct team *team, int na, int nz, int i);
 struct thread *get_thread_struct(struct team *team, int na, int i);
 void update_thread_struct(struct thread *thr, char *t_uuid);
+void send_login_event(struct client *cli);
+void send_logout_event(struct client *cli);
