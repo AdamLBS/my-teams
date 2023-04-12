@@ -55,6 +55,9 @@ int other_commands(struct client *cli, char *buffer)
 
 int more_commands(struct client *cli, char *buffer)
 {
+    if (strstr(buffer, "/subscribed")) {
+        subscribed_command(cli, buffer); return 0;
+    }
     if (strstr(buffer, "/subscribe")) {
         subscribe_command(cli, buffer); return 0;
     }

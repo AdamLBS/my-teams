@@ -180,3 +180,4 @@ void put_r(struct reply *reply, char *uuid, char *tm_uuid, char *t_uuid);
 void put_s(struct thread *thread, char *time, char *t_uuid, char *o_uuid);
 void load_threads(struct client *cli, int nb, int na);
 void load_replies(struct client *cli, int nb, int na, int nz);
+void subscribed_command(struct client *cli, char *buffer);

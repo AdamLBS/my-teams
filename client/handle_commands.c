@@ -64,14 +64,13 @@ void handle_received_data(client_t *client)
         receive_messages_history(client->buffer, client);
     if (strstr(client->buffer, "LOGIN OK\n")) {
         client_event_logged_in(client->id, client->username);client->login = 1;
-    }
-    if (strstr(client->buffer, "LOGOUT OK\n")) {
+    } if (strstr(client->buffer, "LOGOUT OK\n")) {
         client_event_logged_out(client->id, client->username);
         free_client(client);
-    }
-    if (strstr(client->buffer, "/info"))
+    } if (strstr(client->buffer, "/info"))
         info_command_receive(client, client->buffer);
-    if (strstr(client->buffer, "/list"))
-        list_command_receive(client, client->buffer);
+    if (strstr(client->buffer, "/list")) {
+        list_command_receive(client, client->buffer); return;
+    }
     handle_received_more(client);
 }
