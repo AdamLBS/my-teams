@@ -43,8 +43,7 @@ void create_team_command(struct client *client, char *buffer)
     client->teams[nb_teams]->desc = strdup(team_desc);
     client->teams[nb_teams]->channels = malloc(sizeof(struct channel *) * 100);
     create_team_file(team_uuid, team_name, team_desc);
-    write_new_member(client->id, team_uuid);
-    send(client->sock, "911\n", 4, 0);
+    write_new_member(client->id, team_uuid); send(client->sock, "911\n", 4, 0);
 }
 
 void create_team_file(char *t_uuid, char *t_name, char *t_desc)
