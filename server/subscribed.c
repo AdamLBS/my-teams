@@ -78,8 +78,7 @@ void list_users_subribed(struct client *client, char *buffer)
     char *path = malloc(sizeof(char) * (strlen(client->id) + 13));
     strcpy(path, "./teams/"); strcat(path, team_uuid); strcat(path, ".txt");
     FILE *file = fopen(path, "r");
-    char *line = NULL;
-    size_t len = 0; int i = 0;
+    char *line = NULL; size_t len = 0; int i = 0;
     char **users = malloc(sizeof(char *) * 100);
     while (getline(&line, &len, file) != -1) {
         if (i < 5) {
