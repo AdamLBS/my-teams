@@ -7,6 +7,17 @@
 
 #include "client.h"
 
+void subscribe_command(client_t *client, char *buffer)
+{
+    send(client->sock, buffer, strlen(buffer), 0);
+    send(client->sock, "\n", 1, 0);
+    char *team_uuid;
+    buffer += 11;
+    char *token = strtok(buffer, "\"");
+    team_uuid = clean_text(token);
+    client->team_uuid = strdup(team_uuid);
+}
+
 void other_commands(client_t *client, char *buffer)
 {
     if (strcmp(buffer, "/users") == 0)
@@ -19,6 +30,10 @@ void other_commands(client_t *client, char *buffer)
         info_command(client);
     if (strcmp(buffer, "/list") == 0)
         list_command(client);
+    if (strstr(buffer, "/subscribed")) {
+        subscribed_command(client, buffer); return;
+    } if (strstr(buffer, "/subscribe"))
+        subscribe_command(client, buffer);
 }
 
 void check_commands(char *buffer, client_t *client)

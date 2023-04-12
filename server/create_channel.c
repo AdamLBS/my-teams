@@ -25,6 +25,23 @@ int check_channel_error(struct client *client, char *c_name, char *t_uuid
     return 0;
 }
 
+void send_info_channel(struct client *client, int i, int j)
+{
+    struct client *tmp;
+    LIST_FOREACH(tmp, &head, next) {
+        if (check_permissions(tmp, client->teams[i]->uuid) == 1) continue;
+        send(tmp->sock, "921 \"", 5, 0);
+        send(tmp->sock, client->teams[i]->channels[j]->name
+        , strlen(client->teams[i]->channels[j]->name), 0);
+        send(tmp->sock, "\" \"", 3, 0);
+        send(tmp->sock, client->teams[i]->channels[j]->uuid, 36, 0);
+        send(tmp->sock, "\" \"", 3, 0);
+        send(tmp->sock, client->teams[i]->channels[j]->desc
+        , strlen(client->teams[i]->channels[j]->desc), 0);
+        send(tmp->sock, "\"\n", 2, 0);
+    }
+}
+
 void create_channel_command(struct client *client, char *buffer)
 {
     char *c_name; char *c_uuid; char *team_uuid; char *c_desc;
@@ -44,7 +61,7 @@ void create_channel_command(struct client *client, char *buffer)
     client->teams[i]->channels[n_channel]->t_uuid = strdup(team_uuid);
     client->teams[i]->channels[n_channel]->threads =
     malloc(sizeof(struct thread *) * 100); create_c_file(c_uuid, c_name
-    , team_uuid, c_desc); send(client->sock, "921\n", 4, 0);
+    , team_uuid, c_desc); send_info_channel(client, i, n_channel);
 }
 
 void create_c_file(char *c_uuid, char *c_name, char *t_uuid, char *c_desc)

@@ -25,14 +25,13 @@ void free_client(client_t *client)
 void handle_received_more_2(client_t *client)
 {
     if (strstr(client->buffer, "931"))
-        client_event_thread_created(client->s_thread->t_uuid, client->id
-        , client->s_thread->t_time, client->s_thread->t_name,
-            client->s_thread->t_desc);
+        event_thread_created(client->buffer);
     if (strstr(client->buffer, "941"))
-        client_print_reply_created(client->thread_uuid, client->id
-        , client->s_reply->t_time, client->s_reply->r_body);
+        event_reply_created(client->buffer);
     if (strstr(client->buffer, "101"))
         client_error_unauthorized();
+    if (strstr(client->buffer, "901"))
+        client_print_subscribed(client->id, client->team_uuid);
     if (strstr(client->buffer, "user_logged_in: "))
         get_client_login_event(client);
     if (strstr(client->buffer, "user_logged_out: "))
@@ -47,10 +46,11 @@ void handle_received_more(client_t *client)
         client_event_team_created(client->s_team->t_uuid
         , client->s_team->t_name, client->s_team->t_desc);
     if (strstr(client->buffer, "921"))
-        client_event_channel_created(client->s_channel->c_uuid,
-            client->s_channel->c_name, client->s_channel->c_desc);
+        event_channel_created(client->buffer);
     if (strstr(client->buffer, "311"))
         client_error_unknown_team(client->team_uuid);
+    if (strstr(client->buffer, "313"))
+        client_error_unknown_team(client->s_team->t_uuid);
     if (strstr(client->buffer, "321"))
         client_error_unknown_channel(client->channel_uuid);
     if (strstr(client->buffer, "331"))
@@ -70,14 +70,13 @@ void handle_received_data(client_t *client)
         receive_messages_history(client->buffer, client);
     if (strstr(client->buffer, "LOGIN OK\n")) {
         client_event_logged_in(client->id, client->username);client->login = 1;
-    }
-    if (strstr(client->buffer, "LOGOUT OK\n")) {
+    } if (strstr(client->buffer, "LOGOUT OK\n")) {
         client_event_logged_out(client->id, client->username);
         free_client(client);
-    }
-    if (strstr(client->buffer, "/info"))
+    } if (strstr(client->buffer, "/info"))
         info_command_receive(client, client->buffer);
-    if (strstr(client->buffer, "/list"))
-        list_command_receive(client, client->buffer);
+    if (strstr(client->buffer, "/list")) {
+        list_command_receive(client, client->buffer); return;
+    }
     handle_received_more(client);
 }

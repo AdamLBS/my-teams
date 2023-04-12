@@ -94,12 +94,17 @@ void list_command(client_t *client);
 void list_threads(client_t *client, char *buffer);
 void list_replies(client_t *client, char *buffer);
 int check_if_error(char *str, client_t *client);
+void subscribe_command(client_t *client, char *buffer);
+void subscribed_command(client_t *client, char *buffer);
 // RECEIVE COMMANDS:
 void receive_commands(struct client *client);
 void receive_message(char *buffer);
 void handle_received_data(client_t *client);
 void receive_users(char *buffer);
 void handle_received_more(client_t *client);
+void event_channel_created(char *buffer);
+void event_thread_created(char *buffer);
+void event_reply_created(char *buffer);
 // BUFFER HANDLING:
 int is_buffer_ended(client_t *client);
 int is_in_buffer_ended(client_t *client);

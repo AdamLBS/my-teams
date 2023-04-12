@@ -59,3 +59,13 @@ int find_last_line(char *path)
     fclose(fd);
     return i;
 }
+
+void erase_line(char *to_find, char *dir, char *uuid)
+{
+    int size = strlen(dir) + strlen(uuid) + 6;
+    char *path = malloc(sizeof(char) * size);
+    path = memset(path, '\0', size); strcpy(path, dir); strcat(path, uuid);
+    strcat(path, ".txt");
+    FILE *fd;
+    fd = fopen(path, "w+");
+}

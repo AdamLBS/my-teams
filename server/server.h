@@ -38,7 +38,7 @@
 #define MAX_TEAM_CHANNELS 100
 #define UNKNOWN_CMD "500 Syntax error, command unrecognized.\n"
 
-struct reply {
+typedef struct reply {
     char *msg;
     char *uuid;
     char *time;
@@ -46,7 +46,7 @@ struct reply {
     char *tm_uuid;
     char *o_uuid;
     char *c_uuid;
-};
+} reply_t;
 
 typedef struct replies {
     char *thread_uuid;
@@ -172,5 +172,17 @@ int check_team_error(struct client *client, char *t_uuid, char *team_name);
 int check_permissions(struct client *client, char *uuid);
 int check_channel_error(struct client *client, char *c_name, char *t_uuid
 , char *c_uuid);
+void subscribe_command(struct client *cli, char *buffer);
+int more_commands(struct client *cli, char *buffer);
+void load_teams(struct client *cli, char *to_find);
+void load_channels(struct client *cli, int nb);
+void put_r(struct reply *reply, char *uuid, char *tm_uuid, char *t_uuid);
+void put_s(struct thread *thread, char *time, char *t_uuid, char *o_uuid);
+void load_threads(struct client *cli, int nb, int na);
+void load_replies(struct client *cli, int nb, int na, int nz);
+void subscribed_command(struct client *cli, char *buffer);
+struct reply *get_reply_struct(struct team *team, int na, int nz, int i);
+struct thread *get_thread_struct(struct team *team, int na, int i);
+void update_thread_struct(struct thread *thr, char *t_uuid);
 void send_login_event(struct client *cli);
 void send_logout_event(struct client *cli);
