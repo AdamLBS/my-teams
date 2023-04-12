@@ -4,6 +4,8 @@
 
 - 101: Not authorized
 
+- 102: Already subscribed
+
 ## 3XX -> Error server side
 
 ### 31X -> Team / 32X -> Channel / 33X -> Thread / 34X -> Reply
