@@ -18,16 +18,30 @@ void free_client(client_t *client)
         free(client->channel_uuid);
     if (client->context >= 3 && client->thread_uuid != NULL)
         free(client->thread_uuid);
+    free(client->s_team); free(client->s_channel);
     exit(0);
 }
 
 void handle_received_more(client_t *client)
 {
-    if (strstr(client->buffer, "312"))
+    if (client->buffer[0] == '3' && client->buffer[2] == '2')
         client_error_already_exist();
     if (strstr(client->buffer, "911"))
         client_event_team_created(client->s_team->t_uuid
         , client->s_team->t_name, client->s_team->t_desc);
+    if (strstr(client->buffer, "921"))
+        client_event_channel_created(client->s_channel->c_uuid,
+            client->s_channel->c_name, client->s_channel->c_desc);
+    if (strstr(client->buffer, "321"))
+        client_error_unknown_team(client->team_uuid);
+    if (strstr(client->buffer, "331"))
+        client_error_unknown_thread(client->s_thread->t_uuid);
+    if (strstr(client->buffer, "931"))
+        client_event_thread_created(client->s_thread->t_uuid, client->id
+        , client->s_thread->t_time, client->s_thread->t_name,
+            client->s_thread->t_desc);
+    if (strstr(client->buffer, "101"))
+        client_error_unauthorized();
 }
 
 void handle_received_data(client_t *client)
