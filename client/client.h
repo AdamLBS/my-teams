@@ -100,6 +100,9 @@ void receive_message(char *buffer);
 void handle_received_data(client_t *client);
 void receive_users(char *buffer);
 void handle_received_more(client_t *client);
+void event_channel_created(char *buffer);
+void event_thread_created(char *buffer);
+void event_reply_created(char *buffer);
 // BUFFER HANDLING:
 int is_buffer_ended(client_t *client);
 int is_in_buffer_ended(client_t *client);

@@ -42,6 +42,28 @@ void put_s(struct thread *thread, char *time, char *t_uuid, char *o_uuid)
     create_thread_file(thread);
 }
 
+void send_info_thread(struct client *client, int i, int j, int n)
+{
+    struct client *tmp;
+    LIST_FOREACH(tmp, &head, next) {
+        if (check_permissions(tmp, client->teams[i]->uuid) == 1) continue;
+        send(tmp->sock, "931 \"", 5, 0);
+        send(tmp->sock, client->teams[i]->channels[j]->threads[n]->uuid, 36, 0);
+        send(tmp->sock, "\" \"", 3, 0);
+        send(tmp->sock, client->id, 36, 0);
+        send(tmp->sock, "\" \"", 3, 0);
+        send(tmp->sock, client->teams[i]->channels[j]->threads[n]->time,
+        strlen(client->teams[i]->channels[j]->threads[n]->time), 0);
+        send(tmp->sock, "\" \"", 3, 0);
+        send(tmp->sock, client->teams[i]->channels[j]->threads[n]->name,
+        strlen(client->teams[i]->channels[j]->threads[n]->name), 0);
+        send(tmp->sock, "\" \"", 3, 0);
+        send(tmp->sock, client->teams[i]->channels[j]->threads[n]->body,
+        strlen(client->teams[i]->channels[j]->threads[n]->body), 0);
+        send(tmp->sock, "\"\n", 2, 0);
+    }
+}
+
 void create_thread_command(struct client *client, char *buffer)
 {
     char *t_name, *t_uuid, *c_uuid, *t_body, *tm_uuid, *u_uuid, *times;
@@ -63,7 +85,7 @@ void create_thread_command(struct client *client, char *buffer)
     client->teams[i]->channels[j]->threads[n]->body = strdup(t_body);
     client->teams[i]->channels[j]->threads[n]->c_uuid = strdup(c_uuid);
     put_s(client->teams[i]->channels[j]->threads[n], times, tm_uuid, u_uuid);
-    send(client->sock, "931\n", 4, 0);
+    send_info_thread(client, i, j, n);
 }
 
 void create_thread_file(struct thread *thread)

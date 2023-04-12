@@ -25,14 +25,13 @@ void free_client(client_t *client)
 void handle_received_more_2(client_t *client)
 {
     if (strstr(client->buffer, "931"))
-        client_event_thread_created(client->s_thread->t_uuid, client->id
-        , client->s_thread->t_time, client->s_thread->t_name,
-            client->s_thread->t_desc);
+        event_thread_created(client->buffer);
     if (strstr(client->buffer, "941"))
-        client_print_reply_created(client->thread_uuid, client->id
-        , client->s_reply->t_time, client->s_reply->r_body);
+        event_reply_created(client->buffer);
     if (strstr(client->buffer, "101"))
         client_error_unauthorized();
+    if (strstr(client->buffer, "901"))
+        client_print_subscribed(client->id, client->team_uuid);
 }
 
 void handle_received_more(client_t *client)
@@ -43,8 +42,7 @@ void handle_received_more(client_t *client)
         client_event_team_created(client->s_team->t_uuid
         , client->s_team->t_name, client->s_team->t_desc);
     if (strstr(client->buffer, "921"))
-        client_event_channel_created(client->s_channel->c_uuid,
-            client->s_channel->c_name, client->s_channel->c_desc);
+        event_channel_created(client->buffer);
     if (strstr(client->buffer, "311"))
         client_error_unknown_team(client->team_uuid);
     if (strstr(client->buffer, "321"))

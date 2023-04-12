@@ -172,3 +172,5 @@ int check_team_error(struct client *client, char *t_uuid, char *team_name);
 int check_permissions(struct client *client, char *uuid);
 int check_channel_error(struct client *client, char *c_name, char *t_uuid
 , char *c_uuid);
+void subscribe_command(struct client *cli, char *buffer);
+int more_commands(struct client *cli, char *buffer);

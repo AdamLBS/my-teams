@@ -50,6 +50,14 @@ int other_commands(struct client *cli, char *buffer)
     if (strstr(buffer, "/list")) {
         list_command(cli, buffer); return 0;
     }
+    return (more_commands(cli, buffer));
+}
+
+int more_commands(struct client *cli, char *buffer)
+{
+    if (strstr(buffer, "/subscribe")) {
+        subscribe_command(cli, buffer); return 0;
+    }
     write(cli->sock, UNKNOWN_CMD, strlen(UNKNOWN_CMD));
     return 0;
 }

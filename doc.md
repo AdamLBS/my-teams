@@ -14,6 +14,10 @@
 
 ## 9XX -> Success command
 
+- 901: User is subscribe
+
+- 902: User is unsubcribe
+
 ### 91X -> Team / 92X -> Channel / 93X -> Thread / 94X -> Reply
 
 - 911: Successfully created team
