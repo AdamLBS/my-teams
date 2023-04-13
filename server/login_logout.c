@@ -47,6 +47,7 @@ void catch_client_logout(struct client *client)
     client->sock = -1;
 }
 
+
 int check_user_teams(struct client *client, char *t_uuid)
 {
     char *path = malloc(sizeof(char) * 50);
@@ -77,4 +78,11 @@ void load_team_files(struct client *client)
         }
     }
     closedir(dir);
+
+void logout_signal_command(struct client *client)
+{
+    server_event_user_logged_out(client->id);
+    set_user_to_logged_out(client->id);
+    memset(client->username, 0, strlen(client->username));
+    client->sock = -1;
 }
