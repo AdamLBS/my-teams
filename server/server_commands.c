@@ -61,6 +61,9 @@ int more_commands(struct client *cli, char *buffer)
     if (strstr(buffer, "/subscribe")) {
         subscribe_command(cli, buffer); return 0;
     }
+    if (strstr(buffer, "/unsubscribe")) {
+        unsubscribe_command(cli, buffer); return 0;
+    }
     write(cli->sock, UNKNOWN_CMD, strlen(UNKNOWN_CMD));
     return 0;
 }

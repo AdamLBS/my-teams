@@ -31,11 +31,15 @@ void handle_received_more_2(client_t *client)
     if (strstr(client->buffer, "101"))
         client_error_unauthorized();
     if (strstr(client->buffer, "901"))
-        client_print_subscribed(client->id, client->team_uuid);
+        client_print_subscribed(client->id, client->s_team->t_uuid);
     if (strstr(client->buffer, "user_logged_in: "))
         get_client_login_event(client);
     if (strstr(client->buffer, "user_logged_out: "))
         get_client_logout_event(client);
+    if (strstr(client->buffer, "102"))
+        client_error_unauthorized();
+    if (strstr(client->buffer, "902"))
+        client_print_unsubscribed(client->id, client->s_team->t_uuid);
 }
 
 void handle_received_more(client_t *client)

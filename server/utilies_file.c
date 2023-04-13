@@ -67,5 +67,16 @@ void erase_line(char *to_find, char *dir, char *uuid)
     path = memset(path, '\0', size); strcpy(path, dir); strcat(path, uuid);
     strcat(path, ".txt");
     FILE *fd;
-    fd = fopen(path, "w+");
+    fd = fopen(path, "r"); int id = 0;
+    char *line = NULL; size_t len = 0; int i = 0;
+    char **file = malloc(sizeof(char *) * 100); memset(file, 0, 100);
+    while (getline(&line, &len, fd) != -1) {
+        file[i] = line;
+        if (strstr(line, to_find)) id = i;
+        line = NULL;
+        i++;
+    }
+    file[id] = strdup(""); fclose(fd); fd = fopen(path, "w");
+    for (i = 0; file[i]; i++) fputs(file[i], fd);
+    fclose(fd);
 }

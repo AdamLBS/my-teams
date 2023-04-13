@@ -35,7 +35,7 @@ void create_team_command(struct client *client, char *buffer)
     }
     server_event_team_created(team_uuid, team_name, client->id);
     int nb_teams = atoi(get_file_line(3, client->id, "users/"));
-    client->nb_teams = nb_teams + 1;  set_file_line(3, client->id
+    client->nb_teams = nb_teams; set_file_line(3, client->id
     , itoa(nb_teams + 1), "users/"); client->teams[nb_teams] =
     malloc(sizeof(struct team)); client->teams[nb_teams]->name =
     strdup(team_name); client->teams[nb_teams]->uuid = strdup(team_uuid);
