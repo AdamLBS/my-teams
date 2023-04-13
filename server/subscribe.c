@@ -50,14 +50,29 @@ void unsubscribe_command(struct client *cli, char *buffer)
 
 void remove_team_from_struct(char *uuid, struct client *cli)
 {
-    for (int i = 0; i != cli->nb_teams; i++) {
-        if (strcmp(cli->teams[i]->uuid, uuid) == 0 && i != cli->nb_teams + 1) {
-            cli->teams[i] = cli->teams[cli->nb_teams + 1];
-            cli->nb_teams--;
-        }
-        if (strcmp(cli->teams[i]->uuid, uuid) == 0 && i != cli->nb_teams + 1) {
-            cli->teams[i] = NULL;
-            cli->nb_teams--;
+    struct team **tmp = malloc(sizeof(struct team *) * 100);
+    for (int i = 0, j = 0; i <= cli->nb_teams; i++) {
+        if (strcmp(cli->teams[i]->uuid, uuid) != 0) {
+            tmp[j] = cli->teams[i];
+            j++;
         }
     }
+    for (int i = 0; i <= cli->nb_teams; i++) {
+        free(cli->teams[i]->uuid);
+        free(cli->teams[i]->name);
+        free(cli->teams[i]->desc);
+        free (cli->teams[i]);
+    }
+    free(cli->teams);
+    cli->nb_teams--;
+    cli->teams = malloc(sizeof(struct team *) * 100);
+    for (int i = 0; i <= cli->nb_teams; i++) {
+        cli->teams[i] = malloc(sizeof(struct team));
+        cli->teams[i]->uuid = strdup(tmp[i]->uuid);
+        cli->teams[i]->name = strdup(tmp[i]->name);
+        cli->teams[i]->desc = strdup(tmp[i]->desc);
+        cli->teams[i]->nb_channels = tmp[i]->nb_channels;
+        free(tmp[i]);
+    }
+    free(tmp);
 }
