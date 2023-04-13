@@ -17,9 +17,6 @@ void send_reply(client_t *client, char *time, char *r_body)
 
 void create_reply_command(client_t *client, char *buffer)
 {
-    if (check_if_file_exist(client->thread_uuid, "./threads/") == 0) {
-        client_error_unknown_thread(client->thread_uuid); return;
-    }
     time_t curTime = time( NULL ); char *time = ctime(&curTime);
     time[strlen(time) - 1] = '\0';
     char r_uuid[37]; uuid_t uuid; uuid_generate_random(uuid);
