@@ -25,6 +25,7 @@ void login_command(struct client *client, char *buffer)
     send(client->sock, "LOGIN OK\n", 9, 0);
     send_login_event(client);
     check_pending_messages(client);
+    load_team_files(client);
 }
 
 void logout_command(struct client *client)
@@ -44,4 +45,36 @@ void catch_client_logout(struct client *client)
         send_logout_event(client);
     }
     client->sock = -1;
+}
+
+int check_user_teams(struct client *client, char *t_uuid)
+{
+    char *path = malloc(sizeof(char) * 50);
+    memset(path, '\0', 50); size_t len = 0;
+    strcpy(path, "./teams/"); strcat(path, t_uuid); strcat(path, ".txt");
+    FILE *fd = fopen(path, "r");
+    char *line = NULL;
+    while (getline(&line, &len, fd) != -1) {
+        line[strlen(line) - 1] = '\0';
+        if (strcmp(line, client->id) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void load_team_files(struct client *client)
+{
+    DIR *dir;dir = opendir("./teams/");struct dirent *direc;if (!dir) return;
+    for (int i = 0; (direc = readdir(dir)) != NULL; i++) {
+        if (strlen(direc->d_name) < 36) continue;
+        char *uuid = strdup(direc->d_name), *path; uuid[36] = '\0';
+        path =
+        malloc(sizeof(char) * ((strlen("./teams/") + strlen(direc->d_name)
+        + 1))); strcpy(path, "./teams/"); strcat(path, direc->d_name);
+        if (check_user_teams(client, uuid) == 1) {
+            load_teams(client, uuid);
+        }
+    }
+    closedir(dir);
 }
