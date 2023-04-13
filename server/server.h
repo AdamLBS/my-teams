@@ -190,3 +190,5 @@ void logout_signal_command(struct client *client);
 void erase_line(char *to_find, char *dir, char *uuid);
 void unsubscribe_command(struct client *cli, char *buffer);
 void remove_team_from_struct(char *uuid, struct client *cli);
+int check_user_teams(struct client *client, char *t_uuid);
+void load_team_files(struct client *client);
