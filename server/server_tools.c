@@ -68,7 +68,8 @@ void remove_client(int socket)
 
 char *clean_text(char *text)
 {
-    char *new_text = malloc(sizeof(char) * strlen(text));
+    char *new_text = malloc(sizeof(char) * strlen(text) + 1);
+    memset(new_text, 0, strlen(text) + 1);
     int i = 0;
     int j = 0;
     while (text[i] != '\0') {

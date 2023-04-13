@@ -16,4 +16,5 @@ void update_thread_struct(struct thread *thr, char *t_uuid)
     thr->body = strdup(get_file_line_n(4, t_uuid, "./threads/"));
     thr->t_uuid = strdup(get_file_line_n(5, t_uuid, "./threads/"));
     thr->c_uuid = strdup(get_file_line_n(6, t_uuid, "./threads/"));
+    thr->replies = malloc(sizeof(reply_t *) * 100);
 }

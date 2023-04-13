@@ -17,7 +17,8 @@ void load_teams(struct client *cli, char *to_find)
     strdup(get_file_line_n(2, to_find, "./teams/"));
     cli->teams[cli->nb_teams + 1]->nb_channels =
     atoi(get_file_line_n(4, to_find, "./teams/"));
-    cli->teams[cli->nb_teams + 1]->channels = malloc(sizeof(struct channels *));
+    cli->teams[cli->nb_teams + 1]->channels =
+    malloc(sizeof(struct channels *) * 100);
     cli->teams[cli->nb_teams + 1]->nb_channels = 0;
     cli->nb_teams++;
     load_channels(cli, cli->nb_teams);
@@ -41,8 +42,8 @@ void load_channels(struct client *cli, int nb)
         cli->teams[nb]->channels[i]->desc = strdup(get_file_line_n(2, c_uuid
         , "./channels/"));cli->teams[nb]->channels[i]->t_uuid = strdup(
         get_file_line_n(3, c_uuid, "./channels/")); cli->teams[nb]->channels[i]
-        ->nb_threads = atoi(get_file_line_n(4, c_uuid, "./channels/"));
-        cli->teams[nb]->channels[i]->threads = malloc(sizeof(struct thread *));
+        ->nb_threads = atoi(get_file_line_n(4, c_uuid, "./channels/"));cli->
+        teams[nb]->channels[i]->threads = malloc(sizeof(struct thread *) * 100);
         load_threads(cli, nb, i); free(c_uuid); fclose(fd);
     } closedir(dir);
 }
