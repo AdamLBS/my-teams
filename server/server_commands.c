@@ -61,6 +61,9 @@ int more_commands(struct client *cli, char *buffer)
     if (strstr(buffer, "/subscribe")) {
         subscribe_command(cli, buffer); return 0;
     }
+    if (strstr(buffer, "/logout_signal")) {
+        logout_signal_command(cli); return 0;
+    }
     write(cli->sock, UNKNOWN_CMD, strlen(UNKNOWN_CMD));
     return 0;
 }
@@ -69,7 +72,7 @@ int check_commands_socket(struct client *cli)
 {
     int valread; char buffer[MAX_BODY_LENGTH] = {0};
     if ((valread = recv(cli->sock, buffer, 1, 0)) <= 0) {
-        catch_client_logout(cli); return 1;
+        return 1;
     } else {
         if (cli->buffer[0] != '\0')
             strcat(cli->buffer, buffer);

@@ -29,7 +29,6 @@
 #define MAX_NAME_LENGTH 32
 #define MAX_DESCRIPTION_LENGTH 255
 #define MAX_BODY_LENGTH 512
-
 struct save_reply {
     char *r_body;
     time_t t_time;
@@ -123,3 +122,4 @@ void list_command_receive(client_t *client, char *buffer);
 //EVENT HANDLING
 void get_client_login_event(client_t *client);
 void get_client_logout_event(client_t *client);
+void free_client(client_t *client);
