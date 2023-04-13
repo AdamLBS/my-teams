@@ -51,3 +51,19 @@ int check_permissions(struct client *client, char *uuid)
     }
     return 1;
 }
+
+int check_user_teams(struct client *client, char *t_uuid)
+{
+    char *path = malloc(sizeof(char) * 50);
+    memset(path, '\0', 50); size_t len = 0;
+    strcpy(path, "./teams/"); strcat(path, t_uuid); strcat(path, ".txt");
+    FILE *fd = fopen(path, "r");
+    char *line = NULL;
+    while (getline(&line, &len, fd) != -1) {
+        line[strlen(line) - 1] = '\0';
+        if (strcmp(line, client->id) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}

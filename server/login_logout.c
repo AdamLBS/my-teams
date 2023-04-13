@@ -47,23 +47,6 @@ void catch_client_logout(struct client *client)
     client->sock = -1;
 }
 
-
-int check_user_teams(struct client *client, char *t_uuid)
-{
-    char *path = malloc(sizeof(char) * 50);
-    memset(path, '\0', 50); size_t len = 0;
-    strcpy(path, "./teams/"); strcat(path, t_uuid); strcat(path, ".txt");
-    FILE *fd = fopen(path, "r");
-    char *line = NULL;
-    while (getline(&line, &len, fd) != -1) {
-        line[strlen(line) - 1] = '\0';
-        if (strcmp(line, client->id) == 0) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
 void load_team_files(struct client *client)
 {
     DIR *dir;dir = opendir("./teams/");struct dirent *direc;if (!dir) return;
@@ -78,6 +61,7 @@ void load_team_files(struct client *client)
         }
     }
     closedir(dir);
+}
 
 void logout_signal_command(struct client *client)
 {
