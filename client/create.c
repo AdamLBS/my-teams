@@ -67,7 +67,7 @@ void create_channel_command(client_t *client, char *buffer)
 void send_info(client_t *client, char *t_name, char *t_body, char *time)
 {
     send(client->sock, " \"", 2, 0);
-    send(client->sock, time, (strlen(time) - 1), 0);
+    send(client->sock, time, (strlen(time)), 0);
     send(client->sock, "\" \"", 3, 0);
     send(client->sock, t_name, strlen(t_name), 0);
     send(client->sock, "\" \"", 3, 0);

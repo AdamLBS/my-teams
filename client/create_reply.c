@@ -9,7 +9,7 @@
 
 void send_reply(client_t *client, char *time, char *r_body)
 {
-    send(client->sock, time, (strlen(time) - 1), 0);
+    send(client->sock, time, (strlen(time)), 0);
     send(client->sock, "\" \"", 3, 0);
     send(client->sock, r_body, strlen(r_body), 0);
     send(client->sock, "\"\n", 2, 0);
