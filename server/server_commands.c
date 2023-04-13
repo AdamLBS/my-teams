@@ -75,7 +75,7 @@ int check_commands_socket(struct client *cli)
 {
     int valread; char buffer[MAX_BODY_LENGTH] = {0};
     if ((valread = recv(cli->sock, buffer, 1, 0)) <= 0) {
-        return 1;
+        catch_client_logout(cli); return 1;
     } else {
         if (cli->buffer[0] != '\0')
             strcat(cli->buffer, buffer);

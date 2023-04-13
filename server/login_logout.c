@@ -39,10 +39,12 @@ void logout_command(struct client *client)
 
 void catch_client_logout(struct client *client)
 {
-    if (strlen(client->username) > 0 && client->sock != -1) {
+    if (client->username && strlen(client->username) > 0
+    && client->sock != -1) {
         server_event_user_logged_out(client->id);
         set_user_to_logged_out(client->id);
         send_logout_event(client);
+        memset(client->username, 0, strlen(client->username));
     }
     client->sock = -1;
 }

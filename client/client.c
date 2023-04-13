@@ -7,22 +7,6 @@
 
 #include "client.h"
 
-static void handle_ctrl_c(int sig)
-{
-    if (sig >= 0) {
-    }
-}
-
-void catch_ctrl_c(client_t *client)
-{
-    if (client->login) {
-        logout_command(client, "/logout_signal");
-        client_event_logged_out(client->id, client->username);
-        free_client(client); exit (0);
-    }
-    exit (0);
-}
-
 void set_struct_client(client_t *cl)
 {
     cl->username = malloc(sizeof(char) * MAX_NAME_LENGTH);
@@ -43,9 +27,7 @@ void receive_commands(struct client *client)
     fd_set read_fds; FD_ZERO(&read_fds); FD_SET(client->sock, &read_fds);
     struct timeval timeout; timeout.tv_sec = 0; timeout.tv_usec = 150;
     int ready = select(client->sock + 1, &read_fds, NULL, NULL, &timeout);
-    if (ready == -1) {
-        catch_ctrl_c(client);
-    } else if (ready == 0)
+    if (ready <= 0)
         return;
     char tmpBuffer[MAX_BODY_LENGTH];
     memset(tmpBuffer, 0, MAX_BODY_LENGTH);
@@ -61,9 +43,6 @@ void receive_commands(struct client *client)
 
 void create_client(char *ip, char *port)
 {
-    struct sigaction act; act.sa_handler = handle_ctrl_c;
-    sigemptyset(&act.sa_mask);sigaddset(&act.sa_mask, SIGINT);
-    act.sa_flags = 0; sigaction(SIGINT, &act, NULL);
     client_t client;
     client.buffer = malloc(sizeof(char) * MAX_BODY_LENGTH * 2);
     memset(client.buffer, 0, MAX_BODY_LENGTH * 2);
@@ -72,7 +51,10 @@ void create_client(char *ip, char *port)
     set_struct_client(&client);
     struct sockaddr_in myaddr; myaddr.sin_family = AF_INET;
     inet_aton(ip, &myaddr.sin_addr); myaddr.sin_port = htons(atoi(port));
-    connect(client.sock, (struct sockaddr *)&myaddr, sizeof(myaddr));
+    int val = connect(client.sock, (struct sockaddr *)&myaddr, sizeof(myaddr));
+    if (val != 0) {
+        printf("Connection failed\n"); exit(84);
+    }
     while (1) {
         receive_commands(&client);
         send_commands(&client);
