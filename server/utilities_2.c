@@ -44,7 +44,6 @@ char *get_file_line_n(int id, char *uuid, char *dir)
 int check_permissions(struct client *client, char *uuid)
 {
     int i = 0;
-    printf("nb teams: %i\n", client->nb_teams);
     while (i <= client->nb_teams) {
         if (strcmp(client->teams[i]->uuid, uuid) == 0)
             return 0;

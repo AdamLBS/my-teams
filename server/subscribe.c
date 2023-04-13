@@ -51,7 +51,6 @@ void unsubscribe_command(struct client *cli, char *buffer)
 void remove_team_from_struct(char *uuid, struct client *cli)
 {
     struct team **tmp = malloc(sizeof(struct team *) * 100);
-    printf("nb teams: %i\n", cli->nb_teams);
     for (int i = 0, j = 0; i <= cli->nb_teams; i++) {
         if (strcmp(cli->teams[i]->uuid, uuid) != 0) {
             tmp[j] = cli->teams[i];
@@ -75,6 +74,7 @@ void remove_team_from_struct(char *uuid, struct client *cli)
         cli->teams[i]->name = strdup(tmp[i]->name);
         cli->teams[i]->desc = strdup(tmp[i]->desc);
         cli->teams[i]->nb_channels = tmp[i]->nb_channels;
+        cli->teams[i]->channels = malloc(sizeof(struct channel *) * 100);
         free(tmp[i]);
     }
     free(tmp);
