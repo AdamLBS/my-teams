@@ -15,7 +15,22 @@ void subscribe_command(client_t *client, char *buffer)
     buffer += 11;
     char *token = strtok(buffer, "\"");
     team_uuid = clean_text(token);
-    client->team_uuid = strdup(team_uuid);
+    if (client->s_team->t_uuid != NULL)
+        free(client->s_team->t_uuid);
+    client->s_team->t_uuid = strdup(team_uuid);
+}
+
+void unsubscribe_command(client_t *client, char *buffer)
+{
+    send(client->sock, buffer, strlen(buffer), 0);
+    send(client->sock, "\n", 1, 0);
+    char *team_uuid;
+    buffer += 13;
+    char *token = strtok(buffer, "\"");
+    team_uuid = clean_text(token);
+    if (client->s_team->t_uuid != NULL)
+        free(client->s_team->t_uuid);
+    client->s_team->t_uuid = strdup(team_uuid);
 }
 
 void other_commands(client_t *client, char *buffer)
@@ -34,6 +49,8 @@ void other_commands(client_t *client, char *buffer)
         subscribed_command(client, buffer); return;
     } if (strstr(buffer, "/subscribe"))
         subscribe_command(client, buffer);
+    if (strstr(buffer, "/unsubscribe"))
+        unsubscribe_command(client, buffer);
 }
 
 void check_commands(char *buffer, client_t *client)
@@ -63,14 +80,8 @@ void send_commands(client_t *client)
     if (strstr(client->in_buffer, "/login"))
         login_command(client, client->in_buffer);
     else if (strlen(client->in_buffer) > 0 && client->login == 0) {
-        log_unauthorized(); memset(client->in_buffer, 0, 512); return;
+        client_error_unauthorized(); memset(client->in_buffer, 0, 512); return;
     }
     check_commands(client->in_buffer, client);
     memset(client->in_buffer, 0, MAX_BODY_LENGTH);
-}
-
-void log_unauthorized(void)
-{
-    client_error_unauthorized();
-    return;
 }

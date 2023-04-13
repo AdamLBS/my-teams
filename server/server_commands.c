@@ -64,6 +64,9 @@ int more_commands(struct client *cli, char *buffer)
     if (strstr(buffer, "/logout_signal")) {
         logout_signal_command(cli); return 0;
     }
+    if (strstr(buffer, "/unsubscribe")) {
+        unsubscribe_command(cli, buffer); return 0;
+    }
     write(cli->sock, UNKNOWN_CMD, strlen(UNKNOWN_CMD));
     return 0;
 }

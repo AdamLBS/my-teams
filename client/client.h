@@ -108,7 +108,7 @@ void event_reply_created(char *buffer);
 int is_buffer_ended(client_t *client);
 int is_in_buffer_ended(client_t *client);
 //AUTH HANDLING:
-void log_unauthorized(void);
+void write_log_unauthorized(void);
 //MESSAGES HISTORY:
 void send_messages_command(char *buffer, struct client *client);
 void receive_messages_history(char *buffer, struct client *client);

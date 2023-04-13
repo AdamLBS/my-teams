@@ -53,9 +53,10 @@ void create_channel_command(struct client *client, char *buffer)
     strtok(NULL, "\""); token = strtok(NULL, "\""); c_desc = token;
     if (check_channel_error(client, c_name, team_uuid, c_uuid) == 1) return;
     server_event_channel_created(team_uuid, c_uuid, c_name);
+    int i = find_t(team_uuid, client);
     int n_channel = atoi(get_file_line(4, team_uuid, "teams/"));
-    set_file_line(4, team_uuid, itoa(n_channel + 1), "teams/"); int i =
-    find_t(team_uuid, client); client->teams[i]->nb_channels = n_channel + 1;
+    client->teams[i]->nb_channels = n_channel; set_file_line(4, team_uuid,
+    itoa(n_channel + 1), "teams/");
     client->teams[i]->channels[n_channel] = malloc(sizeof(struct channel));
     client->teams[i]->channels[n_channel]->name = strdup(c_name);
     client->teams[i]->channels[n_channel]->uuid = strdup(c_uuid);

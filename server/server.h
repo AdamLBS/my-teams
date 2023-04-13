@@ -187,3 +187,6 @@ void update_thread_struct(struct thread *thr, char *t_uuid);
 void send_login_event(struct client *cli);
 void send_logout_event(struct client *cli);
 void logout_signal_command(struct client *client);
+void erase_line(char *to_find, char *dir, char *uuid);
+void unsubscribe_command(struct client *cli, char *buffer);
+void remove_team_from_struct(char *uuid, struct client *cli);
