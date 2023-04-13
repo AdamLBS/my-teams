@@ -80,14 +80,8 @@ void send_commands(client_t *client)
     if (strstr(client->in_buffer, "/login"))
         login_command(client, client->in_buffer);
     else if (strlen(client->in_buffer) > 0 && client->login == 0) {
-        write_log_unauthorized(); memset(client->in_buffer, 0, 512); return;
+        client_error_unauthorized(); memset(client->in_buffer, 0, 512); return;
     }
     check_commands(client->in_buffer, client);
     memset(client->in_buffer, 0, MAX_BODY_LENGTH);
-}
-
-void write_log_unauthorized(void)
-{
-    client_error_unauthorized();
-    return;
 }
