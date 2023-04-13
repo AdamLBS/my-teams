@@ -30,6 +30,7 @@ void send_info_channel(struct client *client, int i, int j)
     struct client *tmp;
     LIST_FOREACH(tmp, &head, next) {
         if (check_permissions(tmp, client->teams[i]->uuid) != 1) {
+            tmp->teams[i] = client->teams[i];
             send(tmp->sock, "921 \"", 5, 0);
             send(tmp->sock, client->teams[i]->channels[j]->name
             , strlen(client->teams[i]->channels[j]->name), 0);
@@ -60,6 +61,7 @@ void create_channel_command(struct client *client, char *buffer)
     client->teams[i]->channels[n_channel]->uuid = strdup(c_uuid);
     client->teams[i]->channels[n_channel]->desc = strdup(c_desc);
     client->teams[i]->channels[n_channel]->t_uuid = strdup(team_uuid);
+    client->teams[i]->channels[n_channel]->nb_threads = 0;
     client->teams[i]->channels[n_channel]->threads =
     malloc(sizeof(struct thread *) * 100); create_c_file(c_uuid, c_name
     , team_uuid, c_desc); send_info_channel(client, i, n_channel);
