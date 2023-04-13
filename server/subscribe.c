@@ -43,7 +43,21 @@ void unsubscribe_command(struct client *cli, char *buffer)
     }
     erase_line(cli->id, "./teams/", team_uuid);
     erase_line(team_uuid, "./users/", cli->id);
-    // todo: remove team struct from user
+    remove_team_from_struct(team_uuid, cli);
     server_event_user_unsubscribed(team_uuid, cli->id);
     send(cli->sock, "902\n", 4, 0);
+}
+
+void remove_team_from_struct(char *uuid, struct client *cli)
+{
+    for (int i = 0; i != cli->nb_teams; i++) {
+        if (strcmp(cli->teams[i]->uuid, uuid) == 0 && i != cli->nb_teams + 1) {
+            cli->teams[i] = cli->teams[cli->nb_teams + 1];
+            cli->nb_teams--;
+        }
+        if (strcmp(cli->teams[i]->uuid, uuid) == 0 && i != cli->nb_teams + 1) {
+            cli->teams[i] = NULL;
+            cli->nb_teams--;
+        }
+    }
 }

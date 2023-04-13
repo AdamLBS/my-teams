@@ -188,3 +188,4 @@ void send_login_event(struct client *cli);
 void send_logout_event(struct client *cli);
 void erase_line(char *to_find, char *dir, char *uuid);
 void unsubscribe_command(struct client *cli, char *buffer);
+void remove_team_from_struct(char *uuid, struct client *cli);
