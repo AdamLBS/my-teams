@@ -22,6 +22,23 @@ void write_new_member(char *u_uuid, char *t_uuid)
     set_file_line(i, u_uuid, t_uuid, "users/"); free(path);
 }
 
+void send_reply_code_team(struct client *client, char *id, char *name,
+    char *desc)
+{
+    send(client->sock, "910\n", 4, 0);
+    struct client *tmp;
+    LIST_FOREACH(tmp, &head, next) {
+        send(tmp->sock, "911 ", 4, 0);
+        send(tmp->sock, "\"", 1, 0);
+        send(tmp->sock, id, 36, 0);
+        send(tmp->sock, "\" \"", 3, 0);
+        send(tmp->sock, name, strlen(name), 0);
+        send(tmp->sock, "\" \"", 3, 0);
+        send(tmp->sock, desc, strlen(desc), 0);
+        send(tmp->sock, "\"\n", 2, 0);
+    }
+}
+
 void create_team_command(struct client *client, char *buffer)
 {
     char *team_name, *team_uuid, *team_desc;
@@ -34,16 +51,8 @@ void create_team_command(struct client *client, char *buffer)
         send(client->sock, "312\n", 4, 0); return;
     }
     server_event_team_created(team_uuid, team_name, client->id);
-    int nb_teams = atoi(get_file_line(3, client->id, "users/"));
-    client->nb_teams = nb_teams; set_file_line(3, client->id
-    , itoa(nb_teams + 1), "users/"); client->teams[nb_teams] =
-    malloc(sizeof(struct team)); client->teams[nb_teams]->name =
-    strdup(team_name); client->teams[nb_teams]->uuid = strdup(team_uuid);
-    client->teams[nb_teams]->desc = strdup(team_desc);
-    client->teams[nb_teams]->nb_channels = 0;
-    client->teams[nb_teams]->channels = malloc(sizeof(struct channel *) * 100);
     create_team_file(team_uuid, team_name, team_desc);
-    write_new_member(client->id, team_uuid); send(client->sock, "911\n", 4, 0);
+    send_reply_code_team(client, team_uuid, team_name, team_desc);
 }
 
 void create_team_file(char *t_uuid, char *t_name, char *t_desc)

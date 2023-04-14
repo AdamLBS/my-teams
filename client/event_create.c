@@ -50,6 +50,12 @@ void event_reply_created(char *buffer)
 
 void event_team_created(client_t *client)
 {
-    client_print_team_created(client->s_team->t_uuid
-        , client->s_team->t_name, client->s_team->t_desc);
+    char *buffer = strdup(client->buffer);
+    buffer += 4;
+    char *t_uuid = strtok(buffer, "\"");
+    strtok(NULL, "\"");
+    char *t_name = strtok(NULL, "\"");
+    strtok(NULL, "\"");
+    char *t_desc = strtok(NULL, "\"");
+    client_event_team_created(t_uuid, t_name, t_desc);
 }
