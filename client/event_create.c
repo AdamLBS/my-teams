@@ -47,3 +47,9 @@ void event_reply_created(char *buffer)
     strptime(t_time, "%a %b %d %H:%M:%S %Y", &tm); time_t t = mktime(&tm);
     client_print_reply_created(t_uuid, id, t, t_body);
 }
+
+void event_team_created(client_t *client)
+{
+    client_print_team_created(client->s_team->t_uuid
+        , client->s_team->t_name, client->s_team->t_desc);
+}
