@@ -47,3 +47,15 @@ void event_reply_created(char *buffer)
     strptime(t_time, "%a %b %d %H:%M:%S %Y", &tm); time_t t = mktime(&tm);
     client_print_reply_created(t_uuid, id, t, t_body);
 }
+
+void event_team_created(client_t *client)
+{
+    char *buffer = strdup(client->buffer);
+    buffer += 4;
+    char *t_uuid = strtok(buffer, "\"");
+    strtok(NULL, "\"");
+    char *t_name = strtok(NULL, "\"");
+    strtok(NULL, "\"");
+    char *t_desc = strtok(NULL, "\"");
+    client_event_team_created(t_uuid, t_name, t_desc);
+}

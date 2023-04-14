@@ -24,6 +24,8 @@
 
 ### 91X -> Team / 92X -> Channel / 93X -> Thread / 94X -> Reply
 
+- 910 : Successfully craeted team (for creator)
+
 - 911: Successfully created team
 
 - 921: Successfully created channel

@@ -47,9 +47,11 @@ void handle_received_more(client_t *client)
 {
     if (client->buffer[0] == '3' && client->buffer[2] == '2') {
         client_error_already_exist(); return;
+    } if (strstr(client->buffer, "910")) {
+        client_print_team_created(client->s_team->t_uuid,
+        client->s_team->t_name, client->s_team->t_desc); return;
     } if (strstr(client->buffer, "911")) {
-        client_event_team_created(client->s_team->t_uuid
-        , client->s_team->t_name, client->s_team->t_desc); return;
+        event_team_created(client); return;
     } if (strstr(client->buffer, "921")) {
         event_channel_created(client->buffer); return;
     } if (strstr(client->buffer, "311")) {
