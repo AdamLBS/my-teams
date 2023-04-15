@@ -71,7 +71,7 @@ void check_commands(char *buffer, client_t *client)
 void send_commands(client_t *client)
 {
     char buffer[MAX_BODY_LENGTH] = {0};
-    if (read(0, buffer, MAX_BODY_LENGTH) > 0)
+    if (read(0, buffer, 1) > 0)
         strcat(client->in_buffer, buffer);
     if (!is_in_buffer_ended(client))
         return;
