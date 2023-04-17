@@ -25,12 +25,15 @@ void set_struct_client(client_t *cl)
 void receive_commands(struct client *client)
 {
     fd_set read_fds; FD_ZERO(&read_fds); FD_SET(client->sock, &read_fds);
-    struct timeval timeout; timeout.tv_sec = 0; timeout.tv_usec = 150;
-    int ready = select(client->sock + 1, &read_fds, NULL, NULL, &timeout);
+    FD_SET(STDIN_FILENO, &read_fds);
+    int ready = select(client->sock + 1, &read_fds, NULL, NULL, NULL);
     if (ready <= 0)
         return;
     char tmpBuffer[MAX_BODY_LENGTH];
     memset(tmpBuffer, 0, MAX_BODY_LENGTH);
+    if (FD_ISSET(STDIN_FILENO, &read_fds)) {
+        send_commands(client); return;
+    }
     int valread = recv(client->sock, tmpBuffer, 1, 0);
     strcat(client->buffer, tmpBuffer);
     if (!is_buffer_ended(client))
@@ -57,6 +60,5 @@ void create_client(char *ip, char *port)
     }
     while (1) {
         receive_commands(&client);
-        send_commands(&client);
     }
 }
