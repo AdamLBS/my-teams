@@ -85,3 +85,4 @@ void send_commands(client_t *client)
     check_commands(client->in_buffer, client);
     memset(client->in_buffer, 0, MAX_BODY_LENGTH);
 }
+ 
