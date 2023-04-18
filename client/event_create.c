@@ -39,13 +39,9 @@ void event_reply_created(char *buffer)
     char *str = strchr(buffer, ' '); str++;
     char *t_uuid = strtok(str, "\""); strtok(NULL, "\"");
     char *id = strtok(NULL, "\""); strtok(NULL, "\"");
-    char *t_time = strtok(NULL, "\""); strtok(NULL, "\"");
+    char *team_uuid = strtok(NULL, "\""); strtok(NULL, "\"");
     char *t_body = strtok(NULL, "\""); strtok(NULL, "\"");
-    time_t currentTime = time(NULL);
-    struct tm *timeInfos = localtime(&currentTime); struct tm tm;
-    tm.tm_isdst = timeInfos->tm_isdst;
-    strptime(t_time, "%a %b %d %H:%M:%S %Y", &tm); time_t t = mktime(&tm);
-    client_print_reply_created(t_uuid, id, t, t_body);
+    client_event_thread_reply_received(team_uuid, t_uuid, id, t_body);
 }
 
 void event_team_created(client_t *client)

@@ -27,6 +27,7 @@ int check_channel_error(struct client *client, char *c_name, char *t_uuid
 
 void send_info_channel(struct client *client, int i, int j)
 {
+    send(client->sock, "920\n", 4, 0);
     struct client *tmp;
     LIST_FOREACH(tmp, &head, next) {
         if (check_permissions(tmp, client->teams[i]->uuid) != 1) {

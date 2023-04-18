@@ -27,6 +27,7 @@ int check_reply_error(struct client *client, char *team_uuid, char *c_uuid
 
 void send_info_reply(struct client *client, int nb[5])
 {
+    send(client->sock, "940\n", 4, 0);
     struct client *tmp;
     LIST_FOREACH(tmp, &head, next) {
         if (check_permissions(tmp, client->teams[nb[0]]->uuid) != 1) {
@@ -36,9 +37,7 @@ void send_info_reply(struct client *client, int nb[5])
             send(tmp->sock, client->teams[nb[0]]->channels[nb[1]]->
             threads[nb[2]]->uuid, 36, 0); send(tmp->sock, "\" \"", 3, 0);
             send(tmp->sock, client->id, 36, 0); send(tmp->sock, "\" \"", 3, 0);
-            send(tmp->sock,client->teams[nb[0]]->channels[nb[1]]->threads[nb[2]]
-            ->replies[nb[3]]->time, strlen(client->teams[nb[0]]->channels[nb[1]]
-            ->threads[nb[2]]->replies[nb[3]]->time), 0); send(tmp->sock
+            send(tmp->sock,client->teams[nb[0]]->uuid, strlen(client->teams[nb[0]]->uuid), 0); send(tmp->sock
             , "\" \"", 3, 0); send(tmp->sock,client->teams[nb[0]]->
             channels[nb[1]]->threads[nb[2]]->replies[nb[3]]->msg, strlen(client
             ->teams[nb[0]]->channels[nb[1]]->threads[nb[2]]->replies[nb[3]]
