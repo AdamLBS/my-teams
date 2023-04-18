@@ -37,19 +37,19 @@ void other_commands(client_t *client, char *buffer)
 {
     if (strcmp(buffer, "/users") == 0)
         users_command(client);
-    if (strstr(buffer, "/user "))
+    if (strncmp(buffer, "/user ", 6) == 0)
         user_command(client, buffer);
-    else if (strstr(buffer, "/use"))
+    else if (strncmp(buffer, "/use", 4) == 0)
         use_command(client, buffer);
     if (strcmp(buffer, "/info") == 0)
         info_command(client);
     if (strcmp(buffer, "/list") == 0)
         list_command(client);
-    if (strstr(buffer, "/subscribed")) {
+    if (strncmp(buffer, "/subscribed", 11) == 0) {
         subscribed_command(client, buffer); return;
-    } if (strstr(buffer, "/subscribe"))
+    } if (strncmp(buffer, "/subscribe", 10) == 0)
         subscribe_command(client, buffer);
-    if (strstr(buffer, "/unsubscribe"))
+    if (strncmp(buffer, "/unsubscribe", 12) == 0)
         unsubscribe_command(client, buffer);
 }
 
@@ -57,13 +57,13 @@ void check_commands(char *buffer, client_t *client)
 {
     if (strcmp(buffer, "/logout") == 0)
         logout_command(client, buffer);
-    if (strstr(buffer, "/help"))
+    if (strncmp(buffer, "/help", 5) == 0)
         help_command();
-    if (strstr(buffer, "/send"))
+    if (strncmp(buffer, "/send", 5) == 0)
         send_command(buffer, client);
-    if (strstr(buffer, "/create"))
+    if (strncmp(buffer, "/create", 7) == 0)
         check_create_commands(client, buffer);
-    if (strstr(buffer, "/messages"))
+    if (strncmp(buffer, "/messages", 9) == 0)
         send_messages_command(buffer, client);
     other_commands(client, buffer);
 }
@@ -77,7 +77,7 @@ void send_commands(client_t *client)
         return;
     if (strlen(client->in_buffer) > 0 )
         client->in_buffer[strlen(client->in_buffer) - 1] = '\0';
-    if (strstr(client->in_buffer, "/login"))
+    if (strncmp(client->in_buffer, "/login", 6) == 0)
         login_command(client, client->in_buffer);
     else if (strlen(client->in_buffer) > 0 && client->login == 0) {
         client_error_unauthorized(); memset(client->in_buffer, 0, 512); return;

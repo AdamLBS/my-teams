@@ -35,7 +35,7 @@ int check_thread_error2(struct client *client, char *c_uuid)
 
 void send_info_thread(struct client *client, int i, int j, int n)
 {
-    struct client *tmp;
+    send(client->sock, "930\n", 4, 0); struct client *tmp;
     LIST_FOREACH(tmp, &head, next) {
         if (check_permissions(tmp, client->teams[i]->uuid) != 1) {
             tmp->teams[i]->channels[j]->nb_threads = client->teams[i]->
