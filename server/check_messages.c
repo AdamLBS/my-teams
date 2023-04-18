@@ -35,15 +35,17 @@ char ***get_all_messages(struct client *client)
     FILE *fd = fopen(path, "r");
     if (!fd)
         return NULL;
+    fd_set read_fds;FD_ZERO(&read_fds);FD_SET(fileno(fd), &read_fds);
+    select(fileno(fd) + 1, &read_fds, NULL, NULL, NULL);
     char *line = NULL; size_t len = 0; int i = 0;
     while (getline(&line, &len, fd) != -1) {
             file[i] = line; line = NULL; i++;
+            select(fileno(fd) + 1, &read_fds, NULL, NULL, NULL);
     }
     fclose(fd);
     if (i == 0) {
         free(path); return NULL;
-    }
-    fill_messages_history(messages, file); free(path); return messages;
+    } fill_messages_history(messages, file); free(path); return messages;
 }
 
 char *get_waiting_msg(char **value)

@@ -17,11 +17,15 @@ char *get_file_line(int id, char *uuid, char *dir)
     strcat(path, uuid);
     strcat(path, ".txt");
     fd = fopen(path, "r");
+    fd_set read_fds;FD_ZERO(&read_fds);FD_SET(fileno(fd), &read_fds);
+    select(fileno(fd) + 1, &read_fds, NULL, NULL, NULL);
     while (getline(&line, &len, fd) != -1) {
         if (i == id) {
             fclose(fd);
             return line;
         }
+        fd_set read_fds;FD_ZERO(&read_fds);FD_SET(fileno(fd), &read_fds);
+        select(fileno(fd) + 1, &read_fds, NULL, NULL, NULL);
         i++;
     }
     return NULL;
@@ -75,6 +79,8 @@ int check_if_file_exist(char *uuid, char *dir)
 char **get_file_data(char *path)
 {
     FILE *fd = fopen(path, "r");
+    fd_set read_fds;FD_ZERO(&read_fds);FD_SET(fileno(fd), &read_fds);
+    select(fileno(fd) + 1, &read_fds, NULL, NULL, NULL);
     char *line = NULL; size_t len = 0; int i = 0;
     char **file = malloc(sizeof(char *) * 100); memset(file, 0, 100);
     while (getline(&line, &len, fd) != -1) {
@@ -84,6 +90,7 @@ char **get_file_data(char *path)
         memset(file[i], 0, strlen(line) + 1);
         file[i] = strcpy(file[i], line);
         i++;
+        select(fileno(fd) + 1, &read_fds, NULL, NULL, NULL);
     }
     fclose(fd);
     return file;

@@ -55,6 +55,8 @@ char **read_user_from_save(char *path)
     FILE *fptr = fopen(path, "r");
     if (!fptr)
         return NULL;
+    fd_set read_fds;FD_ZERO(&read_fds);FD_SET(fileno(fptr), &read_fds);
+    select(fileno(fptr) + 1, &read_fds, NULL, NULL, NULL);
     size_t len = 0;
     char *line = NULL;
     char **array = malloc(sizeof(char * ) * 100);
@@ -67,7 +69,7 @@ char **read_user_from_save(char *path)
         array[i] = line;
         line = NULL;
         i++;
+        select(fileno(fptr) + 1, &read_fds, NULL, NULL, NULL);
     }
-    fclose(fptr);
-    return array;
+    fclose(fptr); return array;
 }

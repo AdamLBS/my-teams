@@ -7,28 +7,28 @@
 
 #include "client.h"
 
-void check_if_client_exist(FILE *fp, client_t *client, char *username)
+void check_if_client_exist(FILE *fp, client_t *client, char *user)
 {
     char *line = NULL;
     size_t len = 0;
+    fd_set fds;FD_ZERO(&fds);FD_SET(fileno(fp), &fds);
+    select(fileno(fp) + 1, &fds, NULL, NULL, NULL);
     while (getline(&line, &len, fp) != -1) {
         line[strlen(line) - 1] = '\0';
-        if (strcmp(line, username) == 0) {
+        if (strcmp(line, user) == 0) {
             getline(&line, &len, fp);
             line[strlen(line) - 1] = '\0';
             strcpy(client->id, line); fclose(fp);
             free(line);
             return;
         }
+        select(fileno(fp) + 1, &fds, NULL, NULL, NULL);
     }
     free(line); fclose(fp);
-    fp = fopen("log.txt", "a");
-    fprintf(fp, "%s\n", username);
-    uuid_t uuid;
-    uuid_generate_random(uuid);
-    uuid_unparse(uuid, client->id);
-    fprintf(fp, "%s\n", client->id);
-    fclose(fp);
+    fp = fopen("log.txt", "a"); FD_ZERO(&fds);FD_SET(fileno(fp), &fds);
+    select(fileno(fp) + 1, NULL, &fds, NULL, NULL); fprintf(fp, "%s\n", user);
+    uuid_t uuid; uuid_generate_random(uuid); uuid_unparse(uuid, client->id);
+    fprintf(fp, "%s\n", client->id); fclose(fp);
 }
 
 void login_command(client_t *client, char *buff)
