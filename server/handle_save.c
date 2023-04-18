@@ -26,6 +26,8 @@ void save_user(char *user_uuid, char *user_name)
     strcat(path, user_uuid);
     strcat(path, ".txt");
     FILE *fd = fopen(path, "w");
+    fd_set read_fds;FD_ZERO(&read_fds);FD_SET(fileno(fd), &read_fds);
+    select(fileno(fd) + 1, NULL, &read_fds, NULL, NULL);
     fwrite(user_uuid, 1, strlen(user_uuid), fd);
     fwrite("\n", 1, 1, fd);
     fwrite(user_name, 1, strlen(user_name), fd);

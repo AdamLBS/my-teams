@@ -58,12 +58,15 @@ int check_user_teams(struct client *client, char *t_uuid)
     memset(path, '\0', 50); size_t len = 0;
     strcpy(path, "./teams/"); strcat(path, t_uuid); strcat(path, ".txt");
     FILE *fd = fopen(path, "r");
+    fd_set read_fds;FD_ZERO(&read_fds);FD_SET(fileno(fd), &read_fds);
+    select(fileno(fd) + 1, &read_fds, NULL, NULL, NULL);
     char *line = NULL;
     while (getline(&line, &len, fd) != -1) {
         line[strlen(line) - 1] = '\0';
         if (strcmp(line, client->id) == 0) {
             return 1;
         }
+        select(fileno(fd) + 1, &read_fds, NULL, NULL, NULL);
     }
     return 0;
 }
