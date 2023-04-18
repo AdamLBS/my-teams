@@ -37,7 +37,8 @@ void send_info_reply(struct client *client, int nb[5])
             send(tmp->sock, client->teams[nb[0]]->channels[nb[1]]->
             threads[nb[2]]->uuid, 36, 0); send(tmp->sock, "\" \"", 3, 0);
             send(tmp->sock, client->id, 36, 0); send(tmp->sock, "\" \"", 3, 0);
-            send(tmp->sock,client->teams[nb[0]]->uuid, strlen(client->teams[nb[0]]->uuid), 0); send(tmp->sock
+            send(tmp->sock,client->teams[nb[0]]->uuid,
+            strlen(client->teams[nb[0]]->uuid), 0); send(tmp->sock
             , "\" \"", 3, 0); send(tmp->sock,client->teams[nb[0]]->
             channels[nb[1]]->threads[nb[2]]->replies[nb[3]]->msg, strlen(client
             ->teams[nb[0]]->channels[nb[1]]->threads[nb[2]]->replies[nb[3]]

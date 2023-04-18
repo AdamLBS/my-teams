@@ -22,19 +22,8 @@ void free_client(client_t *client)
     exit(0);
 }
 
-void handle_received_more_2(client_t *client)
+void handle_received_more_3(client_t *client)
 {
-    if (strncmp(client->buffer, "930", 3) == 0) {
-        client_print_thread_created(client->s_thread->t_uuid,
-            client->id, client->s_thread->t_time,
-            client->s_thread->t_name, client->s_thread->t_desc); return;
-    } if (strncmp(client->buffer, "931", 3) == 0) {
-        event_thread_created(client->buffer); return;
-    } if (strncmp(client->buffer, "940", 3) == 0) {
-        client_print_reply_created(client->thread_uuid,
-            client->id, client->s_reply->t_time,
-            client->s_reply->r_body); return;
-    }
     if (strncmp(client->buffer, "941", 3) == 0) {
         event_reply_created(client->buffer); return;
     } if (strncmp(client->buffer, "101", 3) == 0) {
@@ -50,6 +39,27 @@ void handle_received_more_2(client_t *client)
     } if (strncmp(client->buffer, "902", 3) == 0) {
         client_print_unsubscribed(client->id, client->s_team->t_uuid); return;
     }
+}
+
+void handle_received_more_2(client_t *client)
+{
+    if (strncmp(client->buffer, "930", 3) == 0) {
+        client_print_thread_created(client->s_thread->t_uuid,
+            client->id, client->s_thread->t_time,
+            client->s_thread->t_name, client->s_thread->t_desc); return;
+    } if (strncmp(client->buffer, "931", 3) == 0) {
+        event_thread_created(client->buffer); return;
+    } if (strncmp(client->buffer, "940", 3) == 0) {
+        client_print_reply_created(client->thread_uuid,
+            client->id, client->s_reply->t_time,
+            client->s_reply->r_body); return;
+    }
+    if (strncmp(client->buffer, "321", 3) == 0) {
+        client_error_unknown_channel(client->channel_uuid); return;
+    } if (strncmp(client->buffer, "331", 3) == 0) {
+        client_error_unknown_thread(client->s_thread->t_uuid);
+    }
+    handle_received_more_3(client);
 }
 
 void handle_received_more(client_t *client)
@@ -70,10 +80,6 @@ void handle_received_more(client_t *client)
         client_error_unknown_team(client->team_uuid); return;
     } if (strncmp(client->buffer, "313", 3) == 0) {
         client_error_unknown_team(client->s_team->t_uuid); return;
-    } if (strncmp(client->buffer, "321", 3) == 0) {
-        client_error_unknown_channel(client->channel_uuid); return;
-    } if (strncmp(client->buffer, "331", 3) == 0) {
-        client_error_unknown_thread(client->s_thread->t_uuid);
     }
     handle_received_more_2(client);
 }
