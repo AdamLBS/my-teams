@@ -28,14 +28,16 @@ void send_reply_code_team(struct client *client, char *id, char *name,
     send(client->sock, "910\n", 4, 0);
     struct client *tmp;
     LIST_FOREACH(tmp, &head, next) {
-        send(tmp->sock, "911 ", 4, 0);
-        send(tmp->sock, "\"", 1, 0);
-        send(tmp->sock, id, 36, 0);
-        send(tmp->sock, "\" \"", 3, 0);
-        send(tmp->sock, name, strlen(name), 0);
-        send(tmp->sock, "\" \"", 3, 0);
-        send(tmp->sock, desc, strlen(desc), 0);
-        send(tmp->sock, "\"\n", 2, 0);
+        if (tmp->username != NULL && tmp->id != NULL) {
+            send(tmp->sock, "911 ", 4, 0);
+            send(tmp->sock, "\"", 1, 0);
+            send(tmp->sock, id, 36, 0);
+            send(tmp->sock, "\" \"", 3, 0);
+            send(tmp->sock, name, strlen(name), 0);
+            send(tmp->sock, "\" \"", 3, 0);
+            send(tmp->sock, desc, strlen(desc), 0);
+            send(tmp->sock, "\"\n", 2, 0);
+        }
     }
 }
 
