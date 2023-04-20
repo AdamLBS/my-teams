@@ -16,13 +16,16 @@ void login_command(struct client *client, char *buffer)
         return;
     client->username = strdup(strtok(str, "\""));
     client->id = strdup(strtok(NULL, " "));
+    fd_set read_fds; FD_ZERO(&read_fds); FD_SET(STDERR_FILENO, &read_fds);
     if (do_user_exists(client->id) == 0) {
         save_user(client->id, client->username);
+        select(STDERR_FILENO + 1, NULL, &read_fds, NULL, NULL);
         server_event_user_created(client->id, client->username);
     }
+    select(STDERR_FILENO + 1, NULL, &read_fds, NULL, NULL);
     server_event_user_logged_in(client->id);
     set_user_to_logged_in(client->id);
-    send(client->sock, "LOGIN OK\n", 9, 0);
+    send_data_to_socket(client->sock, "LOGIN OK\n");
     send_login_event(client);
     check_pending_messages(client);
     load_team_files(client);
@@ -31,7 +34,7 @@ void login_command(struct client *client, char *buffer)
 void logout_command(struct client *client)
 {
     server_event_user_logged_out(client->id);
-    send(client->sock, "LOGOUT OK\n", 10, 0);
+    send_data_to_socket(client->sock, "LOGOUT OK\n");
     set_user_to_logged_out(client->id);
     send_logout_event(client);
     memset(client->username, 0, strlen(client->username));
@@ -41,6 +44,8 @@ void catch_client_logout(struct client *client)
 {
     if (client->username && strlen(client->username) > 0
     && client->sock != -1) {
+        fd_set read_fds; FD_ZERO(&read_fds); FD_SET(STDERR_FILENO, &read_fds);
+        select(STDERR_FILENO + 1, NULL, &read_fds, NULL, NULL);
         server_event_user_logged_out(client->id);
         set_user_to_logged_out(client->id);
         send_logout_event(client);
@@ -67,6 +72,8 @@ void load_team_files(struct client *client)
 
 void logout_signal_command(struct client *client)
 {
+    fd_set read_fds; FD_ZERO(&read_fds); FD_SET(STDERR_FILENO, &read_fds);
+    select(STDERR_FILENO + 1, NULL, &read_fds, NULL, NULL);
     server_event_user_logged_out(client->id);
     set_user_to_logged_out(client->id);
     memset(client->username, 0, strlen(client->username));

@@ -9,8 +9,8 @@
 
 void subscribe_command(client_t *client, char *buffer)
 {
-    send(client->sock, buffer, strlen(buffer), 0);
-    send(client->sock, "\n", 1, 0);
+    send_data_to_socket(client->sock, buffer);
+    send_data_to_socket(client->sock, "\n");
     char *team_uuid;
     buffer += 11;
     char *token = strtok(buffer, "\"");
@@ -22,8 +22,8 @@ void subscribe_command(client_t *client, char *buffer)
 
 void unsubscribe_command(client_t *client, char *buffer)
 {
-    send(client->sock, buffer, strlen(buffer), 0);
-    send(client->sock, "\n", 1, 0);
+    send_data_to_socket(client->sock, buffer);
+    send_data_to_socket(client->sock, "\n");
     char *team_uuid;
     buffer += 13;
     char *token = strtok(buffer, "\"");

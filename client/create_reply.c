@@ -9,10 +9,10 @@
 
 void send_reply(client_t *client, char *time, char *r_body)
 {
-    send(client->sock, time, (strlen(time)), 0);
-    send(client->sock, "\" \"", 3, 0);
-    send(client->sock, r_body, strlen(r_body), 0);
-    send(client->sock, "\"\n", 2, 0);
+    send_data_to_socket(client->sock, time);
+    send_data_to_socket(client->sock, "\" \"");
+    send_data_to_socket(client->sock, r_body);
+    send_data_to_socket(client->sock, "\"\n");
 }
 
 void create_reply_command(client_t *client, char *buffer)

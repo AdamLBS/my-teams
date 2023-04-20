@@ -120,6 +120,7 @@ char *get_file_line(int id, char *uuid, char *dir);
 int check_if_file_exist(char *uuid, char *dir);
 int check_if_title_exist(char *title, char *dir);
 void list_command_receive(client_t *client, char *buffer);
+void send_data_to_socket(int socket, char *data);
 //EVENT HANDLING
 void get_client_login_event(client_t *client);
 void get_client_logout_event(client_t *client);
