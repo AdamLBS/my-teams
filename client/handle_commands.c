@@ -95,8 +95,6 @@ void handle_received_data(client_t *client)
     } if (strncmp(client->buffer, "msg_history:", 12) == 0) {
         receive_messages_history(client->buffer, client); return;
     } if (strncmp(client->buffer, "LOGIN OK\n", 9) == 0) {
-        fd_set read_fds; FD_ZERO(&read_fds); FD_SET(STDERR_FILENO, &read_fds);
-        select(STDERR_FILENO + 1, NULL, &read_fds, NULL, NULL);
         client_event_logged_in(client->id, client->username);client->login = 1;
     } if (strncmp(client->buffer, "LOGOUT OK\n", 10) == 0) {
         client_event_logged_out(client->id, client->username);
@@ -105,5 +103,6 @@ void handle_received_data(client_t *client)
         info_command_receive(client, client->buffer); return;
     } if (strncmp(client->buffer, "/list", 5) == 0) {
         list_command_receive(client, client->buffer); return;
-    } handle_received_more(client);
+    }
+    handle_received_more(client);
 }

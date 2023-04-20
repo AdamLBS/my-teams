@@ -92,10 +92,3 @@ int check_if_title_exist(char *title, char *dir)
     }
     closedir(d); return 0;
 }
-
-void send_data_to_socket(int socket, char *data)
-{
-    fd_set read_fds; FD_ZERO(&read_fds); FD_SET(socket, &read_fds);
-    select(socket + 1, NULL, &read_fds, NULL, NULL);
-    send(socket, data, strlen(data), 0);
-}

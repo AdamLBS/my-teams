@@ -45,9 +45,7 @@ void load_users_from_save(void)
 
 void send_user_loaded(char ***userList)
 {
-    fd_set read_fds; FD_ZERO(&read_fds); FD_SET(STDERR_FILENO, &read_fds);
     for (int i = 0; userList[i] ; i++) {
-        select(STDERR_FILENO + 1, NULL, &read_fds, NULL, NULL);
         server_event_user_loaded(userList[i][1], userList[i][0]);
     }
 }

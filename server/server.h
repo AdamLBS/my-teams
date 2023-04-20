@@ -192,4 +192,3 @@ void unsubscribe_command(struct client *cli, char *buffer);
 void remove_team_from_struct(char *uuid, struct client *cli);
 int check_user_teams(struct client *client, char *t_uuid);
 void load_team_files(struct client *client);
-void send_data_to_socket(int socket, char *data);

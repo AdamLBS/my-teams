@@ -15,11 +15,11 @@ void send_login_event(struct client *cli)
             continue;
         if (tmp->username == NULL)
             continue;
-        send_data_to_socket(tmp->sock, "user_logged_in: ");
-        send_data_to_socket(tmp->sock, cli->id);
-        send_data_to_socket(tmp->sock, " ");
-        send_data_to_socket(tmp->sock, cli->username);
-        send_data_to_socket(tmp->sock, "\n");
+        send(tmp->sock, "user_logged_in: ", 16, 0);
+        send(tmp->sock, cli->id, strlen(cli->id), 0);
+        send(tmp->sock, " ", 1, 0);
+        send(tmp->sock, cli->username, strlen(cli->username), 0);
+        send(tmp->sock, "\n", 1, 0);
     }
 }
 
@@ -33,10 +33,10 @@ void send_logout_event(struct client *cli)
             continue;
         if (tmp->sock == -1)
             continue;
-        send_data_to_socket(tmp->sock, "user_logged_out: ");
-        send_data_to_socket(tmp->sock, cli->id);
-        send_data_to_socket(tmp->sock, " ");
-        send_data_to_socket(tmp->sock, cli->username);
-        send_data_to_socket(tmp->sock, "\n");
+        send(tmp->sock, "user_logged_out: ", 17, 0);
+        send(tmp->sock, cli->id, strlen(cli->id), 0);
+        send(tmp->sock, " ", 1, 0);
+        send(tmp->sock, cli->username, strlen(cli->username), 0);
+        send(tmp->sock, "\n", 1, 0);
     }
 }
