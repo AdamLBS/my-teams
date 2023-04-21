@@ -33,7 +33,7 @@ void check_if_client_exist(FILE *fp, client_t *client, char *user)
 
 void login_command(client_t *client, char *buff)
 {
-    char *username = strchr(buff, '"');
+    char *username = strchr(buff, '"'); int sock = client->sock;
     if (username != NULL && username[1] != '\0')
         username++;
     else
@@ -50,9 +50,9 @@ void login_command(client_t *client, char *buff)
         fprintf(fp, "%s\n", client->id); fclose(fp);
     } else
         check_if_client_exist(fp, client, username);
-    send(client->sock, buff, strlen(buff), 0); send(client->sock, "\" ", 2, 0);
-    send(client->sock, client->id, strlen(client->id), 0);
-    send(client->sock, "\n", 1, 0);
+    send_data_to_socket(sock, buff); send_data_to_socket(sock, "\" ");
+    send_data_to_socket(sock, client->id);
+    send_data_to_socket(client->sock, "\n");
 }
 
 void logout_command(client_t *client, char *buffer)
