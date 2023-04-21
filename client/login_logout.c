@@ -9,20 +9,23 @@
 
 void check_if_client_exist(FILE *fp, client_t *client, char *user)
 {
-    char *line = NULL;
-    size_t len = 0;
+    char *line = malloc(sizeof(char) * MAX_BODY_LENGTH); int readLen = 1;
+    size_t len = 0;char buffer[256] = {0};
     fd_set fds;FD_ZERO(&fds);FD_SET(fileno(fp), &fds);
-    select(fileno(fp) + 1, &fds, NULL, NULL, NULL);
-    while (getline(&line, &len, fp) != -1) {
-        line[strlen(line) - 1] = '\0';
-        if (strcmp(line, user) == 0) {
-            getline(&line, &len, fp);
-            line[strlen(line) - 1] = '\0';
-            strcpy(client->id, line); fclose(fp);
-            free(line);
-            return;
-        }
+    select(fileno(fp) + 1, &fds, NULL, NULL, NULL); int foundUser = 0;
+    while (read(fileno(fp), buffer, readLen) > 0) {
         select(fileno(fp) + 1, &fds, NULL, NULL, NULL);
+        if (buffer[0] == '\n') {
+            if (strcmp(line, user) == 0) {
+                foundUser = 1; readLen = UUID_STR_LEN - 1;
+            }
+            free(line); line = NULL; len = 0;
+            line = malloc(sizeof(char) * MAX_BODY_LENGTH);
+            memset(line, '\0', MAX_BODY_LENGTH); continue;
+        }
+        if (foundUser == 1) {
+            strcpy(client->id, buffer); fclose(fp); free(line);return;
+        } strcat(line, buffer); len++;
     }
     free(line); fclose(fp);
     fp = fopen("log.txt", "a"); FD_ZERO(&fds);FD_SET(fileno(fp), &fds);

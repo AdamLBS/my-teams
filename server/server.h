@@ -150,7 +150,7 @@ void create_thread_command(struct client *client, char *buffer);
 void check_pending_messages(struct client *client);
 char ***get_all_messages(struct client *client);
 char *get_waiting_msg(char **value);
-char **get_file_data(char *path);
+char **get_file_data(char *path, int newline);
 void write_file_data(char *path, char **data);
 void clear_message_queue(struct client *client);
 int is_message_waiting(char **msg);

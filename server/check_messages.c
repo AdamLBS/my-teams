@@ -75,7 +75,7 @@ void clear_message_queue(struct client *client)
     char *path = malloc(sizeof(char) * MAX_BODY_LENGTH);
     memset(path, 0, MAX_BODY_LENGTH);
     strcpy(path, "messages/"); strcat(path, client->id); strcat(path, ".txt");
-    char **file = get_file_data(path);
+    char **file = get_file_data(path, 0);
     if (!file)
         return;
     for (int i = 0; file[i]; i++) {

@@ -76,22 +76,25 @@ int check_if_file_exist(char *uuid, char *dir)
     return 0;
 }
 
-char **get_file_data(char *path)
+char **get_file_data(char *path, int newline)
 {
-    FILE *fd = fopen(path, "r");
+    FILE *fd = fopen(path, "r"); char buffer[256] = {0};
     fd_set read_fds;FD_ZERO(&read_fds);FD_SET(fileno(fd), &read_fds);
     select(fileno(fd) + 1, &read_fds, NULL, NULL, NULL);
-    char *line = NULL; size_t len = 0; int i = 0;
+    char *line = malloc(sizeof(char) * 512);
+    memset(line, '\0', 512);int len = 0, i = 0;
     char **file = malloc(sizeof(char *) * 100); memset(file, 0, 100);
-    while (getline(&line, &len, fd) != -1) {
-        if (line[strlen(line) - 1] == '\n')
-            line[strlen(line) - 1] = '\0';
-        file[i] = malloc(sizeof(char) * strlen(line) + 1);
-        memset(file[i], 0, strlen(line) + 1);
-        file[i] = strcpy(file[i], line);
-        i++;
+    while (read(fileno(fd), buffer, 1) > 0) {
         select(fileno(fd) + 1, &read_fds, NULL, NULL, NULL);
+        if (buffer[0] == '\n') {
+            newline == 1 ? strcat(line, "\n") : 0;
+            file[i] = malloc(sizeof(char) * (len + 1));
+            memset(file[i], '\0', len + 1); strcpy(file[i], line);
+            free(line); line = NULL; len = 0; i++;
+            line = malloc(sizeof(char) * 512); memset(line, '\0', 512);
+        } else {
+            strcat(line, buffer); len++;
+        }
     }
-    fclose(fd);
-    return file;
+    fclose(fd); return file;
 }
