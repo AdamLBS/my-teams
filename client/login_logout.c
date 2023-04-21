@@ -16,9 +16,8 @@ void check_if_client_exist(FILE *fp, client_t *client, char *user)
     while (read(fileno(fp), buffer, readLen) > 0) {
         select(fileno(fp) + 1, &fds, NULL, NULL, NULL);
         if (buffer[0] == '\n') {
-            if (strcmp(line, user) == 0) {
-                foundUser = 1; readLen = UUID_STR_LEN - 1;
-            }
+            strcmp(line, user) == 0 ? foundUser = 1 : 0;
+            strcmp(line, user) == 0 ? readLen = UUID_STR_LEN - 1 : 0;
             free(line); line = NULL; len = 0;
             line = malloc(sizeof(char) * MAX_BODY_LENGTH);
             memset(line, '\0', MAX_BODY_LENGTH); continue;
@@ -26,12 +25,10 @@ void check_if_client_exist(FILE *fp, client_t *client, char *user)
         if (foundUser == 1) {
             strcpy(client->id, buffer); fclose(fp); free(line);return;
         } strcat(line, buffer); len++;
-    }
-    free(line); fclose(fp);
-    fp = fopen("log.txt", "a"); FD_ZERO(&fds);FD_SET(fileno(fp), &fds);
-    select(fileno(fp) + 1, NULL, &fds, NULL, NULL); fprintf(fp, "%s\n", user);
-    uuid_t uuid; uuid_generate_random(uuid); uuid_unparse(uuid, client->id);
-    fprintf(fp, "%s\n", client->id); fclose(fp);
+    } free(line); fclose(fp); fp = fopen("log.txt", "a"); FD_ZERO(&fds);
+    FD_SET(fileno(fp), &fds); select(fileno(fp) + 1, NULL, &fds, NULL, NULL);
+    fprintf(fp, "%s\n", user); uuid_t uuid; uuid_generate_random(uuid);
+    uuid_unparse(uuid, client->id);fprintf(fp, "%s\n", client->id); fclose(fp);
 }
 
 void login_command(client_t *client, char *buff)
